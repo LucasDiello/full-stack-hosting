@@ -1,6 +1,15 @@
+import bcrypt from 'bcrypt';
+
+export const register = async (req, res) => {
+    const { username, email, password } = req.body;
 
 
-export const register = (req, res) => {}
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    console.log(hashedPassword)
+
+    console.log(req.body)
+}
 
 export const login = (req, res) => {}
 
