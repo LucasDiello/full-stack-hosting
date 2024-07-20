@@ -8,16 +8,16 @@ const Navbar = () => {
 
     return (
         <nav>
-            <ul className="left">
-                <li href="/" className="logo">
+            <div className="left">
+                <a href="/" className="logo">
                     <img src="/logo.png" alt="" />
                     <span>LDHomes</span>
-                </li>
-                <li href="/">Início</li>
-                <li href="/">Sobre</li>
-                <li href="/">Contato</li>
-                <li href="/">Agentes</li>
-            </ul>
+                </a>
+                <a href="/">Início</a>
+                <a href="/">Sobre</a>
+                <a href="/">Contato</a>
+                <a href="/">Agentes</a>
+            </div>
             <div className="right">
                 {user ? (
                     <div className="user">
@@ -33,8 +33,8 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <>
-                        <a href="/" className='transition'>Entrar</a>
-                        <a href="/" className="register transition">
+                        <a href="/">Entrar</a>
+                        <a href="/" className="register ">
                             Registrar-se
                         </a>
                     </>
@@ -46,14 +46,14 @@ const Navbar = () => {
                         onClick={() => setOpen((prev) => !prev)}
                     />
                 </div>
-                <ul className={open ? "menu active" : "menu"}>
-                    <li href="/">Início</li>
-                    <li href="/">Sobre</li>
-                    <li href="/">Contato</li>
-                    <li href="/">Agentes</li>
-                    <li href="/">Entrar</li>
-                    <li href="/">Registrar-se</li>
-                </ul>
+                <div className={open ? "menu active" : "menu"}>
+                    <a href="/">Início</a>
+                    <a href="/">Sobre</a>
+                    <a href="/">Contato</a>
+                    <a href="/">Agentes</a>
+                    <a href="/">Entrar</a>
+                    <a href="/">Registrar-se</a>
+                </div>
             </div>
         </nav>
     );

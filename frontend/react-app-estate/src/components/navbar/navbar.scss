@@ -1,23 +1,13 @@
 @import "../../responsive.scss";
 
-.transition {
-  transition: all 0.4s ease;
-  cursor: pointer;
- 
-  &:hover {
-    scale: 1.05;
-  }
-}
-
 nav {
   height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  li {
+  a {
     transition: all 0.4s ease;
-    cursor: pointer;
 
     @include sm {
       display: none;
@@ -73,11 +63,6 @@ nav {
       margin: 20px;
     }
 
-    li {
-      font-size: 18px;
-      margin: 22px;
-    }
-
     .user{
       display: flex;
       align-items: center;
@@ -89,19 +74,13 @@ nav {
         border-radius: 50%;
         object-fit: cover;
         margin-right: 20px;
-     
-        @include sm{
-          display: none;
-        }
       }
-      
+
       span{
         @include sm{
           display: none;
         }
       }
-
-
 
       .profile{
         padding: 12px 24px;
@@ -109,11 +88,6 @@ nav {
         cursor: pointer;
         border: none;
         position: relative;
-        transition: all 0.4s ease;
-
-        &:hover{
-          scale: 1.05;
-        }
         
         .notification{
           position: absolute;
@@ -129,17 +103,12 @@ nav {
           justify-content: center;
         }
 
-
-        @include sm{
-          display: none;
-        }
       }
     }
 
     .register {
       background-color: #fece51;
     }
-    
 
     .menuIcon {
       display: none;
@@ -176,7 +145,7 @@ nav {
       }
 
       @include sm {
-        li {
+        a {
           display: initial;
         }
       }
