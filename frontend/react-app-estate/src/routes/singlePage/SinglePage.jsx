@@ -76,21 +76,21 @@ const SinglePage = () => {
               <img src="/school.png" alt="" />
               <div className="featureText">
                 <span>Escola</span>
-                <p>250m de distância</p>
+                <p>250m </p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
-                <span>Ponto de Ônibus</span>
-                <p>100m de distância</p>
+                <span>Ônibus</span>
+                <p>100m </p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Restaurante</span>
-                <p>200m de distância</p>
+                <p>200m </p>
               </div>
             </div>
           </div>
