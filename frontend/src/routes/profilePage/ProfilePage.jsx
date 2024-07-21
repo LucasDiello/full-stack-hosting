@@ -1,16 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import "./profilePage.scss";
-import List from '../../components/List/List';
-import Chat from '../../components/chat/Chat';
-import apiRequest from '../../lib/apiRequest';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import List from "../../components/List/List";
+import Chat from "../../components/chat/Chat";
+import apiRequest from "../../lib/apiRequest";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const ProfilePage = () => {
-  const {updateUser, currentUser} = useContext(AuthContext);
-
-  const user = localStorage.getItem("user");
+  const { updateUser, currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       const response = await apiRequest.post("/auth/logout");
@@ -19,50 +18,47 @@ const ProfilePage = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
-    <div className="profilePage">
-      <div className="details">
-        <div className="wrapper">
-          <div className="title">
-            <h1>Informações do Usuário</h1>
-            <button>Atualizar Perfil</button>
+      <div className="profilePage">
+        <div className="details">
+          <div className="wrapper">
+            <div className="title">
+              <h1>Informações do Usuário</h1>
+              <button>Atualizar Perfil</button>
+            </div>
+            <div className="info">
+              <span>
+                Avatar:
+                <img src={currentUser.avatar || "/noavatar.jpg"} alt="" />
+              </span>
+              <span>
+                Nome de Usuário: <b>{currentUser.username}</b>
+              </span>
+              <span>
+                E-mail: <b>{currentUser.email}</b>
+              </span>
+              <button onClick={handleLogout}>Sair</button>
+            </div>
+            <div className="title">
+              <h1>Minha Lista</h1>
+              <button>Criar Novo Post</button>
+            </div>
+            <List />
+            <div className="title">
+              <h1>Listas Salvas</h1>
+            </div>
+            <List />
           </div>
-          <div className="info">
-            <span>
-              Avatar:
-              <img
-              src={currentUser.avatar || "/noavatar.jpg"}
-alt=""
-              />
-            </span>
-            <span>
-              Nome de Usuário: <b>{currentUser.username}</b>
-            </span>
-            <span>
-              E-mail: <b>{currentUser.email}</b>
-            </span>
-            <button onClick={handleLogout}>Sair</button>
+        </div>
+        <div className="chatContainer">
+          <div className="wrapper">
+            <Chat />
           </div>
-          <div className="title">
-            <h1>Minha Lista</h1>
-            <button>Criar Novo Post</button>
-          </div>
-          <List/>
-          <div className="title">
-            <h1>Listas Salvas</h1>
-          </div>
-          <List />
         </div>
       </div>
-      <div className="chatContainer">
-        <div className="wrapper">
-            <Chat/>
-        </div>
-      </div>
-    </div>
-  )
-}
+    )
+};
 
 export default ProfilePage;
