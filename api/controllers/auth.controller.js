@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       },
     });
 
-    res.status(mapStatusHTTP("CREATED")).json(user);
+    res.status(mapStatusHTTP("CREATED")).json(data);
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
@@ -54,17 +54,19 @@ export const login = async (req, res) => {
       expiresIn: age,
     });
 
+    const {password: userPassword, ...dataUser} = user;
+
     res
       .cookie("token", token, {
         httpOnly: true,
         maxAge: age,
       })
       .status(mapStatusHTTP("SUCCESSFUL"))
-      .json({ message: "Login Successful" });
+      .json(dataUser);
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
-      .json({ message: "Unable to login" });
+      .json({ message: "Failed to login" });
   }
 };
 
