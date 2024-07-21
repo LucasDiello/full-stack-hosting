@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./registerPage.scss";
-import axios from "axios";
+import apiRequest from "../../lib/apiRequest";
 
 const RegisterPage = () => {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const formData = new FormData(e.target);
-
+    
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
-
+    
     try {
-      const response = await axios.post(
-        "http://localhost:8800/api/auth/register",
+      const response = await apiRequest.post(
+        "/auth/register",
         {
           username,
           email,
@@ -27,6 +30,8 @@ const RegisterPage = () => {
     } catch (error) {
       console.error(error);
       setError(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -37,7 +42,9 @@ const RegisterPage = () => {
           <input name="username" type="text" placeholder="Usuário" />
           <input name="email" type="text" placeholder="E-mail" />
           <input name="password" type="password" placeholder="Senha" />
-          <button>Registrar</button>
+          <button disabled={
+            isLoading
+          }>Registrar</button>
           {error && <span>{error}</span>}
           <Link to="/login">Já tem uma conta?</Link>
         </form>
