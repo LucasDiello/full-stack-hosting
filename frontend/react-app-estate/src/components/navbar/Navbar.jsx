@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    const user = true;  // Exemplo de usuário logado
+    const user = false;  // Exemplo de usuário logado
 
     return (
         <nav>
@@ -33,8 +33,8 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <>
-                        <a href="/">Entrar</a>
-                        <a href="/" className="register ">
+                        <a href="/login">Entrar</a>
+                        <a href="/register" className="register-nav ">
                             Registrar-se
                         </a>
                     </>
