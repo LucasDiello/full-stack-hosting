@@ -2,16 +2,18 @@ import React from 'react';
 import "./singlePage.scss";
 import Map from "../../components/map/Map";
 import { singlePostData, userData } from "../../lib/dummydata";
+import Slider from '../../components/slider/Slider';
 
 const SinglePage = () => {
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
+          <Slider images={singlePostData.images} />
           <div className="info">
             <div className="top">
               <div className="post">
-                <h1>{singlePostData.title}</h1>
+                <h1>{singlePostData.title}</h1> 
                 <div className="address">
                   <img src="/pin.png" alt="" />
                   <span>{singlePostData.address}</span>

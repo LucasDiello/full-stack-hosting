@@ -7,7 +7,7 @@ export const listData = [
       bathroom: 1,
       price: 1000,
       address: "456 Centro, Canoas RS",
-      latitude: -29.9187,  // Latitude de Canoas, RS
+      latitude: -29.9187,  
       longitude: -51.1794,
     },
     {
@@ -92,7 +92,7 @@ export const listData = [
   
   export const singlePostData = {
     id: 1,
-    title: "Lindo Apartamento",
+    title: "Apartamento",
     price: 1200,
     images: [
       "https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -103,19 +103,19 @@ export const listData = [
     bedRooms: 2,
     bathroom: 1,
     size: 861,
-    latitude: 51.5074,
-    longitude: -0.1278,
-    city: "Londres",
-    address: "1234 Rua Broadway",
+    latitude: -29.9187,  
+    longitude: -51.1794,
+    city: "Canoas RS",
+    address: "1234 Rua da Paz, Canoas RS",
     school: "250m de distância",
     bus: "100m de distância",
     restaurant: "50m de distância",
     description:
-      "Futuro semelhante ao morro puxar imagem nadar magia corrente semente engenheiro ninho externo levantar fácil poesia ganhar alto peso me reconhecer fazendeiro nu perigo. na verdade colocar vaso perna motor terra matéria chave copo de fato corpo filme século fechar lugar ambiente eram palco vertical telhado fundo senhora função brisa escuridão ao lado de visão lata vista respirar carbono nadou declarado ímã escapar tem de pilha separada rota café tempestade alguém segurar espaço usar frente ovelha selva de perto natural anexo parte superior grão seu grau comércio salmão problema novo dobrar mais professor gama qualquer um cada assento quinze eventualmente",
+      "Seu futuro lar está localizado em um dos melhores bairros de Canoas, próximo a escolas, restaurantes e pontos de ônibus. O apartamento possui 2 quartos, 1 banheiro, 1 sala de estar e 1 cozinha. O prédio possui uma área de lazer com piscina, academia e salão de festas. Agende uma visita e venha conhecer seu novo lar! Agora com um preço promocional de R$ 1200! Não perca essa oportunidade! Algumas pessoas dizem que é bom demais para ser verdade, mas acredite, é verdade! Venha conferir! Entre em contato conosco para mais informações. Aguardamos sua visita! ",
   };
   
   export const userData = {
     id: 1,
-    name: "João da Silva",
+    name: "John Doe",
     img: "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   };
