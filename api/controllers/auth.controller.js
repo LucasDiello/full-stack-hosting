@@ -20,7 +20,7 @@ export const register = async (req, res) => {
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
-      .json({ message: "Unable to create user" });
+      .json({ message: "Failed to create user" });
   }
 };
 
