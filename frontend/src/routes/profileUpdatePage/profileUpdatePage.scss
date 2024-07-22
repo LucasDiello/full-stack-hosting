@@ -1,3 +1,5 @@
+@import "../../responsive.scss";
+
 .profileUpdatePage {
     height: 100%;
     display: flex;
@@ -48,8 +50,21 @@
       justify-content: center;
   
       .avatar{
-        width: 50%;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
         object-fit: cover;
+
+        @include md{
+          margin-top: 40px;
+          width: 200px;
+          height: 200px;
+        }
       }
+      
+    }
+    @include sm{
+      flex-direction: column;
+      
     }
   }
