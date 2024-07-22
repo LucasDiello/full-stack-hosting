@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import mapStatusHTTP from "../util/mapStatusHTTP";
+import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;

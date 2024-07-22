@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       },
     });
 
-    res.status(mapStatusHTTP("CREATED")).json(data);
+    res.status(mapStatusHTTP("CREATED")).json({ message: "User created" });
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
