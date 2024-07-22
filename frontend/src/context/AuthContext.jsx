@@ -8,7 +8,7 @@ export const AuthContextProvider = ({children}) => {
     );
     console.log(currentUser)
     const updateUser = (data) => {
-        console.log(data)
+        console.log(data)       
         setCurrentUser(data);
     }    
 

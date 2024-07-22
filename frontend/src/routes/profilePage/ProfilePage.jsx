@@ -3,7 +3,7 @@ import "./profilePage.scss";
 import List from "../../components/List/List";
 import Chat from "../../components/chat/Chat";
 import apiRequest from "../../lib/apiRequest";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const ProfilePage = () => {
@@ -26,7 +26,9 @@ const ProfilePage = () => {
           <div className="wrapper">
             <div className="title">
               <h1>Informações do Usuário</h1>
+              <Link to="/profile/update">
               <button>Atualizar Perfil</button>
+              </Link>
             </div>
             <div className="info">
               <span>
