@@ -9,7 +9,6 @@ import { AuthContext } from "../../context/AuthContext";
 const ProfilePage = () => {
   const { updateUser, currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       const response = await apiRequest.post("/auth/logout");
@@ -45,7 +44,9 @@ const ProfilePage = () => {
             </div>
             <div className="title">
               <h1>Minha Lista</h1>
-              <button>Criar Novo Post</button>
+              <Link to="/add">
+              <button >Criar Novo Post</button>
+              </Link>
             </div>
             <List />
             <div className="title">

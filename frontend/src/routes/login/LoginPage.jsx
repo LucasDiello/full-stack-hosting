@@ -15,9 +15,9 @@ const LoginPage = () => {
     setIsLoading(true);
     setError("");
     const formData = new FormData(e.target);
-
-    const username = formData.get("username");
-    const password = formData.get("password");
+    const { username, password } = Object.fromEntries(formData);
+    //const username = formData.get("username");
+    //const password = formData.get("password");
 
     try {
 
