@@ -15,10 +15,10 @@ export const serviceGetAllPosts = async (query) => {
       },
     },
   });
-      return {
-        status: "SUCCESSFUL",
-        data: posts,
-      };
+  return {
+    status: "SUCCESSFUL",
+    data: posts,
+  };
 };
 
 export const serviceGetPostById = async (id, token) => {
@@ -35,33 +35,34 @@ export const serviceGetPostById = async (id, token) => {
     },
   });
 
-  console.log(post);
-  console.log(token)
+  if (!post) {
+    return {
+      status: "NOT_FOUND",
+      data: {
+        message: "Post not found",
+      },
+    };
+  }
 
   if (token) {
-    console.log("entrei no if");
-    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
-      if (!err) {
-        console.log("entrei no if do err");
-        const saved = await prisma.savedPost.findUnique({
-          where: {
-            userId_postId: {
-              postId: id,
-              userId: payload.id,
-            },
-          },
-        });
-        console.log("entrei");
-        return {
-          status: "SUCCESSFUL",
-          data: {
-            ...post,
-            isSaved: !!saved,
-          },
-        };
-      }
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const savedPost = await prisma.savedPost.findUnique({
+      where: {
+        userId_postId: {
+          postId: id,
+          userId: payload.id,
+        },
+      },
     });
+    return {
+      status: "SUCCESSFUL",
+      data: {
+        ...post,
+        isSaved: !!savedPost,
+      },
+    };
   }
+
   return {
     status: "SUCCESSFUL",
     data: {
@@ -90,42 +91,42 @@ export const serviceCreatePost = async (body, tokenUserId) => {
 export const serviceUpdatePost = async (id, inputs) => {};
 
 export const serviceDeletePost = async (id, tokenUserId) => {
-    const post = await prisma.post.findUnique({
-        where: {id}
-    });
-    console.log(tokenUserId)    
-    console.log(post)
-    console.log(id)
-    if(post.userId !== tokenUserId) {
-        return {
-            status: "FORBIDDEN",
-            data: {
-                message: "You are not authorized to delete this post"
-            }
-        }
-    }
-
-    const postDetail = await prisma.postDetail.findUnique({
-        where: { postId: id }
-    });
-    console.log(postDetail)
-
-    if (postDetail) {
-        await prisma.postDetail.delete({
-            where: { postId: id }
-        });
-    }
-
-    console.log("entrei no delete")
-
-    await prisma.post.delete({
-        where: {id}
-    });
-    
+  const post = await prisma.post.findUnique({
+    where: { id },
+  });
+  console.log(tokenUserId);
+  console.log(post);
+  console.log(id);
+  if (post.userId !== tokenUserId) {
     return {
-        status: "SUCCESSFUL",
-        data: {
-            message: "Post deleted successfully"
-        }
-    }
+      status: "FORBIDDEN",
+      data: {
+        message: "You are not authorized to delete this post",
+      },
+    };
+  }
+
+  const postDetail = await prisma.postDetail.findUnique({
+    where: { postId: id },
+  });
+  console.log(postDetail);
+
+  if (postDetail) {
+    await prisma.postDetail.delete({
+      where: { postId: id },
+    });
+  }
+
+  console.log("entrei no delete");
+
+  await prisma.post.delete({
+    where: { id },
+  });
+
+  return {
+    status: "SUCCESSFUL",
+    data: {
+      message: "Post deleted successfully",
+    },
+  };
 };

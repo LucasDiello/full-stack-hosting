@@ -56,7 +56,9 @@ export const serviceDeleteUser = async (userId) => {
     }
 }
 
+// refactor logic to get all posts 
 export const serviceSavePost = async (postId, tokenUserId) => {
+    console.log(postId, tokenUserId);
    const savedPost = await prisma.savedPost.findUnique({
          where: {
               userId_postId: {
@@ -65,7 +67,6 @@ export const serviceSavePost = async (postId, tokenUserId) => {
               }
          }
     });
-
     if(savedPost) {
         await prisma.savedPost.delete({
             where: {
@@ -78,7 +79,7 @@ export const serviceSavePost = async (postId, tokenUserId) => {
                 message: "Post removed from saved"
             }
         }
-    } else {
+    } 
         await prisma.savedPost.create({
             data: {
                 userId: tokenUserId,
@@ -91,5 +92,30 @@ export const serviceSavePost = async (postId, tokenUserId) => {
                 message: "Post saved"
             }
         }
-    }
 }
+
+export const serviceProfilePosts = async (tokenUserId) => {
+    const userPosts = await prisma.post.findMany({
+        where: {
+            userId: tokenUserId
+        }
+    });
+
+    const saved = await prisma.savedPost.findMany({
+        where: {
+            userId: tokenUserId
+        }, include: {
+            post: true
+        }
+    });
+
+    const savedPosts = saved.map(s => s.post);
+
+    return {
+        status: "SUCCESSFUL",
+        data: {
+            userPosts,
+            savedPosts
+        }
+    }
+};

@@ -1,6 +1,7 @@
+import prisma from "../lib/prisma.js";
 import { serviceCreatePost, serviceDeletePost, serviceGetAllPosts, serviceGetPostById } from "../service/post.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
-
+import jwt from "jsonwebtoken";
 
 export const getAllPosts = async (req, res) => {
     const query = req.query;
@@ -15,11 +16,13 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
     const id = req.params.id;
     const token = req.cookies?.token;
+
     try {
         const {status, data} = await serviceGetPostById(id, token);
         res.status(mapStatusHTTP(status)).json(data);
-    } catch (error) {
-        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error find postId" });
+    }
+    catch (error) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error retrieving post" });
     }
 }
 

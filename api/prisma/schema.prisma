@@ -30,7 +30,7 @@ model Post {
   user       User        @relation(fields: [userId], references: [id])
   userId     String      @db.ObjectId
   postDetail PostDetail?
-  SavedPosts SavedPost[]
+  savedPosts SavedPost[]
 }
 
 enum Type {
@@ -59,6 +59,16 @@ model PostDetail {
   postId     String  @unique @db.ObjectId
 }
 
+model SavedPost {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String   @unique @db.ObjectId
+  postId    String   @unique @db.ObjectId
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
 
 model User {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
@@ -68,16 +78,6 @@ model User {
   avatar     String?
   createdAt  DateTime    @default(now())
   posts      Post[]
-  SavedPosts SavedPost[]
-}
-
-model SavedPost {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  user       User    @relation(fields: [userId], references: [id])
-  post       Post    @relation(fields: [postId], references: [id])
-  userId     String  @db.ObjectId @unique
-  postId     String  @db.ObjectId @unique
-  createdAt  DateTime @default(now())
-
-  @@unique([userId, postId])
+  savedPosts SavedPost[]
+  chatIDs    String[]    @db.ObjectId
 }
