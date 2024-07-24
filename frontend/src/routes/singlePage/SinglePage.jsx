@@ -11,11 +11,12 @@ import { BsFillSaveFill, BsSave } from "react-icons/bs";
 
 const SinglePage = () => {
   const post = useLoaderData();
-  const [saved, setSaved] = useState(false);
+  
+  const [saved, setSaved] = useState(post.isSaved);
+  console.log(post)
   const navigate = useNavigate();
-  console.log(post.isSaved);
+  console.log(saved)
   const { currentUser } = useContext(AuthContext);
-  console.log(currentUser);
   const handleSave = async () => {
     // atualizar para optimistik react19
     setSaved((prev) => !prev)
@@ -30,6 +31,7 @@ const SinglePage = () => {
       console.log(res)
     }catch(err) {
       console.log(err)
+      setSaved((prev) => !prev)
     }
   }
 
