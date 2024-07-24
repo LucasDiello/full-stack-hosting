@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 
 export const serviceGetAllPosts = async (query) => {
   const { city, type, property, bedroom, minPrice, maxPrice } = query;
-
   const posts = await prisma.post.findMany({
     where: {
       city: city || undefined,
@@ -16,11 +15,10 @@ export const serviceGetAllPosts = async (query) => {
       },
     },
   });
-
-  return {
-    status: "SUCCESSFUL",
-    data: posts,
-  };
+      return {
+        status: "SUCCESSFUL",
+        data: posts,
+      };
 };
 
 export const serviceGetPostById = async (id, token) => {
