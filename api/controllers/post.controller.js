@@ -1,4 +1,5 @@
 import { serviceCreatePost, serviceDeletePost, serviceGetAllPosts, serviceGetPostById } from "../service/post.service.js";
+import { serviceSavePost } from "../service/user.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 
@@ -52,5 +53,17 @@ export const deletePost = async (req, res) => {
         res.status(mapStatusHTTP(status)).json(data.message);
     } catch (error) {
         res.status(500).json({ message: "Error deleting post" });
+    }
+}
+
+export const savePost = async (req, res) => {
+    const postId = req.body.postId;
+    const tokenUserId = req.userId;
+
+    try {
+        const {status, data} = await serviceSavePost(postId, tokenUserId);
+        res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error saving post" });
     }
 }

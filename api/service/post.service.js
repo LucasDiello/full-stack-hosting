@@ -35,10 +35,14 @@ export const serviceGetPostById = async (id, token) => {
     },
   });
 
+  console.log(post);
+  console.log(token)
+
   if (token) {
     console.log("entrei no if");
     jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
       if (!err) {
+        console.log("entrei no if do err");
         const saved = await prisma.savedPost.findUnique({
           where: {
             userId_postId: {

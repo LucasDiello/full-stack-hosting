@@ -55,3 +55,41 @@ export const serviceDeleteUser = async (userId) => {
         data: {message:"User deleted"}
     }
 }
+
+export const serviceSavePost = async (postId, tokenUserId) => {
+   const savedPost = await prisma.savedPost.findUnique({
+         where: {
+              userId_postId: {
+                userId: tokenUserId,
+                postId
+              }
+         }
+    });
+
+    if(savedPost) {
+        await prisma.savedPost.delete({
+            where: {
+            id: savedPost.id
+            }
+        });
+        return {
+            status: "SUCCESSFUL",
+            data: {
+                message: "Post removed from saved"
+            }
+        }
+    } else {
+        await prisma.savedPost.create({
+            data: {
+                userId: tokenUserId,
+                postId
+            }
+        });
+        return {
+            status: "SUCCESSFUL",
+            data: {
+                message: "Post saved"
+            }
+        }
+    }
+}
