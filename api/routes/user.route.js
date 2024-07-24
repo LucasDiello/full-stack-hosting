@@ -5,10 +5,11 @@ import { verifyToken } from '../middleware/verifyToken.js';
 const router = express.Router();
 
 router.get('/', getAllUsers)
+router.get('/profilePosts', verifyToken, profilePosts)
 // router.get('/:id',verifyToken, getUserById) not ussing this route
+// remember Don't forget to check
 router.put('/:id',verifyToken, updateUser)
 router.delete('/:id',verifyToken, deleteUser)
 router.post('/save',verifyToken, savePost)
-router.get('/profilePosts', verifyToken, profilePosts)
 
 export default router; 
