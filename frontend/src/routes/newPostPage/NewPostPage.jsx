@@ -141,15 +141,15 @@ const NewPostPage = () => {
               <input min={0} id="size" name="size" type="number" />
             </div>
             <div className="item">
-              <label htmlFor="school">Escola Próx. (km)</label>
+              <label htmlFor="school">Escola Próx. (metros)</label>
               <input min={0} id="school" name="school" type="number" />
             </div>
             <div className="item">
-              <label htmlFor="bus">Ônibus Próx. (km)</label>
+              <label htmlFor="bus">Ônibus Próx. (metros)</label>
               <input min={0} id="bus" name="bus" type="number" />
             </div>
             <div className="item">
-              <label htmlFor="restaurant">Restaurante Próx. (km)</label>
+              <label htmlFor="restaurant">Restaurante Próx. (metros)</label>
               <input min={0} id="restaurant" name="restaurant" type="number" />
             </div>
             <button className="sendButton">Adicionar</button>
