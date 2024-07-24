@@ -1,0 +1,74 @@
+import prisma from "../lib/prisma";
+
+
+export const serviceGetAllChats = async (tokenUserId) => {
+    const chats = await prisma.chat.findMany({
+        where: {
+            userIDs: {
+                hasSome: [tokenUserId]
+            }
+        }
+    })
+
+    for (let chat of chats) {
+    const receiverId = chat.userIDs.find((id) => id !== tokenUserId);
+
+    const receiver = await prisma.user.findUnique({
+        where: {
+            id: receiverId
+        },
+        select: {
+            id: true,
+            username: true,
+            avatar: true
+        }
+    })
+    chat.receiver = receiver;
+    }
+    
+    return {
+        status: "SUCCESSFUL",
+        data: chats
+    }
+};
+
+export const serviceGetChatById = async (id,tokenUserId) => {
+    const chat = await prisma.chat.findUnique({
+        where: {
+            id: id,
+            userIDs: {
+                hasSome: [tokenUserId]
+            }
+        },
+        include: {
+            messages: {
+                include: {
+                   orderBy: {
+                    createdAt: "asc"
+                   }
+                }
+            }
+        }
+    });
+
+    await prisma.chat.update({
+        where: {
+            id
+        },
+        data: {
+            seenBy: {
+                push: tokenUserId
+            }
+        }
+    })
+
+    return {
+        status: "SUCCESSFUL",
+        data: chat
+    }
+};
+
+export const serviceCreateChat = async () => {};
+
+export const serviceReadChat = async () => {};
+

@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRoute, postRoute, userRoute }  from './routes/index.js';
+import { authRoute, chatRoute, messageRoute, postRoute, userRoute }  from './routes/index.js';
 import cors from 'cors';
 
 const app = express();
@@ -15,6 +15,9 @@ app.use('/api/posts', postRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)
 app.use('/api/posts', postRoute)
+app.use('/api/chat', chatRoute)
+app.use('/api/messages', messageRoute)
+
 
 app.listen(8800, () => {
     console.log('Server is running on port 8800');
