@@ -81,5 +81,24 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
     }
 };
 
-export const serviceReadChat = async () => {};
+export const serviceReadChat = async (id, tokenUserId) => {
+    const  chat = await prisma.chat.findUnique({
+        where: {
+            id,
+            userIDs: {
+                hasSome: [tokenUserId]
+            }
+        },
+        data: {
+            seenBy: {
+                set: [tokenUserId]
+            }
+        }
+    });
+
+    return {
+        status: "SUCCESSFUL",
+        data: chat
+    }
+};
 
