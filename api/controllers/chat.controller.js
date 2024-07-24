@@ -1,5 +1,5 @@
-import { serviceGetAllChats } from "../service/chat.service";
-import mapStatusHTTP from "../util/mapStatusHTTP";
+import { serviceGetAllChats } from "../service/chat.service.js";
+import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 
 export const getAllChats = async (req, res) => {
