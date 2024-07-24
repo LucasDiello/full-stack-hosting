@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-import { serviceDeleteUser, serviceGetAllUsers, serviceGetUserById, serviceUpdateUser } from "../service/user.service.js";
+import { serviceDeleteUser, serviceGetAllUsers, serviceGetUserById, serviceSavePost, serviceUpdateUser } from "../service/user.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 export const getAllUsers = async (req, res) => {
@@ -50,3 +50,15 @@ export const deleteUser = async (req, res) => {
         res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({message : "Error deleting user"});
     }
 };
+
+export const savePost = async (req, res) => {
+    const postId = req.body.postId;
+    const tokenUserId = req.userId;
+    console.log(postId, tokenUserId);
+    try {
+        const {status, data} = await serviceSavePost(postId, tokenUserId);
+        res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error saving post" });
+    }
+}
