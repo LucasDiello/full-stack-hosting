@@ -1,4 +1,4 @@
-import { serviceGetAllChats } from "../service/chat.service.js";
+import { serviceCreateChat, serviceGetAllChats, serviceGetChatById, serviceReadChat } from "../service/chat.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 
@@ -16,7 +16,8 @@ export const getAllChats = async (req, res) => {
 export const getChatById = async (req, res) => {
     const id = req.params.id;
     const tokenUserId = req.userId;
-
+    console.log("tokenUserId", tokenUserId);
+    console.log("id", id);
     try {
         const {status, data} = await serviceGetChatById(id, tokenUserId);
         res.status(mapStatusHTTP(status)).json(data);
@@ -29,7 +30,8 @@ export const getChatById = async (req, res) => {
 export const createChat = async (req, res) => {
     const tokenUserId = req.userId;
     const receiverId = req.body.receiverId;
-
+    console.log("tokenUserId", tokenUserId);
+    console.log("receiverId", receiverId);
     try {
         const {status, data} = await serviceCreateChat(tokenUserId, receiverId);
         res.status(mapStatusHTTP(status)).json(data);

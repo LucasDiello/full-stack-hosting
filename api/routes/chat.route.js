@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', verifyToken, getAllChats)
 router.get('/:id', verifyToken, getChatById)
 router.post('/', verifyToken, createChat)
-router.get('/read/:id', verifyToken, readChat)
+router.put('/read/:id', verifyToken, readChat)
 
 
 export default router; 

@@ -42,15 +42,12 @@ export const serviceGetChatById = async (id,tokenUserId) => {
         },
         include: {
             messages: {
-                include: {
-                   orderBy: {
-                    createdAt: "asc"
-                   }
-                }
+                orderBy: {
+                    createdAt: 'asc'
+                },
             }
         }
     });
-
     await prisma.chat.update({
         where: {
             id
@@ -91,7 +88,7 @@ export const serviceReadChat = async (id, tokenUserId) => {
         },
         data: {
             seenBy: {
-                set: [tokenUserId]
+                push: [tokenUserId]
             }
         }
     });
