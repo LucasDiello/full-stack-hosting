@@ -26,6 +26,17 @@ export const getChatById = async (req, res) => {
     }
 };
 
-export const createChat = async (req, res) => {};
+export const createChat = async (req, res) => {
+    const tokenUserId = req.userId;
+    const receiverId = req.body.receiverId;
+
+    try {
+        const {status, data} = await serviceCreateChat(tokenUserId, receiverId);
+        res.status(mapStatusHTTP(status)).json(data);
+    }
+    catch (error) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({message : "Error creating chat"});
+    }
+};
 
 export const readChat = async (req, res) => {};

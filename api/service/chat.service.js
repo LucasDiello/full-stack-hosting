@@ -68,7 +68,18 @@ export const serviceGetChatById = async (id,tokenUserId) => {
     }
 };
 
-export const serviceCreateChat = async () => {};
+export const serviceCreateChat = async (tokenUserId, receiverId) => {
+    const newChat = await prisma.chat.create({
+        data: {
+            userIDs: [tokenUserId, receiverId]
+        }
+    });
+
+    return {
+        status: "SUCCESSFUL",
+        data: newChat
+    }
+};
 
 export const serviceReadChat = async () => {};
 
