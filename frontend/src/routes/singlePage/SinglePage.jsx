@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./singlePage.scss";
 import Map from "../../components/map/Map";
 import { singlePostData, userData } from "../../lib/dummydata";
 import Slider from "../../components/slider/Slider";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { AuthContext } from "../../context/AuthContext";
+import apiRequest from "../../lib/apiRequest";
+import { BsFillSaveFill, BsSave } from "react-icons/bs";
 
 const SinglePage = () => {
   const post = useLoaderData();
-  console.log(post);
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
+  console.log(post.isSaved);
+  const { currentUser } = useContext(AuthContext);
+  console.log(currentUser);
+  const handleSave = async () => {
+    // atualizar para optimistik react19
+    setSaved((prev) => !prev)
+    if(!currentUser) {
+      navigate("/login");
+    }
+    try {
+      const res = await apiRequest.post("/users/save", {
+        postId: post.id,
+        tokenUserId: currentUser.id
+      })
+      console.log(res)
+    }catch(err) {
+      console.log(err)
+    }
+  }
 
   return (
     <div className="singlePage">
@@ -130,9 +153,9 @@ const SinglePage = () => {
               <img src="/chat.png" alt="" />
               Enviar uma Mensagem
             </button>
-            <button>
-              <img src="/save.png" alt="" />
-              Salvar o Local
+            <button onClick={handleSave} style={{backgroundColor: saved ? "#fece51" : "white"}}>
+              {saved ? <BsFillSaveFill /> : <BsSave  />}
+              {saved ? "local Salvo" : "Salvar o Local"}
             </button>
           </div>
         </div>
