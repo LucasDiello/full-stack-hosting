@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-import { serviceDeleteUser, serviceGetAllUsers, serviceGetUserById, serviceProfilePosts, serviceSavePost, serviceUpdateUser } from "../service/user.service.js";
+import { serviceDeleteUser, serviceGetAllUsers, serviceGetNotificationNumber, serviceGetUserById, serviceProfilePosts, serviceSavePost, serviceUpdateUser } from "../service/user.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 export const getAllUsers = async (req, res) => {
@@ -71,3 +71,13 @@ export const profilePosts = async (req, res) => {
         res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error retrieving profile posts" });
     }
 };
+
+export const getNotificationNumber = async (req, res) => {
+    const tokenUserId = req.userId;
+    try {   
+     const { status, data } = await serviceGetNotificationNumber(tokenUserId);
+        res.status(mapStatusHTTP(status)).json(data);
+    } catch (err) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error retrieving notification number" });
+    }
+  };

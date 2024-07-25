@@ -119,3 +119,22 @@ export const serviceProfilePosts = async (tokenUserId) => {
         }
     }
 };
+
+export const serviceGetNotificationNumber = async (tokenUserId) => {
+    const number = await prisma.chat.count({
+        where: {
+          userIDs: {
+            hasSome: [tokenUserId],
+          },
+          NOT: {
+            seenBy: {
+              hasSome: [tokenUserId],
+            },
+          },
+        },
+      });
+        return {
+            status: "SUCCESSFUL",
+            data: number,
+        };  
+};
