@@ -9,16 +9,40 @@ const Chat = ({ chats }) => {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   console.log(chats);
+
+  console.log(chat);
   const handleOpenChat = async (chatId, receiver) => {
     try {
       const response = await apiRequest.get(`/chats/${chatId}`);
       console.log(response.data);
+      console.log(receiver);
       setChat({
         ...response.data,
         receiver,
       });
+      console.log(chat)
     } catch (error) {
       console.error(error);
+    }
+  }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const text = formData.get("text");
+
+    if(!text) return;
+    try {
+      console.log(chat.id);
+      console.log(text);
+      const response = await apiRequest.post(`/messages/${chat.id}`, { text });
+      setChat((prev) => ({
+        ...prev,
+        messages: [...prev.messages, response.data],
+      }))
+      e.target.reset();
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -74,8 +98,8 @@ const Chat = ({ chats }) => {
               ))
             }
           </div>
-          <form className="bottom">
-            <textarea></textarea>
+          <form onSubmit={handleSubmit} className="bottom">
+            <textarea name="text"></textarea>
             <button>Enviar</button>
           </form>
         </div>
