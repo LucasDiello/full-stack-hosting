@@ -1,74 +1,62 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./chat.scss";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
-import { format } from "timeago.js"
+import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
+import { useNotificationStore } from "../../lib/notificationStore";
 
-const Chat = ({ chats }) => {
+function Chat({ chats }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
-  console.log(socket)
-  console.log(chats);
-
-  console.log(chat);
-
-  const messageEndRef = useRef(null);
+  console.log(chats)
+  console.log(chats[0].id)
+  const messageEndRef = useRef();
+  const decrease = useNotificationStore((state) => state.decrease);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  },[chat])
+  }, [chat]);
 
-  const handleOpenChat = async (chatId, receiver) => {
+  const handleOpenChat = async (id, receiver) => {
     try {
-      const response = await apiRequest.get(`/chats/${chatId}`);
-      console.log(response.data);
-      console.log(receiver);
-      setChat({
-        ...response.data,
-        receiver,
-      });
-
-      console.log(chat)
-    } catch (error) {
-      console.error(error);
+      const res = await apiRequest("/chats/" + id);
+      if (!res.data.seenBy.includes(currentUser.id)) {
+        decrease();
+      }
+      setChat({ ...res.data, receiver });
+    } catch (err) {
+      console.log(err);
     }
-  }
-  
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = new FormData(e.target);
     const text = formData.get("text");
 
-    if(!text) return;
+    if (!text) return;
     try {
-      console.log(chat.id);
-      console.log(text);
-      const response = await apiRequest.post(`/messages/${chat.id}`, { text });
-      setChat((prev) => ({
-        ...prev,
-        messages: [...prev.messages, response.data],
-      }))
+      const res = await apiRequest.post("/messages/" + chat.id, { text });
+      setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
-      socket.emit("sendMessage",  {
+      socket.emit("sendMessage", {
         receiverId: chat.receiver.id,
-        data: response.data,
+        data: res.data,
       });
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
-
     const read = async () => {
       try {
-        const response = await apiRequest.put(`/chats/read/${chat.id}`);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
+        await apiRequest.put("/chats/read/" + chat.id);
+      } catch (err) {
+        console.log(err);
       }
     };
 
@@ -84,24 +72,28 @@ const Chat = ({ chats }) => {
       socket.off("getMessage");
     };
   }, [socket, chat]);
-  
+
   return (
     <div className="chat">
       <div className="messages">
-        <h1>Messages</h1>
-        {chats?.map((chat) => (
+        <h1>Mensagens</h1>
+        {chats?.map((c) => (
           <div
             className="message"
+            key={c.id}
             style={{
-              backgroundColor: chat.seenBy.includes(currentUser.id)
-                ? "white"
-                : "#fecd514e",
+              backgroundColor:
+                c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                  ? "white"
+                  : "#fecd514e",
             }}
-            onClick={() => handleOpenChat(chat.id, chat.receiver)}
+            onClick={() => handleOpenChat(c.id, c.receiver)}
           >
-            <img src={chat.receiver.avatar || "./noavatar.jpg"} alt="" />
-            <span>{chat.username}</span>
-            <p>{chat.lastMessage}</p>
+            <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
+            <div>
+            <span>{c.receiver.username}</span>
+            <p>{c.lastMessage}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -109,34 +101,32 @@ const Chat = ({ chats }) => {
         <div className="chatBox">
           <div className="top">
             <div className="user">
-              <img
-                src={chat.receiver.avar || "./noavatar.jpg"}
-                alt=""
-              />
-                {chat.receiver.username}
+              <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
+              {chat.receiver.username}
             </div>
             <span className="close" onClick={() => setChat(null)}>
               X
             </span>
           </div>
           <div className="center">
-            {
-              chat.messages.map((message) => (
-                <div
-                  className="chatMessage"
-                  style={{
-                    alignSelf: message.userId === currentUser.id ? "flex-end" : "flex-start",
-                    textAlign: message.userId === currentUser.id ? "right" : "left",
-                  }}
-                  key={message.id}
-                  
-                >
-                  <p>{message.text}</p>
-                  <span>{format(message.createdAt)}</span>
-                </div>
-              ))
-            }
-            <div ref={messageEndRef} />
+            {chat.messages.map((message) => (
+              <div
+                className="chatMessage"
+                style={{
+                  alignSelf:
+                    message.userId === currentUser.id
+                      ? "flex-end"
+                      : "flex-start",
+                  textAlign:
+                    message.userId === currentUser.id ? "right" : "left",
+                }}
+                key={message.id}
+              >
+                <p>{message.text}</p>
+                <span>{format(message.createdAt)}</span>
+              </div>
+            ))}
+            <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
             <textarea name="text"></textarea>
@@ -146,6 +136,6 @@ const Chat = ({ chats }) => {
       )}
     </div>
   );
-};
+}
 
 export default Chat;
