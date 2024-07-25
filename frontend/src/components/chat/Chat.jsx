@@ -1,16 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import "./chat.scss";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { format } from "timeago.js"
+import { SocketContext } from "../../context/SocketContext";
 
 const Chat = ({ chats }) => {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
+  console.log(socket)
   console.log(chats);
 
   console.log(chat);
+
+  const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  },[chat])
+
   const handleOpenChat = async (chatId, receiver) => {
     try {
       const response = await apiRequest.get(`/chats/${chatId}`);
@@ -20,6 +30,7 @@ const Chat = ({ chats }) => {
         ...response.data,
         receiver,
       });
+
       console.log(chat)
     } catch (error) {
       console.error(error);
@@ -41,11 +52,39 @@ const Chat = ({ chats }) => {
         messages: [...prev.messages, response.data],
       }))
       e.target.reset();
+      socket.emit("sendMessage",  {
+        receiverId: chat.receiver.id,
+        data: response.data,
+      });
     } catch (error) {
       console.log(error)
     }
   }
 
+  useEffect(() => {
+
+    const read = async () => {
+      try {
+        const response = await apiRequest.put(`/chats/read/${chat.id}`);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (chat && socket) {
+      socket.on("getMessage", (data) => {
+        if (chat.id === data.chatId) {
+          setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
+          read();
+        }
+      });
+    }
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket, chat]);
+  
   return (
     <div className="chat">
       <div className="messages">
@@ -97,6 +136,7 @@ const Chat = ({ chats }) => {
                 </div>
               ))
             }
+            <div ref={messageEndRef} />
           </div>
           <form onSubmit={handleSubmit} className="bottom">
             <textarea name="text"></textarea>
