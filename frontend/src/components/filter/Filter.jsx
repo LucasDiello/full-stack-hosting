@@ -4,15 +4,16 @@ import { useSearchParams } from "react-router-dom";
 
 function Filter() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { type, city, property, minPrice, maxPrice, bedroom } = searchParams;
   const [query, setQuery] = useState({
-    type: searchParams.get("type") || "",
-    city: searchParams.get("city") || "",
-    property: searchParams.get("property") || "",
-    minPrice: searchParams.get("minPrice") || 100,
-    maxPrice: searchParams.get("maxPrice") || 100000,
-    bedroom: searchParams.get("bedroom") || 3,
+    type: type || "",
+    city: city || "",
+    property: property || "",
+    minPrice: minPrice || 100,
+    maxPrice: maxPrice || 100000,
+    bedroom: bedroom || 3,
   });
-
+  
   const handleChange = (e) => {
     setQuery({
       ...query,
@@ -27,7 +28,7 @@ function Filter() {
   return (
     <div className="filter">
       <h1>
-        Resultados da busca por <b>{searchParams.get("city")}</b>
+        Resultados da busca por - <b>{city}</b>
       </h1>
       <div className="top">
         <div className="item">

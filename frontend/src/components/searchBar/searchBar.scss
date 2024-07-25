@@ -33,7 +33,6 @@
     display: flex;
     justify-content: space-between;
     height: 64px;
-    gap: 5px;
 
     @include sm {
       flex-direction: column;
@@ -43,7 +42,7 @@
     input {
       border: none;
       padding: 0px 10px;
-      width: 200px;
+      width: 100%;
 
       @include lg {
         padding: 0px 5px;
@@ -76,7 +75,6 @@
       display: flex;
       padding: 10px;
       background-color: #fece51;
-
       button {
         border: none;
         background-color: #fece51;
