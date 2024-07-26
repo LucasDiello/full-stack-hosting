@@ -1,38 +1,45 @@
 .login {
     height: 100%;
     display: flex;
-  
     .formContainer {
       flex: 3;
       height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
-  
+      
+      
       form {
         display: flex;
         flex-direction: column;
         gap: 20px;
+        padding-block: 100px;
   
+        h1 {
+          font-weight: 300;
+          font-size: 90px;
+          color: rgb(36, 36, 36);
+
+          &::after {
+            content: "!";
+            font-size: 7rem;
+            color: #ff6b6b;
+          }
+
+        }
+
+        p {
+          font-size: 15px;
+          max-width: 70%;
+          line-height: 30px;
+          letter-spacing: 1px;
+          color: gray;
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
         input{
           padding: 20px;
           border: 1px solid gray;
+          max-width: 70%;
           border-radius: 5px;
-        }
-  
-        button{
-          padding: 20px;
-          border-radius: 5px;
-          border: none;
-          background-color: teal;
-          color: white;
-          font-weight: bold;
-          cursor: pointer;
-  
-          &:disabled{
-            background-color: #BED9D8;
-            cursor: not-allowed;
-          }
         }
   
         span{
@@ -42,9 +49,30 @@
         a{
           font-size: 14px;
           color: gray;
+          letter-spacing: 1px;
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
           border-bottom: 1px solid gray;
           width: max-content;
+         
         }
+
+        button {
+          padding: 20px 24px;
+          max-width: 40%;
+          background-color: #ff6b6b;
+          cursor: pointer;
+          color: white;
+          border: none;
+          font-size: 15px;
+          font-weight: 300;
+          transition: all 0.5s ease;
+  
+          &:hover {
+            background-color: #fece51;
+            box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
+            color: black;
+        }
+      }
       }
     }
   

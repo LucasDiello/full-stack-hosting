@@ -40,6 +40,10 @@ const RegisterPage = () => {
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Criar uma Conta</h1>
+          <p>
+            Crie uma conta para acessar a plataforma e encontrar o imóvel dos seus sonhos.
+            Não perca tempo, crie sua conta agora mesmo!
+          </p>
           <input name="username" type="text" placeholder="Usuário" />
           <input name="email" type="text" placeholder="E-mail" />
           <input name="password" type="password" placeholder="Senha" />
