@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './loginPage.scss';
 import apiRequest from '../../lib/apiRequest';
 import { AuthContext } from '../../context/AuthContext';
@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { updateUser } = useContext(AuthContext);
-
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +38,8 @@ const LoginPage = () => {
   };
   return (
     <div className="login">
+            <div className={`${pathname === "/login" && "before"}`}/>
+
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Bem-vindo de volta</h1>

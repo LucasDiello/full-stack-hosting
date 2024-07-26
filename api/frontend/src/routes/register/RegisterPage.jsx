@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./registerPage.scss";
 import apiRequest from "../../lib/apiRequest";
 
 const RegisterPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -36,6 +36,7 @@ const RegisterPage = () => {
   };
   return (
     <div className="register">
+      <div className={`${pathname === "/register" && "before"}`}/>
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Criar uma Conta</h1>
