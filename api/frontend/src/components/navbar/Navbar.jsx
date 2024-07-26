@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
-
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
-
+  const { pathname } = useLocation();
+  console.log(pathname)
   if(currentUser) fetch()
 
   return (
@@ -25,7 +25,7 @@ const Navbar = () => {
         <a href="/">Contato</a>
         <a href="/">Agentes</a>
       </div>
-      <div className="right">
+      <div className="right" style={{backgroundColor: pathname !== "/" && "#fcf5f3"}}>
         {currentUser ? (
           <div className="user">
             <img src={currentUser.avatar || "/noavatar.jpg"} alt="" />

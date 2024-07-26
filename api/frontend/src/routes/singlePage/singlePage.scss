@@ -3,7 +3,6 @@
 .singlePage {
   display: flex;
   height: 100%;
-
   @include md {
     flex-direction: column;
     overflow: scroll;
@@ -102,8 +101,8 @@
   }
   .features {
     flex: 2;
-    background-color: #fcf5f3;
-    height: 100%;
+    background-color: #f7f7f7;
+    max-height: 85vh;
     overflow-y: scroll;
 
     @include md {

@@ -12,12 +12,7 @@ function Chat({ chats }) {
   const { socket } = useContext(SocketContext);
   console.log(chats)
   console.log(chats[0].id)
-  const messageEndRef = useRef();
   const decrease = useNotificationStore((state) => state.decrease);
-
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
 
   const handleOpenChat = async (id, receiver) => {
     try {
@@ -126,7 +121,6 @@ function Chat({ chats }) {
                 <span>{format(message.createdAt)}</span>
               </div>
             ))}
-            <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
             <textarea name="text"></textarea>

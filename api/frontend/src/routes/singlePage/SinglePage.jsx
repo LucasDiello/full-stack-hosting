@@ -51,8 +51,8 @@ const SinglePage = () => {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.img} alt="" />
-                <span>{post.user.name}</span>
+                <img src={post.user.avatar} alt="" />
+                <p>{post.user.username}</p>
               </div>
             </div>
             <div className="bottom">

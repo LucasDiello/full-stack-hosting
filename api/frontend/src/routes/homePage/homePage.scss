@@ -33,6 +33,20 @@
         @include lg {
           font-size: 48px;
         }
+
+        span {
+          color: #ff6b6b;
+
+          &::after {
+            content: "";
+            display: block;
+            width: 16rem;
+            height: 5px;
+            background-color: #ff6b6b;
+            margin-top: 10px;
+          }
+        }
+        
       }
 
       .boxes {
@@ -61,11 +75,11 @@
 
   .imgContainer {
     flex: 2;
-    background-color: #fcf5f3;
+    background-color: #ff6b6b;
     position: relative;
     display: flex;
     align-items: center;
-
+    
     @include md {
       display: none;
     }
