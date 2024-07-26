@@ -10,9 +10,7 @@ const ProfilePage = () => {
   const { updateUser, currentUser } = useContext(AuthContext);
   const data = useLoaderData();
   const navigate = useNavigate();
-  (async () => {
-    console.log(await data.chatResponse);
-  })()
+
   const handleLogout = async () => {
     try {
       const response = await apiRequest.post("/auth/logout");
