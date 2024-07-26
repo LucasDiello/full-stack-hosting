@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { BsUpload } from "react-icons/bs";
 
 // Create a context to manage the script loading state
 const CloudinaryScriptContext = createContext();
@@ -54,7 +55,7 @@ function UploadWidget({ uwConfig, setPublicId, setState }) {
         className="cloudinary-button"
         onClick={initializeCloudinaryWidget}
       >
-        Upload
+        <BsUpload size={20} />
       </button>
     </CloudinaryScriptContext.Provider>
   );

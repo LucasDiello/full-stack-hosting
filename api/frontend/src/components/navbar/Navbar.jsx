@@ -10,8 +10,12 @@ const Navbar = () => {
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
   const { pathname } = useLocation();
-  console.log(pathname)
-  if(currentUser) fetch()
+
+  const backgroundColor = 
+    pathname === "/profile/update" ? "beige" : 
+    (pathname === "/" ? "#ff6b6b" : "");
+
+  if (currentUser) fetch();
 
   return (
     <nav>
@@ -25,20 +29,23 @@ const Navbar = () => {
         <a href="/">Contato</a>
         <a href="/">Agentes</a>
       </div>
-      <div className="right" style={{backgroundColor: pathname !== "/" && "#fcf5f3"}}>
+      <div
+        className="right"
+        style={{ backgroundColor }}
+      >
         {currentUser ? (
           <div className="user">
             <img src={currentUser.avatar || "/noavatar.jpg"} alt="" />
             <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
-          {number > 0 && <div className="notification">{number}</div>}
+              {number > 0 && <div className="notification">{number}</div>}
               <span>Perfil</span>
             </Link>
           </div>
         ) : (
           <>
             <a href="/login">Entrar</a>
-            <a href="/register" className="register-nav ">
+            <a href="/register" className="register-nav">
               Registrar-se
             </a>
           </>
@@ -55,8 +62,8 @@ const Navbar = () => {
           <a href="/">Sobre</a>
           <a href="/">Contato</a>
           <a href="/">Agentes</a>
-          <a href="/">Entrar</a>
-          <a href="/">Registrar-se</a>
+          <a href="/login">Entrar</a>
+          <a href="/register">Registrar-se</a>
         </div>
       </div>
     </nav>

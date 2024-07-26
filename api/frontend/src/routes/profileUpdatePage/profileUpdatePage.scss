@@ -1,70 +1,103 @@
-@import "../../responsive.scss";
 
 .profileUpdatePage {
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  
+  img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0px 0px 20px 0px rgba(89, 89, 89, 0.75);
+  }
+  
+  .sideContainer {
     display: flex;
-  
-    .formContainer {
-      flex:3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-  
-        .item {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-  
-          label {
-          }
-  
-          input {
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid gray;
-          }
-        }
-        button {
-          padding: 20px;
-          border-radius: 5px;
-          border: none;
-          background-color: teal;
-          color: white;
-          font-weight: bold;
-          cursor: pointer;
-        }
+    flex-direction: column;
+    position: relative;
+    bottom: 90px;
+
+    .cloudinary-button {
+      margin: 20px;
+      width: 10em;
+      height: 3em;
+      border-radius: 8px;
+      border: 0.15em solid #ff6b6b;
+      color: #ff6b6b;
+      background-color: #00000000;
+      transition: all 0.5s ease;
+
+      &:hover {
+        background-color: #ff6b6b;
+        color: white;
       }
     }
-  
-    .sideContainer {
-      flex: 2;
-      background-color: #fcf5f3;
+
+  }
+
+  .formContainer {
+    margin-top: 100px;
+    height: 100%;
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: beige;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
+
+    form {
+      position: relative;
+      bottom: 40px;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      align-items: center;
-      justify-content: center;
-  
-      .avatar{
-        width: 500px;
-        height: 500px;
-        border-radius: 50%;
-        object-fit: cover;
+      padding: 0;
 
-        @include md{
-          margin-top: 40px;
-          width: 200px;
-          height: 200px;
+      h1 {
+        font-weight: 300;
+        text-align: center;
+        font-size: 40px;
+        color: rgb(36, 36, 36);
+      }
+
+      
+      .item {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: all 0.5s ease;
+        color: gray;
+        
+        input {
+          border: none;
+          background-color: inherit;
+          border-bottom: 2px solid #888;
+
+          &:focus {
+            outline: none;
+          }
+
         }
       }
-      
+
+
+      button {
+        padding: 12px 24px;
+        background-color: #fece51;
+        cursor: pointer;
+        border: none;
+        font-size: 15px;
+        font-weight: 300;
+        transition: all 0.5s ease;
+
+        &:hover {
+          background-color: #ff6b6b;
+          color: white;
+      }
     }
-    @include sm{
-      flex-direction: column;
-      
     }
   }
+}
