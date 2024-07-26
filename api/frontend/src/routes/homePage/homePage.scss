@@ -23,15 +23,12 @@
         padding: 0;
       }
 
-      @include sm{
-        justify-content: flex-start;
-      }
-
       .title {
         font-size: 64px;
 
-        @include lg {
-          font-size: 48px;
+        @include sm {
+          font-size: 38px;
+          line-height: 50px;
         }
 
         span {
@@ -40,11 +37,15 @@
           &::after {
             content: "";
             display: block;
-            width: 16rem;
+            width: 17rem;
             height: 5px;
             background-color: #ff6b6b;
-            margin-top: 10px;
+
+            @include sm {
+              width: 10rem;
+            }
           }
+
         }
         
       }
