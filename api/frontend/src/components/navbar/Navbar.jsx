@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
@@ -10,11 +10,12 @@ const Navbar = () => {
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
   const { pathname } = useLocation();
-
+  const navigate = useNavigate();
+  
   const getBackgroundColor = () => {
     switch (pathname) {
       case "/profile/update":
-        return "beige";
+        return "white";
       case "/":
       case "/login":
       case "/register":
@@ -47,7 +48,7 @@ const Navbar = () => {
       >
         {currentUser ? (
           <div className="user">
-            <img src={currentUser.avatar || "/noavatar.jpg"} alt="User Avatar" />
+            <img onClick={() => navigate("/profile")} src={currentUser.avatar || "/noavatar.jpg"} alt="User Avatar" />
             <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
               {number > 0 && <div className="notification">{number}</div>}
@@ -60,13 +61,14 @@ const Navbar = () => {
             <a href="/register"   className={`${isActive("/register")} ${isActive("/")}`}>Registrar-se</a>
           </>
         )}
-        <div className="menuIcon">
+{      !currentUser && <div className="menuIcon">
           <img
             src="/menu.png"
             alt="Menu Icon"
             onClick={() => setOpen((prev) => !prev)}
           />
         </div>
+        }
         <div className={open ? "menu active" : "menu"}>
           <a href="/" className={isActive("/")}>Início</a>
           <a href="/" className={isActive("/about")}>Sobre</a>
