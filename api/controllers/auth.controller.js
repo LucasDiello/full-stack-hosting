@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -54,7 +55,7 @@ export const login = async (req, res) => {
       expiresIn: age,
     });
 
-    const {password: userPassword, ...dataUser} = user;
+    const { password: userPassword, ...dataUser } = user;
 
     res
       .cookie("token", token, {
@@ -75,4 +76,57 @@ export const logout = (req, res) => {
     .clearCookie("token")
     .status(mapStatusHTTP("SUCCESSFUL"))
     .json({ message: "Logout Successful" });
+};
+
+export const googleLogin = async (req, res) => {
+  const { idToken } = req.body;
+  try {
+    const decoded = jwtDecode(idToken);
+    const { email, email_verified, name, picture } = decoded;
+
+    if (!email_verified) {
+      return res
+        .status(mapStatusHTTP("UNAUTHORIZED"))
+        .json({ message: "Email not verified" });
+      }
+
+    let user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email,
+          username: name,
+          password: idToken,
+        },
+      });
+    }
+
+    const age = 100 * 60 * 60 * 24 * 7;
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: age,
+    });
+
+    const { password: userPassword, ...dataUser } = user; // remove password from user data
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: age,
+      }) 
+      .status(mapStatusHTTP("SUCCESSFUL"))
+      .json({
+        ...dataUser,
+        avatar: picture,
+      });
+  } catch (err) {
+    res
+      .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
+      .json({ message: "Failed to login with google" });
+  }
 };

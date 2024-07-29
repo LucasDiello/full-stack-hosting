@@ -64,7 +64,7 @@ const ProfilePage = () => {
             <Suspense fallback={<p>Loading...</p>}>
              <Await
               resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
+              errorElement={<p>Posts não encontrados!</p>}
             >
               {(postResponse) => <List posts={postResponse.data.savedPosts} />}
             </Await>
@@ -76,7 +76,7 @@ const ProfilePage = () => {
           <Suspense fallback={<p>Loading...</p>}>
              <Await
               resolve={data.chatResponse}
-              errorElement={<p>Error loading chats!</p>}
+              errorElement={<p>Chats não encontrado!</p>}
             >
               {(chatResponse) => <Chat chats={chatResponse.data} />}
             </Await>
