@@ -4,6 +4,7 @@ import "./loginPage.scss";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 import { SlLogin } from "react-icons/sl";
+import { GoogleLogin } from "@react-oauth/google";
 
 const LoginPage = () => {
   const [error, setError] = useState("");
@@ -32,6 +33,22 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+  const responseGoogle = async (response) => {
+    try {
+      const { credential } = response;
+      const result = await apiRequest.post("/auth/google-login", {
+        idToken: credential
+      });
+      updateUser(result.data);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      setError("Failed to authenticate with Google");
+    } 
+  };
+
+
   return (
     <div className="login">
       <div className={`${pathname === "/login" && "before"}`} />
@@ -55,6 +72,13 @@ const LoginPage = () => {
           <button disabled={isLoading}><SlLogin size={20}/>
           </button>
           <Link to="/register">Ainda não tem uma conta?</Link>
+          <div className="auth">
+            <GoogleLogin
+            buttonText="Continuar com o Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            />
+          </div>
         </form>
       </div>
       <div className="imgContainer">
