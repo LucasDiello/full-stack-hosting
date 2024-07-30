@@ -80,10 +80,15 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            padding: 0px 50px;
+            padding: 0px 30px ;
             border-radius: 10px;
             background-color: rgba(254, 205, 81, 0.209);
             font-weight: 600;
+
+            p {
+              font-size: 10px;
+              width: 100%;
+            }
 
             @include sm {
               padding: 20px 50px;
@@ -219,7 +224,7 @@
           border: 1px solid #fece51;
           border-radius: 5px;
           cursor: pointer;
-          
+
           .chatMessage {
             position: relative;
             font-size: 10px;
