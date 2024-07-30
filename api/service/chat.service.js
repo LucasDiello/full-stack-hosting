@@ -103,6 +103,17 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
         }
     });
 
+    const addChatInUser = await prisma.user.update({
+        where: {
+            id: tokenUserId
+        },
+        data: {
+            chatIds: {
+                push: newChat.id
+            }
+        }
+    });
+
     return {
         status: "SUCCESSFUL",
         data: `Chat adicionado!!`
