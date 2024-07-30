@@ -3,9 +3,13 @@ import bcrypt from "bcrypt";
 
 export const serviceGetAllUsers = async () => {
     const users = await prisma.user.findMany();
+    const usersWithoutPassword = users.map((user) => {
+        delete user.password;
+        return user;
+    })
     return {
         status: "SUCCESSFUL",
-        data: users
+        data: usersWithoutPassword
     }
     };
 

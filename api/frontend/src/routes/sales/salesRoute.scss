@@ -1,0 +1,116 @@
+@import "../../responsive.scss";
+
+.users {
+  height: 100%;
+  display: flex;
+  .users-content {
+    flex: 3;
+    height: 90vh;
+    overflow: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    h1 {
+        font-weight: 300;
+        font-size: 70px;
+        color: rgb(36, 36, 36);
+        text-align: center;
+
+
+  &::after {
+    content: "!";
+    font-size: 7rem;
+    color: #ff6b6b;
+
+    @include sm {
+      font-size: 4rem;
+      line-height: 100px;
+    }
+}
+}
+    
+    .users-card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+
+.user-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    margin-bottom: 20px;
+    
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      
+      .user-img {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-bottom: 15px;
+          
+          img {
+              width: 100%;
+              height: 100%;
+              transition: transform 0.3s ease;
+              object-fit: cover;
+            }
+            
+            &:hover img {
+          transform: scale(1.1);
+          cursor: pointer;
+        }
+    }
+    
+    .user-info {
+        text-align: center;
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+    }
+}
+
+}
+
+    .user-card:first-of-type {
+      border-top: 4px solid #ff6b6b;
+    }
+
+    .user-card:last-of-type {
+      border-bottom: 4px solid #ff6b6b;
+    }
+  }
+
+  .imgContainer {
+    flex: 2;
+    background-color: #ff6b6b;
+    display: none;
+
+    img {
+      width: 100%;
+    }
+
+    @media screen and (min-width: 768px) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

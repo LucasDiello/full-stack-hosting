@@ -11,7 +11,7 @@ const Navbar = () => {
   const number = useNotificationStore((state) => state.number);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  
+
   const getBackgroundColor = () => {
     switch (pathname) {
       case "/profile/update":
@@ -19,13 +19,14 @@ const Navbar = () => {
       case "/":
       case "/login":
       case "/register":
+      case "/sales":
         return "#ff6b6b";
       default:
         return "";
     }
   };
-  const isActive = (path) => pathname === path ? "active" : "";
-  console.log(currentUser)
+  const isActive = (path) => (pathname === path ? "active" : "");
+  console.log(currentUser);
   // Fetch notifications if currentUser exists
   if (currentUser) fetch();
 
@@ -37,22 +38,21 @@ const Navbar = () => {
           <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
         </a>
-        <a href="/" className={isActive("/")}>Início</a>
-        <a href="/" className={isActive("/about")}>Sobre</a>
-        <a href="/" className={isActive("/contact")}>Contato</a>
-        <a href="/" className={isActive("/agents")}>Agentes</a>
+        <a href="/">Início</a>
+        <a href="/">Sobre</a>
+        <a href="/">Contato</a>
+        <a href="/sales">Vendedores</a>
       </div>
-      <div
-        className="right"
-        style={{ backgroundColor: getBackgroundColor() }}
-      >
+      <div className="right" style={{ backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
           <div className="user">
             <div className="user-name">
-            <img onClick={() => navigate("/profile")} src={currentUser.avatar || "/noavatar.jpg"} alt="User Avatar" />
-          <p>
-            {currentUser.username}
-          </p>
+              <img
+                onClick={() => navigate("/profile")}
+                src={currentUser.avatar || "/noavatar.jpg"}
+                alt="User Avatar"
+              />
+              <p>{currentUser.username}</p>
             </div>
             <Link to="/profile" className="profile">
               {number > 0 && <div className="notification">{number}</div>}
@@ -61,25 +61,33 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <a href="/login" className={isActive("/login")}>Entrar</a>
-            <a href="/register"   className={`${isActive("/register")} ${isActive("/")}`}>Registrar-se</a>
+            <a href="/login" className={isActive("/login")}>
+              Entrar
+            </a>
+            <a
+              href="/register"
+              className={`${isActive("/register")} ${isActive("/")}`}
+            >
+              Registrar-se
+            </a>
           </>
         )}
-{      !currentUser && <div className="menuIcon">
-          <img
-            src="/menu.png"
-            alt="Menu Icon"
-            onClick={() => setOpen((prev) => !prev)}
-          />
-        </div>
-        }
+        {!currentUser && (
+          <div className="menuIcon">
+            <img
+              src="/menu.png"
+              alt="Menu Icon"
+              onClick={() => setOpen((prev) => !prev)}
+            />
+          </div>
+        )}
         <div className={open ? "menu active" : "menu"}>
-          <a href="/" className={isActive("/")}>Início</a>
-          <a href="/" className={isActive("/about")}>Sobre</a>
-          <a href="/" className={isActive("/contact")}>Contato</a>
-          <a href="/" className={isActive("/agents")}>Agentes</a>
-          <a href="/login" className={isActive("/login")}>Entrar</a>
-          <a href="/register" className={isActive("/register")}>Registrar-se</a>
+          <a href="/">Início</a>
+          <a href="/">Sobre</a>
+          <a href="/">Contato</a>
+          <a href="/">Vendedores</a>
+          <a href="/login">Entrar</a>
+          <a href="/register">Registrar-se</a>
         </div>
       </div>
     </nav>
