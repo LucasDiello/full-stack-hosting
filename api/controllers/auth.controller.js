@@ -102,6 +102,7 @@ export const googleLogin = async (req, res) => {
           email,
           username: name,
           password: idToken,
+          avatar: picture,
         },
       });
     }

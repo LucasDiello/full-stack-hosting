@@ -1,9 +1,26 @@
-import React from 'react'
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import "./card.scss";
+import { RiDislikeLine } from "react-icons/ri";
+import { MdOutlineChat } from "react-icons/md";
+import apiRequest from "../../lib/apiRequest";
+import { AuthContext } from "../../context/AuthContext";
 
-const Card = ({item}) => {
-  console.log(item)
+const Card = ({ item }) => {
+  const [chatMessage, setChatMessage] = useState("");
+
+  const handleChat = async (receiverId) => {
+    try {
+      const response = await apiRequest.post("/chats", { receiverId });
+      console.log(response);
+      setChatMessage(response.data);
+      setTimeout(() => setChatMessage(""), 3000);
+    } catch (error) {
+      setChatMessage(error.response.data);
+      setTimeout(() => setChatMessage(""), 3000);
+    }
+  };
+
   return (
     <div className="card">
       <Link to={`/${item.id}`} className="imageContainer">
@@ -31,15 +48,17 @@ const Card = ({item}) => {
           </div>
           <div className="icons">
             <div className="icon">
-              <img src="/save.png" alt="" />
+              <RiDislikeLine />
             </div>
             <div className="icon">
-              <img src="/chat.png" alt="" />
+              {chatMessage && <div className="chatMessage">{chatMessage}</div>}
+              <MdOutlineChat onClick={() => handleChat(item.userId)} />
             </div>
           </div>
         </div>
       </div>
-    </div>  )
-}
+    </div>
+  );
+};
 
-export default Card
+export default Card;

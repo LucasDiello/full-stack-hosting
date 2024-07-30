@@ -22,6 +22,7 @@ export const serviceGetAllPosts = async (query) => {
 };
 
 export const serviceGetPostById = async (id, token) => {
+  console.log(id);
   const post = await prisma.post.findUnique({
     where: { id },
     include: {
@@ -29,12 +30,11 @@ export const serviceGetPostById = async (id, token) => {
       user: {
         select: {
           username: true,
-          avatar: true,
+          avatar: true ,
         },
       },
     },
   });
-
   if (!post) {
     return {
       status: "NOT_FOUND",

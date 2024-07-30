@@ -25,7 +25,7 @@ const Navbar = () => {
     }
   };
   const isActive = (path) => pathname === path ? "active" : "";
-
+  console.log(currentUser)
   // Fetch notifications if currentUser exists
   if (currentUser) fetch();
 
@@ -48,8 +48,12 @@ const Navbar = () => {
       >
         {currentUser ? (
           <div className="user">
+            <div className="user-name">
             <img onClick={() => navigate("/profile")} src={currentUser.avatar || "/noavatar.jpg"} alt="User Avatar" />
-            <span>{currentUser.username}</span>
+          <p>
+            {currentUser.username}
+          </p>
+            </div>
             <Link to="/profile" className="profile">
               {number > 0 && <div className="notification">{number}</div>}
               <span>Perfil</span>
