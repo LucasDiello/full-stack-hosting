@@ -25,6 +25,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 10px;
+    overflow: hidden;
 
     img {
       width: 16px;
@@ -92,10 +93,16 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.4s ease;
 
           &:hover {
             background-color: lightgray;
           }
+
+        }
+        .chatMessage {
+         position: relative;
+         font-size: 10px;
         }
       }
     }

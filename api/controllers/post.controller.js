@@ -17,7 +17,9 @@ export const getPostById = async (req, res) => {
     const id = req.params.id;
     const token = req.cookies?.token;
 
-    try {
+    console.log(token, id)
+
+    try {   
         const {status, data} = await serviceGetPostById(id, token);
         res.status(mapStatusHTTP(status)).json(data);
     }
@@ -29,8 +31,6 @@ export const getPostById = async (req, res) => {
 export const createPost = async (req, res) => {
     const body = req.body;
     const tokenUserId = req.userId;
-    console.log(tokenUserId)
-    console.log(body)
     try {
         const {status, data} = await serviceCreatePost(body,tokenUserId);
         console.log(data)

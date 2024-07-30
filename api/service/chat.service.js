@@ -66,6 +66,37 @@ export const serviceGetChatById = async (id,tokenUserId) => {
 };
 
 export const serviceCreateChat = async (tokenUserId, receiverId) => {
+    console.log(tokenUserId === receiverId);
+    if (tokenUserId === receiverId) 
+        return {
+            status: "UNAUTHORIZED",
+            data: `Você não pode criar um chat com você mesmo.`
+    }
+
+    const chatExists = await prisma.chat.findFirst({
+        where: {
+            userIDs: {
+                hasEvery: [tokenUserId, receiverId]
+            }
+        }
+    });
+
+    //userIds equals to [tokenUserId, receiverId]
+
+
+    const userReceiver = await prisma.user.findUnique({
+        where: {
+            id: receiverId
+        }
+    });
+
+    if (chatExists) 
+        return {
+            status: "SUCCESSFUL",
+            data: `Chat já adicionado com ${userReceiver.username}.`
+    }
+    
+
     const newChat = await prisma.chat.create({
         data: {
             userIDs: [tokenUserId, receiverId]
@@ -74,7 +105,7 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
 
     return {
         status: "SUCCESSFUL",
-        data: newChat
+        data: `Chat adicionado!!`
     }
 };
 
