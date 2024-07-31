@@ -40,7 +40,7 @@ const Navbar = () => {
         </a>
         <a href="/">Início</a>
         <a href="/">Sobre</a>
-        <a href="/">Contato</a>
+        <a href="/list">Ver móveis</a>
         <a href="/sales">Vendedores</a>
       </div>
       <div className="right" style={{ backgroundColor: getBackgroundColor() }}>
@@ -84,8 +84,8 @@ const Navbar = () => {
         <div className={open ? "menu active" : "menu"}>
           <a href="/">Início</a>
           <a href="/">Sobre</a>
-          <a href="/">Contato</a>
-          <a href="/">Vendedores</a>
+          <a href="/list">Ver móveis</a>
+          <a href="/sales">Vendedores</a>
           <a href="/login">Entrar</a>
           <a href="/register">Registrar-se</a>
         </div>

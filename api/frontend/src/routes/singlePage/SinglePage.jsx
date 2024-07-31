@@ -18,7 +18,7 @@ const SinglePage = () => {
   console.log(saved)
   const { currentUser } = useContext(AuthContext);
   const handleSave = async () => {
-    // atualizar para optimistik react19
+    // atualizar para optimistik react19 
     setSaved((prev) => !prev)
     if(!currentUser) {
       navigate("/login");
@@ -51,7 +51,7 @@ const SinglePage = () => {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.avatar} alt="" />
+                <img src={post.user.avatar || "./noavatar.jpg"} alt="" />
                 <p>{post.user.username}</p>
               </div>
             </div>

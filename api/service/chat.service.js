@@ -66,11 +66,10 @@ export const serviceGetChatById = async (id,tokenUserId) => {
 };
 
 export const serviceCreateChat = async (tokenUserId, receiverId) => {
-    console.log(tokenUserId === receiverId);
     if (tokenUserId === receiverId) 
         return {
             status: "UNAUTHORIZED",
-            data: `Você não pode criar um chat com você mesmo.`
+            data: `Este imóvel é seu.`
     }
 
     const chatExists = await prisma.chat.findFirst({
@@ -82,7 +81,6 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
     });
 
     //userIds equals to [tokenUserId, receiverId]
-
 
     const userReceiver = await prisma.user.findUnique({
         where: {
