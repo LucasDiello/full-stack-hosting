@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiRequest = axios.create({
-    baseURL: 'https://aluguejahotel.vercel.app',
+    baseURL: 'https://aluguejahotel.onrender.com/api',
     withCredentials: true,
 })
 
