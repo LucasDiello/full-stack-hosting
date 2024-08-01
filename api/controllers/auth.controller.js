@@ -83,7 +83,8 @@ export const googleLogin = async (req, res) => {
   try {
     const decoded = jwtDecode(idToken);
     const { email, email_verified, name, picture } = decoded;
-
+    console.log(decoded);
+    console.log(email);
     if (!email_verified) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
