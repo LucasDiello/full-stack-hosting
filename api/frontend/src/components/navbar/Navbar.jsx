@@ -3,10 +3,11 @@ import "./navbar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
+import apiRequest from "../../lib/apiRequest";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, updateUser } = useContext(AuthContext);
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
   const { pathname } = useLocation();
@@ -23,6 +24,15 @@ const Navbar = () => {
         return "#ff6b6b";
       default:
         return "";
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await apiRequest.post("/auth/logout");
+      updateUser(null);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -99,12 +109,12 @@ const Navbar = () => {
           {currentUser && (
             <>
             <a href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</a>
-            <a href="/api/auth/logout">Sair</a></>
+            <a href="/" onClick={handleLogout}>Sair</a></>
           )}
           {!currentUser && (
             <>
               <a href="/login" className={pathname === "/login" && "active-menu"}>Entrar</a>
-              <a href="/register" className={pathname === "/register" && "active-menu"}>Registrar-se</a>
+              <a href="/" className={pathname === "/register" && "active-menu"}>Registrar-se</a>
             </>
           )}
           <div className="about">
