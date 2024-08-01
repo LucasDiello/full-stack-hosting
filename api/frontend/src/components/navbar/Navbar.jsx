@@ -62,12 +62,12 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <a href="/login" className={isActive("/login")}>
+            <a href="/login" className={`${isActive("/login")} btn-login`}>
               Entrar
             </a>
             <a
               href="/register"
-              className={`${isActive("/register")} ${isActive("/")}`}
+              className={`${isActive("/register")} ${isActive("/")} btn-register`}
             >
               Registrar-se
             </a>

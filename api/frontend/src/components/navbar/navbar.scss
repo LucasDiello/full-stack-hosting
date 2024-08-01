@@ -55,6 +55,21 @@ nav {
     background-color: #fcf5f3;
     height: 100%;
 
+    .btn-register {
+      width: 120px;
+      margin-right: 20px;
+      text-align: center;
+      padding: 10px ;
+      border: none !important;
+    }
+
+    .btn-login {
+      border: none;
+      padding: 10px ;
+      width: 120px;
+      text-align: center;
+    }
+
     @include md {
       background-color: transparent;
     }
