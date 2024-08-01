@@ -15,10 +15,7 @@ const PORT = process.env.PORT || 4000
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
+app.use(cors());
 
 app.use('/api/posts', postRoute)
 app.use('/api/auth', authRoute)
@@ -32,9 +29,9 @@ app.get('/*', (req, res) => {
     res.send('Hello World!')
 })
 
-//app.use(express.static(path.join(__dirname, '/frontend/dist')));
+app.use(express.static(path.join(__dirname, '/frontend/dist')));
 
-//app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/dist/index.html')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/dist/index.html')));
 
 app.listen(PORT, () => {
     console.log(`S  erver is running on port ${PORT}`);
