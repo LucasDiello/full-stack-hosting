@@ -3,16 +3,21 @@
 .singlePage {
   display: flex;
   height: 100%;
-
   @include md {
     flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
     overflow: scroll;
   }
 
   .details {
     flex: 3;
     height: 100%;
-    overflow-y: scroll;
+    
+    @media (min-width: 768px) {
+      overflow-y: scroll;
+    }
 
     @include md {
       flex: none;
@@ -75,10 +80,15 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            padding: 0px 50px;
+            padding: 0px 30px ;
             border-radius: 10px;
             background-color: rgba(254, 205, 81, 0.209);
             font-weight: 600;
+
+            p {
+              font-size: 10px;
+              width: 100%;
+            }
 
             @include sm {
               padding: 20px 50px;
@@ -102,9 +112,12 @@
   }
   .features {
     flex: 2;
-    background-color: #fcf5f3;
-    height: 100%;
-    overflow-y: scroll;
+    background-color: #f7f7f7;
+    max-height: 85vh;
+    
+    @media (min-width: 768px) {
+      overflow-y: scroll;
+    }
 
     @include md {
       flex: none;
@@ -201,6 +214,7 @@
         display: flex;
         justify-content: space-between;
 
+        
         button {
           padding: 20px;
           display: flex;
@@ -211,6 +225,11 @@
           border-radius: 5px;
           cursor: pointer;
 
+          .chatMessage {
+            position: relative;
+            font-size: 10px;
+           }
+          
           img {
             width: 16px;
             height: 16px;

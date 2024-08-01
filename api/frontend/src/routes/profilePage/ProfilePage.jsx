@@ -10,9 +10,7 @@ const ProfilePage = () => {
   const { updateUser, currentUser } = useContext(AuthContext);
   const data = useLoaderData();
   const navigate = useNavigate();
-  (async () => {
-    console.log(await data.chatResponse);
-  })()
+
   const handleLogout = async () => {
     try {
       const response = await apiRequest.post("/auth/logout");
@@ -66,7 +64,7 @@ const ProfilePage = () => {
             <Suspense fallback={<p>Loading...</p>}>
              <Await
               resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
+              errorElement={<p>Posts não encontrados!</p>}
             >
               {(postResponse) => <List posts={postResponse.data.savedPosts} />}
             </Await>
@@ -78,7 +76,7 @@ const ProfilePage = () => {
           <Suspense fallback={<p>Loading...</p>}>
              <Await
               resolve={data.chatResponse}
-              errorElement={<p>Error loading chats!</p>}
+              errorElement={<p>Chats não encontrado!</p>}
             >
               {(chatResponse) => <Chat chats={chatResponse.data} />}
             </Await>

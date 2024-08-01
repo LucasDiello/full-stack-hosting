@@ -1,5 +1,5 @@
 @import "../../responsive.scss";
-
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Oswald:wght@200..700&family=Sacramento&display=swap');
 nav {
   height: 100px;
   display: flex;
@@ -46,6 +46,7 @@ nav {
       }
     }
   }
+
   .right {
     flex: 2;
     display: flex;
@@ -57,39 +58,66 @@ nav {
     @include md {
       background-color: transparent;
     }
-
     a {
-      padding: 12px 24px;
-      margin: 20px;
+      padding: 0 20px;
+      font-size: 12px;
+      padding-block: 18px;
+      border-block-start: 1px solid #ffffff;
+      width: 100%;
+      text-transform: uppercase;
+      font-family: "DM Sans", sans-serif;
+
+
+      &:active {
+        background-color: #fece51;
+        color: #0e0d0b;
+      }
+
+      &:last-of-type {
+        border-block-end: 1px solid #ffffff;
+      }
     }
 
-    .user{
+    .user {
       display: flex;
       align-items: center;
       font-weight: bold;
 
-      img{
+      .user-name {
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+      }
+
+      .user-name > p {
+        font-size: 14px;
+      }
+
+      img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 20px;
+        cursor: pointer;
       }
 
-      span{
-        @include sm{
+      span {
+        @include sm {
           display: none;
         }
       }
 
-      .profile{
-        padding: 12px 24px;
+      .profile {
+        padding: 10px;
+        margin-right: 20px;
+        margin-left: 20px;
+        text-transform: none;
+        text-align: center;
         background-color: #fece51;
         cursor: pointer;
         border: none;
         position: relative;
-        
-        .notification{
+
+        .notification {
           position: absolute;
           top: -8px;
           right: -8px;
@@ -102,18 +130,16 @@ nav {
           align-items: center;
           justify-content: center;
         }
-
       }
     }
 
-    .register-nav {
+    .active {
       background-color: #fece51;
     }
 
     .menuIcon {
       display: none;
       z-index: 999;
-
       img {
         width: 36px;
         height: 36px;
@@ -126,19 +152,49 @@ nav {
     }
 
     .menu {
-      position: absolute;
+      position: fixed;
+      justify-content: center;
       top: 0;
-      right: -50%;
-      background-color: black;
+      right: -100%;
+      background-color: #0e0d0b;
       color: white;
       height: 100vh;
-      width: 50%;
+      width: 90%;
       transition: all 1s ease;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
       font-size: 24px;
+      padding: 20px;
+
+      .box-user {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        .user {
+        flex-direction: column;
+        gap: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        
+        img {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          object-fit: cover;
+          
+        }
+      }
+      img {
+        width: 50px;
+        height: 50px;
+        }
+
+        p {
+          font-size: 18px;
+        }
+      }
 
       &.active {
         right: 0;
@@ -149,6 +205,58 @@ nav {
           display: initial;
         }
       }
+    }
+
+    .about {
+      &:first-of-type {
+        font-size: 15px;
+      }
+    }
+
+    .active-menu {
+      color: #fece51;
+
+      &::after {
+        content: "";
+        position: relative;
+        top: 7px;
+        display: block;
+        width: 10%;
+        height: 2px;
+        background-color: #fece51;
+        bottom: 0;
+        left: 0;
+      }
+    }
+
+    .about {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      h3 {
+        margin-top: 20px;
+        font-weight: 300;
+        font-family: "DM Sans", sans-serif;
+      }
+
+      p {
+        font-size: 12px;
+        margin-top: 20px;
+        font-family: "DM Sans", sans-serif;
+        text-align: center;
+      }
+    }
+    
+    .copywrite {
+      color: white;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
   }
 }
