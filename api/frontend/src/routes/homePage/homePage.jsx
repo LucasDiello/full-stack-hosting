@@ -10,12 +10,12 @@ function HomePage() {
     <div className="homePage">
       <div className="textContainer">
         <div className="wrapper">
-          <h1 className="title">Encontre Imóveis e Conquiste seu Lugar dos Sonhos</h1>
+          <h1 className="title">Encontre <span>Imóveis</span> e Conquiste seu Lugar dos Sonhos</h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-            explicabo suscipit cum eius, iure est nulla animi consequatur
-            facilis id pariatur fugit quos laudantium temporibus dolor ea
-            repellat provident impedit!
+           Está procurando um lugar para morar? Nós temos a solução para você!
+           Encontre o imóvel dos seus sonhos com a nossa ajuda, temos mais de 2000 propriedades disponíveis.
+           O que você está esperando? Comece a procurar agora!
+          
           </p>
           <SearchBar />
           <div className="boxes">

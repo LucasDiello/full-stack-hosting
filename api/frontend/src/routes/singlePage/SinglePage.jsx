@@ -8,17 +8,18 @@ import DOMPurify from "dompurify";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { BsFillSaveFill, BsSave } from "react-icons/bs";
+import { MdOutlineChat } from "react-icons/md";
 
 const SinglePage = () => {
   const post = useLoaderData();
-  
+  const [chatMessage, setChatMessage] = useState("");
   const [saved, setSaved] = useState(post.isSaved);
   console.log(post)
   const navigate = useNavigate();
   console.log(saved)
   const { currentUser } = useContext(AuthContext);
   const handleSave = async () => {
-    // atualizar para optimistik react19
+    // atualizar para optimistik react19 
     setSaved((prev) => !prev)
     if(!currentUser) {
       navigate("/login");
@@ -34,6 +35,18 @@ const SinglePage = () => {
       setSaved((prev) => !prev)
     }
   }
+
+  const handleChat = async (receiverId) => {
+    try {
+      const response = await apiRequest.post("/chats", { receiverId });
+      console.log(response);
+      setChatMessage(response.data);
+      setTimeout(() => setChatMessage(""), 3000);
+    } catch (error) {
+      setChatMessage(error.response.data);
+      setTimeout(() => setChatMessage(""), 3000);
+    }
+  };
 
   return (
     <div className="singlePage">
@@ -51,8 +64,8 @@ const SinglePage = () => {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.img} alt="" />
-                <span>{post.user.name}</span>
+                <img src={post.user.avatar || "./noavatar.jpg"} alt="" />
+                <p>{post.user.username}</p>
               </div>
             </div>
             <div className="bottom">
@@ -151,9 +164,10 @@ const SinglePage = () => {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
-              <img src="/chat.png" alt="" />
+            <button onClick={() => handleChat(post.userId)}>
+            <MdOutlineChat size={17} />
               Enviar uma Mensagem
+              {chatMessage && <div className="chatMessage">{chatMessage}</div>}
             </button>
             <button onClick={handleSave} style={{backgroundColor: saved ? "#fece51" : "white"}}>
               {saved ? <BsFillSaveFill /> : <BsSave  />}

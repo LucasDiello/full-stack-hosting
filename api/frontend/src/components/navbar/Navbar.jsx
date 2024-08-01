@@ -1,44 +1,74 @@
 import React, { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
-
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  if(currentUser) fetch()
+  const getBackgroundColor = () => {
+    switch (pathname) {
+      case "/profile/update":
+        return "white";
+      case "/":
+      case "/login":
+      case "/register":
+      case "/sales":
+        return "#ff6b6b";
+      default:
+        return "";
+    }
+  };
 
+  const isActive = (path) => (pathname === path ? "active" : "");
+
+  // Fetch notifications if currentUser exists
+  if (currentUser) fetch();
+  console.log(currentUser);
   return (
     <nav>
+      <div className={`${pathname === "/" ? "before" : ""}`} />
       <div className="left">
         <a href="/" className="logo">
-          <img src="/logo.png" alt="" />
+          <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
         </a>
         <a href="/">Início</a>
         <a href="/">Sobre</a>
-        <a href="/">Contato</a>
-        <a href="/">Agentes</a>
+        <a href="/list">Ver móveis</a>
+        <a href="/sales">Vendedores</a>
       </div>
-      <div className="right">
+      <div className="right" style={{ backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
           <div className="user">
-            <img src={currentUser.avatar || "/noavatar.jpg"} alt="" />
-            <span>{currentUser.username}</span>
+            <div className="user-name">
+              <img
+                onClick={() => navigate("/profile")}
+                src={currentUser.avatar || "/noavatar.jpg"}
+                alt="User Avatar"
+              />
+              <p>{currentUser.username}</p>
+            </div>
             <Link to="/profile" className="profile">
-          {number > 0 && <div className="notification">{number}</div>}
+              {number > 0 && <div className="notification">{number}</div>}
               <span>Perfil</span>
             </Link>
           </div>
         ) : (
           <>
-            <a href="/login">Entrar</a>
-            <a href="/register" className="register-nav ">
+            <a href="/login" className={isActive("/login")}>
+              Entrar
+            </a>
+            <a
+              href="/register"
+              className={`${isActive("/register")} ${isActive("/")}`}
+            >
               Registrar-se
             </a>
           </>
@@ -46,17 +76,47 @@ const Navbar = () => {
         <div className="menuIcon">
           <img
             src="/menu.png"
-            alt=""
+            alt="Menu Icon"
             onClick={() => setOpen((prev) => !prev)}
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <a href="/">Início</a>
-          <a href="/">Sobre</a>
-          <a href="/">Contato</a>
-          <a href="/">Agentes</a>
-          <a href="/">Entrar</a>
-          <a href="/">Registrar-se</a>
+          <div className="box-user">
+          {currentUser && (
+            <div className="user">
+              <img
+                onClick={() => navigate("/profile")}
+                src={currentUser.avatar || "/noavatar.jpg"}
+                alt="User Avatar"
+                />
+              <p>{currentUser.username}</p>
+            </div>
+          )}
+          </div>
+          <a href="/" className={pathname === "/" && "active-menu"}>Início</a>
+          <a href="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</a>
+          <a href="/sales" className={pathname === "/sales" && "active-menu"}>Vendedores</a>
+          {currentUser && (
+            <>
+            <a href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</a>
+            <a href="/api/auth/logout">Sair</a></>
+          )}
+          {!currentUser && (
+            <>
+              <a href="/login" className={pathname === "/login" && "active-menu"}>Entrar</a>
+              <a href="/register" className={pathname === "/register" && "active-menu"}>Registrar-se</a>
+            </>
+          )}
+          <div className="about">
+            <h3>- Sobre nós -</h3>
+            <p>
+             Somos uma empresa que vende móveis de alta qualidade e com preços acessíveis.
+            </p>
+            
+          </div>
+          <div className="copywrite">
+            <p>&copy; 2021 LDHomes</p>
+          </div>
         </div>
       </div>
     </nav>
