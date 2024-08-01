@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
@@ -25,11 +25,12 @@ const Navbar = () => {
         return "";
     }
   };
+
   const isActive = (path) => (pathname === path ? "active" : "");
-  console.log(currentUser);
+
   // Fetch notifications if currentUser exists
   if (currentUser) fetch();
-
+  console.log(currentUser);
   return (
     <nav>
       <div className={`${pathname === "/" ? "before" : ""}`} />
@@ -72,22 +73,50 @@ const Navbar = () => {
             </a>
           </>
         )}
-        {!currentUser && (
-          <div className="menuIcon">
-            <img
-              src="/menu.png"
-              alt="Menu Icon"
-              onClick={() => setOpen((prev) => !prev)}
-            />
-          </div>
-        )}
+        <div className="menuIcon">
+          <img
+            src="/menu.png"
+            alt="Menu Icon"
+            onClick={() => setOpen((prev) => !prev)}
+          />
+        </div>
         <div className={open ? "menu active" : "menu"}>
-          <a href="/">Início</a>
-          <a href="/">Sobre</a>
-          <a href="/list">Ver móveis</a>
-          <a href="/sales">Vendedores</a>
-          <a href="/login">Entrar</a>
-          <a href="/register">Registrar-se</a>
+          <div className="box-user">
+          {currentUser && (
+            <div className="user">
+              <img
+                onClick={() => navigate("/profile")}
+                src={currentUser.avatar || "/noavatar.jpg"}
+                alt="User Avatar"
+                />
+              <p>{currentUser.username}</p>
+            </div>
+          )}
+          </div>
+          <a href="/" className={pathname === "/" && "active-menu"}>Início</a>
+          <a href="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</a>
+          <a href="/sales" className={pathname === "/sales" && "active-menu"}>Vendedores</a>
+          {currentUser && (
+            <>
+            <a href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</a>
+            <a href="/api/auth/logout">Sair</a></>
+          )}
+          {!currentUser && (
+            <>
+              <a href="/login" className={pathname === "/login" && "active-menu"}>Entrar</a>
+              <a href="/register" className={pathname === "/register" && "active-menu"}>Registrar-se</a>
+            </>
+          )}
+          <div className="about">
+            <h3>- Sobre nós -</h3>
+            <p>
+             Somos uma empresa que vende móveis de alta qualidade e com preços acessíveis.
+            </p>
+            
+          </div>
+          <div className="copywrite">
+            <p>&copy; 2021 LDHomes</p>
+          </div>
         </div>
       </div>
     </nav>
