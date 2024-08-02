@@ -8,16 +8,13 @@ function HomePage() {
   console.log(currentUser)
   return (
     <div className="homePage">
-      <div className="textContainer">
         <div className="wrapper">
-          <h1 className="title">Encontre <span>Imóveis</span> e Conquiste seu Lugar dos Sonhos</h1>
+          <h1 className="title">Encontre Imóveis <span>&</span> seu Lugar dos Sonhos</h1>
           <p>
            Está procurando um lugar para morar? Nós temos a solução para você!
-           Encontre o imóvel dos seus sonhos com a nossa ajuda, temos mais de 2000 propriedades disponíveis.
-           O que você está esperando? Comece a procurar agora!
-          
           </p>
           <SearchBar />
+        </div>
           <div className="boxes">
             <div className="box">
               <h1>16+</h1>
@@ -32,11 +29,6 @@ function HomePage() {
               <h2>Propriedades Disponíveis</h2>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="imgContainer">
-        <img src="/bg.png" alt="" />
-      </div>
     </div>
   );
 }

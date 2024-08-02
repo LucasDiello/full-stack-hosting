@@ -108,7 +108,7 @@ export const googleLogin = async (req, res) => {
       });
     }
 
-    const age = 100 * 60 * 60 * 24 * 7;
+    const age = 50 * 60 * 60 * 24 * 7;
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: age,
