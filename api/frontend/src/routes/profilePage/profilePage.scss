@@ -25,6 +25,10 @@
       flex-direction: column;
       gap: 50px;
 
+      @include sm {
+        padding-right: 0px;
+      }
+
       .title{
         display: flex;
         align-items: center;
@@ -46,7 +50,6 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
-
         span{
           display: flex;
           align-items: center;

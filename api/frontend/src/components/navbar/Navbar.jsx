@@ -19,10 +19,9 @@ const Navbar = () => {
         return "transparent"
       case "/profile/update":
         return "white";
-            case "/sales":
-        return "#ff6b6b";
         case "/login":
           case "/register":
+            case "/sales":
           return "rgb(36, 36, 36,0.5)";
       default:
         return "";
@@ -35,6 +34,7 @@ const Navbar = () => {
         return "white";
       case "/login":
         case "/register":
+          case "/sales":
         return "white";
       default:
         return "black"
@@ -67,7 +67,7 @@ const Navbar = () => {
         <a href="/list">Ver móveis</a>
         <a href="/sales">Vendedores</a>
       </div>
-      <div className="right" style={{ backgroundColor: getBackgroundColor(), color: getColor() }}>
+      <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
           <div className="user" >
             <div className="user-name">
