@@ -210,10 +210,21 @@
         height: 200px;
       }
 
+      
       .buttons {
         display: flex;
         justify-content: space-between;
+        position: fixed;
+        bottom: 0;
+        z-index: 9998;
+        
+        @include sm {
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100%;
+        }
 
+        
         
         button {
           padding: 20px;
@@ -224,7 +235,12 @@
           border: 1px solid #fece51;
           border-radius: 5px;
           cursor: pointer;
-
+          
+          &:first-of-type {
+            display: flex;
+            flex-direction: column;
+          }
+          
           .chatMessage {
             position: relative;
             font-size: 10px;

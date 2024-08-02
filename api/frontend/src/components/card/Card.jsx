@@ -5,7 +5,6 @@ import { RiDislikeLine } from "react-icons/ri";
 import { MdOutlineChat } from "react-icons/md";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
-
 const Card = ({ item }) => {
   const [chatMessage, setChatMessage] = useState("");
 
@@ -23,9 +22,11 @@ const Card = ({ item }) => {
 
   return (
     <div className="card">
-      <Link to={`/${item.id}`} className="imageContainer">
+      <div className="imageContainer">
+      <Link to={`/${item.id}`} >
         <img src={item.images[0]} alt="" />
       </Link>
+      </div>
       <div className="textContainer">
         <h2 className="title">
           <Link to={`/${item.id}`}>{item.title}</Link>

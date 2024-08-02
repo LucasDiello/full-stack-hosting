@@ -14,9 +14,7 @@ const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
   const [saved, setSaved] = useState(post.isSaved);
-  console.log(post)
   const navigate = useNavigate();
-  console.log(saved)
   const { currentUser } = useContext(AuthContext);
   const handleSave = async () => {
     // atualizar para optimistik react19 
@@ -39,11 +37,11 @@ const SinglePage = () => {
   const handleChat = async (receiverId) => {
     try {
       const response = await apiRequest.post("/chats", { receiverId });
-      console.log(response);
+      console.log(response)
       setChatMessage(response.data);
       setTimeout(() => setChatMessage(""), 3000);
     } catch (error) {
-      setChatMessage(error.response.data);
+      setChatMessage(error.response.data || error.res);
       setTimeout(() => setChatMessage(""), 3000);
     }
   };
@@ -163,7 +161,9 @@ const SinglePage = () => {
           <div className="mapContainer">
             <Map items={[post]} />
           </div>
-          <div className="buttons">
+          {
+            currentUser &&
+            <div className="buttons">
             <button onClick={() => handleChat(post.userId)}>
             <MdOutlineChat size={17} />
               Enviar uma Mensagem
@@ -174,6 +174,7 @@ const SinglePage = () => {
               {saved ? "local Salvo" : "Salvar o Local"}
             </button>
           </div>
+          }
         </div>
       </div>
     </div>
