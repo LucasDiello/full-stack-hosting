@@ -62,7 +62,6 @@ export const serviceDeleteUser = async (userId) => {
 
 // refactor logic to get all posts 
 export const serviceSavePost = async (postId, tokenUserId) => {
-    console.log(postId, tokenUserId);
    const savedPost = await prisma.savedPost.findUnique({
          where: {
               userId_postId: {

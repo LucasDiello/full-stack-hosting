@@ -5,6 +5,8 @@ import Chat from "../../components/chat/Chat";
 import apiRequest from "../../lib/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { BsBookmarkStarFill } from "react-icons/bs";
+import { FaHome } from "react-icons/fa";
 
 const ProfilePage = () => {
   console.log("profilePage"); 
@@ -58,7 +60,10 @@ const ProfilePage = () => {
           </div>
         </div>
             <div className="title">
+              <div className="movel">
+              <FaHome color="#9ac5c8" size={30} />
               <h1>Meus imóveis anunciados!</h1>
+              </div>
               <Link to="/add">
               <button >Criar Novo Post</button>
               </Link>
@@ -73,7 +78,10 @@ const ProfilePage = () => {
           </Suspense>
           
             <div className="title">
-              <h1>Listas Salvas</h1>
+              <div className="movel">
+              <BsBookmarkStarFill color="#9ac5c8" size={30}/>
+              <h1>Imóveis Salvos</h1>
+              </div>
             </div>
             <Suspense fallback={<p>Loading...</p>}>
              <Await
