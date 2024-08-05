@@ -35,7 +35,6 @@ const SinglePage = () => {
       });
       console.log(res);
     } catch (err) {
-      console.log(err);
       setSaved((prev) => !prev);
     }
   };

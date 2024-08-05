@@ -17,8 +17,6 @@ export const getPostById = async (req, res) => {
     const id = req.params.id;
     const token = req.cookies?.token;
 
-    console.log(token, id)
-
     try {   
         const {status, data} = await serviceGetPostById(id, token);
         res.status(mapStatusHTTP(status)).json(data);

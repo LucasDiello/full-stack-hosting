@@ -22,7 +22,6 @@ export const serviceGetAllPosts = async (query) => {
 };
 
 export const serviceGetPostById = async (id, token) => {
-  console.log(id);
   const post = await prisma.post.findUnique({
     where: { id },
     include: {
@@ -94,9 +93,7 @@ export const serviceDeletePost = async (id, tokenUserId) => {
   const post = await prisma.post.findUnique({
     where: { id },
   });
-  console.log(tokenUserId);
-  console.log(post);
-  console.log(id);
+
   if (post.userId !== tokenUserId) {
     return {
       status: "FORBIDDEN",
@@ -116,8 +113,6 @@ export const serviceDeletePost = async (id, tokenUserId) => {
       where: { postId: id },
     });
   }
-
-  console.log("entrei no delete");
 
   await prisma.post.delete({
     where: { id },
