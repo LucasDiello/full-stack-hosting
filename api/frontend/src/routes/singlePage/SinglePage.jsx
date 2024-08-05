@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
 import "./singlePage.scss";
 import Map from "../../components/map/Map";
-import { singlePostData, userData } from "../../lib/dummydata";
 import Slider from "../../components/slider/Slider";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { BsFillSaveFill, BsSave } from "react-icons/bs";
 import {
@@ -16,29 +14,12 @@ import {
 } from "react-icons/md";
 import { FaBed, FaBus, FaRegMoneyBillAlt, FaSchool, FaStar } from "react-icons/fa";
 import { IoIosResize, IoMdRestaurant } from "react-icons/io";
+import useSavePost from "../../hooks/useSavePost";
+
 const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
-  const [saved, setSaved] = useState(post.isSaved);
-  const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
-  const handleSave = async () => {
-    // atualizar para optimistik react19
-    setSaved((prev) => !prev);
-    if (!currentUser) {
-      navigate("/login");
-    }
-    try {
-      const res = await apiRequest.post("/users/save", {
-        postId: post.id,
-        tokenUserId: currentUser.id,
-      });
-      console.log(res);
-    } catch (err) {
-      setSaved((prev) => !prev);
-    }
-  };
-
+  const { saved, handleSave } = useSavePost();
   const handleChat = async (receiverId) => {
     try {
       const response = await apiRequest.post("/chats", { receiverId });
@@ -85,10 +66,9 @@ const SinglePage = () => {
                 __html: DOMPurify.sanitize(post.postDetail.desc),
               }}
             ></p>
-            {currentUser && (
               <div className="buttons">
                 <button
-                  onClick={handleSave}
+                  onClick={() => handleSave(post.id)}
                   className="chats"
                   style={{ backgroundColor: saved ? "#fece51" : "white" }}
                 >
@@ -100,7 +80,6 @@ const SinglePage = () => {
                   <p>Chat</p>
                 </div>
               </div>
-            )}
             <div className="chat-message">
               {chatMessage && <div class="speech up">{chatMessage}</div>}
             </div>

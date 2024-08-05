@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import "./card.scss";
-import { RiDislikeLine } from "react-icons/ri";
+import { RiDislikeFill, RiDislikeLine } from "react-icons/ri";
 import { MdOutlineChat } from "react-icons/md";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
@@ -52,9 +52,6 @@ const Card = ({ item }) => {
           {
             currentUser &&
           <div className="icons">
-            <button className="icon">
-              <RiDislikeLine size={20}/>
-            </button>
             <button className="icon" onClick={() => handleChat(item.userId)}>
               <MdOutlineChat size={20} />
             </button>
