@@ -7,7 +7,7 @@ import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 const Card = ({ item }) => {
   const [chatMessage, setChatMessage] = useState("");
-
+  const { currentUser } = useContext(AuthContext);
   const handleChat = async (receiverId) => {
     try {
       const response = await apiRequest.post("/chats", { receiverId });
@@ -47,6 +47,8 @@ const Card = ({ item }) => {
               <span>{item.bathroom} bathroom</span>
             </div>
           </div>
+          {
+            currentUser &&
           <div className="icons">
             <div className="icon">
               <RiDislikeLine />
@@ -56,6 +58,7 @@ const Card = ({ item }) => {
               <MdOutlineChat onClick={() => handleChat(item.userId)} />
             </div>
           </div>
+          }
         </div>
       </div>
     </div>

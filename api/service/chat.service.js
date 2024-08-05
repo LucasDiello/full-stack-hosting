@@ -80,18 +80,11 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
         }
     });
 
-    //userIds equals to [tokenUserId, receiverId]
-
-    const userReceiver = await prisma.user.findUnique({
-        where: {
-            id: receiverId
-        }
-    });
 
     if (chatExists) 
         return {
             status: "SUCCESSFUL",
-            data: `Chat já adicionado com ${userReceiver.username}.`
+            data: `Chat já adicionado.`
     }
     
 
