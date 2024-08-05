@@ -8,7 +8,12 @@ import DOMPurify from "dompurify";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { BsFillSaveFill, BsSave } from "react-icons/bs";
-import { MdBathroom, MdOutlineChat, MdOutlineHardware, MdOutlinePets } from "react-icons/md";
+import {
+  MdBathroom,
+  MdOutlineChat,
+  MdOutlineHardware,
+  MdOutlinePets,
+} from "react-icons/md";
 import { FaBed, FaBus, FaRegMoneyBillAlt, FaSchool } from "react-icons/fa";
 import { IoIosResize, IoMdRestaurant } from "react-icons/io";
 const SinglePage = () => {
@@ -81,20 +86,24 @@ const SinglePage = () => {
                 __html: DOMPurify.sanitize(post.postDetail.desc),
               }}
             ></p>
-            {currentUser && 
-            <div className="buttons">
-            <button onClick={handleSave} className="chats" style={{backgroundColor: saved ? "#fece51" : "white"}}>
-              {saved ? <BsFillSaveFill /> : <BsSave  />}
-              {saved ? <p>Local Salvo</p> : <p>Salvar o Local</p>}
-            </button>
-              <div className="chats" onClick={() => handleChat(post.userId)}>
-                <MdOutlineChat />
-                <p>Chat</p>
+            {currentUser && (
+              <div className="buttons">
+                <button
+                  onClick={handleSave}
+                  className="chats"
+                  style={{ backgroundColor: saved ? "#fece51" : "white" }}
+                >
+                  {saved ? <BsFillSaveFill /> : <BsSave />}
+                  {saved ? <p>Local Salvo</p> : <p>Salvar o Local</p>}
+                </button>
+                <div className="chats" onClick={() => handleChat(post.userId)}>
+                  <MdOutlineChat />
+                  <p>Chat</p>
+                </div>
               </div>
-            </div>
-            }
+            )}
             <div className="chat-message">
-                          {chatMessage && <div class="speech up">{chatMessage}</div>}              
+              {chatMessage && <div class="speech up">{chatMessage}</div>}
             </div>
           </div>
         </div>
@@ -113,57 +122,57 @@ const SinglePage = () => {
           )}
         </div>
         <div className="pet">
-        <MdOutlinePets size={20} />
-        <span>Política de Animais:</span>
-                {post.postDetail.pet === "allowed" ? (
-                  <p>Pets Permitidos</p>
-                ) : (
-                  <p>Pets Não Permitidos</p>
-                )}
+          <MdOutlinePets size={20} />
+          <span>Política de Animais:</span>
+          {post.postDetail.pet === "allowed" ? (
+            <p>Pets Permitidos</p>
+          ) : (
+            <p>Pets Não Permitidos</p>
+          )}
         </div>
         <div className="rate">
-        <FaRegMoneyBillAlt size={20}/>
-        <span>Taxas de Propriedade</span>
-        <p>{post.postDetail.income}</p>
+          <FaRegMoneyBillAlt size={20} />
+          <span>Taxas de Propriedade</span>
+          <p>{post.postDetail.income}</p>
         </div>
         <div>
-        <IoIosResize size={20} />
-        <span>{post.postDetail.size} pés quadrados</span>
+          <IoIosResize size={20} />
+          <span>{post.postDetail.size} pés quadrados</span>
         </div>
         <div>
-        <FaBed size={20} />
-        <span>{post.bedroom} quartos</span>
+          <FaBed size={20} />
+          <span>{post.bedroom} quartos</span>
         </div>
         <div>
-        <MdBathroom size={20} />
-        <span>{post.bathroom} banheiro</span>
+          <MdBathroom size={20} />
+          <span>{post.bathroom} banheiro</span>
         </div>
         <div>
-        <FaSchool size={20}/>
-        <span>Escola</span>
-                <p>
-                  {post.postDetail.school > 999
-                    ? post.postDetail.school / 1000 + "km"
-                    : post.postDetail.school + "m"}
-                </p>
+          <FaSchool size={20} />
+          <span>Escola</span>
+          <p>
+            {post.postDetail.school > 999
+              ? post.postDetail.school / 1000 + "km"
+              : post.postDetail.school + "m"}
+          </p>
         </div>
         <div>
-        <FaBus size={20} />
-        <span>Ônibus</span>
-                <p>
-                  {post.postDetail.bus > 999
-                    ? post.postDetail.bus / 1000 + "km"
-                    : post.postDetail.bus + "m"}
-                </p>
+          <FaBus size={20} />
+          <span>Ônibus</span>
+          <p>
+            {post.postDetail.bus > 999
+              ? post.postDetail.bus / 1000 + "km"
+              : post.postDetail.bus + "m"}
+          </p>
         </div>
         <div>
-        <IoMdRestaurant size={20} />
-        <span>Restaurante</span>
-                <p>
-                  {post.postDetail.restaurant > 999
-                    ? post.postDetail.restaurant / 1000 + "km"
-                    : post.postDetail.restaurant + "m"}{" "}
-                </p>
+          <IoMdRestaurant size={20} />
+          <span>Restaurante</span>
+          <p>
+            {post.postDetail.restaurant > 999
+              ? post.postDetail.restaurant / 1000 + "km"
+              : post.postDetail.restaurant + "m"}{" "}
+          </p>
         </div>
       </div>
     </div>
