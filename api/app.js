@@ -8,8 +8,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(__dirname)
-
 const app = express();
 const PORT = process.env.PORT || 4000
 
@@ -25,9 +23,8 @@ app.use('/api/chats', chatRoute)
 app.use('/api/messages', messageRoute)
 app.use('/test', userRoute)
 
-app.use(express.static(path.join(__dirname, '/frontend/dist')));
-
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/dist/index.html')));
+// app.use(express.static(path.join(__dirname, '/frontend/dist')));
+// app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/dist/index.html')));
 
 app.listen(PORT, () => {
     console.log(`S  erver is running on port ${PORT}`);

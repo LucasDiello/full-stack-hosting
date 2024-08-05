@@ -44,8 +44,20 @@ const ProfilePage = () => {
               </span>
               <button onClick={handleLogout}>Sair</button>
             </div>
+            <div className="chatContainer">
+          <div className="wrapper">
+          <Suspense fallback={<p>Loading...</p>}>
+             <Await
+              resolve={data.chatResponse}
+              errorElement={<p>Chats não encontrado!</p>}
+            >
+              {(chatResponse) => <Chat chats={chatResponse.data} />}
+            </Await>
+          </Suspense>
+          </div>
+        </div>
             <div className="title">
-              <h1>Minha Lista</h1>
+              <h1>Meus imóveis anunciados!</h1>
               <Link to="/add">
               <button >Criar Novo Post</button>
               </Link>
@@ -58,6 +70,7 @@ const ProfilePage = () => {
               {(postResponse) => <List posts={postResponse.data.userPosts} />}
             </Await>
           </Suspense>
+          
             <div className="title">
               <h1>Listas Salvas</h1>
             </div>
@@ -71,18 +84,7 @@ const ProfilePage = () => {
           </Suspense>
           </div>
         </div>
-        <div className="chatContainer">
-          <div className="wrapper">
-          <Suspense fallback={<p>Loading...</p>}>
-             <Await
-              resolve={data.chatResponse}
-              errorElement={<p>Chats não encontrado!</p>}
-            >
-              {(chatResponse) => <Chat chats={chatResponse.data} />}
-            </Await>
-          </Suspense>
-          </div>
-        </div>
+
       </div>
     )
 };

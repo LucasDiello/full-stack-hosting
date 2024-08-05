@@ -17,8 +17,6 @@ const Navbar = () => {
     switch (pathname) {
       case "/":
         return "transparent"
-      case "/profile/update":
-        return "white";
         case "/login":
           case "/register":
             case "/sales":
