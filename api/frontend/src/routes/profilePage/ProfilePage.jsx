@@ -7,6 +7,7 @@ import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const ProfilePage = () => {
+  console.log("profilePage"); 
   const { updateUser, currentUser } = useContext(AuthContext);
   const data = useLoaderData();
   const navigate = useNavigate();

@@ -11,7 +11,6 @@ const Card = ({ item }) => {
   const handleChat = async (receiverId) => {
     try {
       const response = await apiRequest.post("/chats", { receiverId });
-      console.log(response);
       setChatMessage(response.data);
       setTimeout(() => setChatMessage(""), 3000);
     } catch (error) {
@@ -35,7 +34,10 @@ const Card = ({ item }) => {
           <img src="/pin.png" alt="" />
           <span>{item.address}</span>
         </p>
+        <div className="price-btn">
         <p className="price">$ {item.price}</p>
+        {chatMessage && <div class="speech down">{chatMessage}</div>}              
+        </div>
         <div className="bottom">
           <div className="features">
             <div className="feature">
@@ -50,13 +52,12 @@ const Card = ({ item }) => {
           {
             currentUser &&
           <div className="icons">
-            <div className="icon">
-              <RiDislikeLine />
-            </div>
-            <div className="icon">
-              {chatMessage && <div className="chatMessage">{chatMessage}</div>}
-              <MdOutlineChat onClick={() => handleChat(item.userId)} />
-            </div>
+            <button className="icon">
+              <RiDislikeLine size={20}/>
+            </button>
+            <button className="icon" onClick={() => handleChat(item.userId)}>
+              <MdOutlineChat size={20} />
+            </button>
           </div>
           }
         </div>
