@@ -1,4 +1,5 @@
-# Projeto Full Stack APP projeto para compra de imóveis!
+# Projeto MERN Full Stack APP projeto para compra de imóveis!
+#### (Em desenvolvimento)
 
  - Visão Geral :
 O Projeto Full Stack APP é uma aplicação para compra de imóveis, desenvolvida utilizando a stack MERN (MongoDB, Express, React e Node.js). A aplicação permite que os usuários visualizem, filtrem, conversem com o dono do imóvel, e negociem além de gerenciar suas contas e preferências.
