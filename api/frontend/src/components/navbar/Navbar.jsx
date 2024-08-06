@@ -15,18 +15,30 @@ const Navbar = () => {
 
   const getBackgroundColor = () => {
     switch (pathname) {
-      case "/profile/update":
-        return "white";
       case "/":
-      case "/login":
-      case "/register":
-      case "/sales":
-        return "#ff6b6b";
+        return "transparent"
+        case "/login":
+          case "/register":
+            case "/sales":
+              case "/add":
+          return "rgb(36, 36, 36,0.5)";
       default:
         return "";
     }
   };
 
+  const getColor = () => {
+    switch (pathname) {
+      case "/":
+        return "white";
+      case "/login":
+        case "/register":
+          case "/sales":
+        return "white";
+      default:
+        return "black"
+  }
+  };
   const handleLogout = async () => {
     try {
       const response = await apiRequest.post("/auth/logout");
@@ -42,9 +54,9 @@ const Navbar = () => {
   if (currentUser) fetch();
   console.log(currentUser);
   return (
-    <nav>
-      <div className={`${pathname === "/" ? "before" : ""}`} />
-      <div className="left">
+    <nav >
+      <div/>
+      <div className="left" style={{display: pathname === "/" && "none", color: getColor()}}>
         <a href="/" className="logo">
           <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
@@ -54,9 +66,9 @@ const Navbar = () => {
         <a href="/list">Ver móveis</a>
         <a href="/sales">Vendedores</a>
       </div>
-      <div className="right" style={{ backgroundColor: getBackgroundColor() }}>
+      <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
-          <div className="user">
+          <div className="user" >
             <div className="user-name">
               <img
                 onClick={() => navigate("/profile")}

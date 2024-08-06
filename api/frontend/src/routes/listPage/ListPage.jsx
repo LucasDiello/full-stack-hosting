@@ -4,16 +4,24 @@ import Filter from "../../components/filter/Filter";
 import Card from "../../components/card/Card";
 import Map from "../../components/map/Map";
 import { Await, useLoaderData } from "react-router-dom";
-
+import { CiFaceFrown } from "react-icons/ci";
 const ListPage = () => {
   
   const data = useLoaderData();
   console.log(data);
+  console.log(data.postResponse.data);
   return (
     <div className="listPage">
       <div className="listContainer">
-        <div className="wrapper">
           <Filter />
+        <div className="wrapper">
+          {
+            data.postResponse.data.length === 0 ? <div className="post-notfound">
+              <p>
+              Infelizmente não encontramos nenhum imóvel com essas características.
+              </p>
+              <CiFaceFrown size={50} />
+              </div> :
           <Suspense fallback={<p>Loading...</p>}>
             <Await
               resolve={data.postResponse}
@@ -26,6 +34,7 @@ const ListPage = () => {
               }
             </Await>
           </Suspense>
+          }
         </div>
       </div>
       <div className="mapContainer">

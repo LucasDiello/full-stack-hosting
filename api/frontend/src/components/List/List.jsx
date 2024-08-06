@@ -1,6 +1,6 @@
 import React from 'react'
 import Card from '../card/Card'
-
+import './list.scss'
 const List = ({posts}) => {
   console.log(posts)
   return (

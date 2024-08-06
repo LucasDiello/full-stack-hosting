@@ -1,9 +1,16 @@
 @import "../../responsive.scss";
 
 .searchBar {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+  align-items: center;
+  
+  @include sm {
+ align-items: start;
+  }
+
   .type {
-
-
     button {
       padding: 16px 36px;
       border: 1px solid #999;
@@ -33,10 +40,15 @@
     display: flex;
     justify-content: space-between;
     height: 64px;
-
+    
     @include sm {
+      width: 100%;
       flex-direction: column;
       border: none;
+    }
+    
+    @include md {
+      max-width: 800px;
     }
 
     input {
@@ -53,10 +65,10 @@
         }
       }
       @include md {
-        width: 200px;
+        width: 230px;
         &:nth-child(2),
         &:nth-child(3) {
-          width: 200px;
+          width: 230px;
         }
       }
 

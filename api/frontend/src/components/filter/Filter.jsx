@@ -22,13 +22,16 @@ function Filter() {
   };
 
   const handleFilter = () => {
-    setSearchParams(query);
+    setSearchParams({
+      ...query,
+      city: query.city.toLowerCase(),
+    });
   };
 
   return (
     <div className="filter">
       <h1>
-        Resultados da busca por - <b>{city}</b>
+        Resultados da busca por - <b>{query.city}</b>
       </h1>
       <div className="top">
         <div className="item">

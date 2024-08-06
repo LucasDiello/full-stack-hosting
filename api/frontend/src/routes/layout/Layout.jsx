@@ -19,7 +19,8 @@ const Layout = () => {
 
 const RequireAuth = () => {
   const { currentUser } = useContext(AuthContext);
-  
+  console.log("to aqui")
+  console.log(currentUser)
   if(!currentUser) {
     return <Navigate to="/login"/>
   }

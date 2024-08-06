@@ -5,6 +5,9 @@ import Chat from "../../components/chat/Chat";
 import apiRequest from "../../lib/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { BsBookmarkStarFill } from "react-icons/bs";
+import { FaHome } from "react-icons/fa";
+import { RxExit } from "react-icons/rx";
 
 const ProfilePage = () => {
   const { updateUser, currentUser } = useContext(AuthContext);
@@ -42,10 +45,26 @@ const ProfilePage = () => {
               <span>
                 E-mail: <b>{currentUser.email}</b>
               </span>
-              <button onClick={handleLogout}>Sair</button>
+              <button onClick={handleLogout}><RxExit size={20} />
+              </button>
             </div>
+            <div className="chatContainer">
+          <div className="wrapper">
+          <Suspense fallback={<p>Loading...</p>}>
+             <Await
+              resolve={data.chatResponse}
+              errorElement={<p>Chats não encontrado!</p>}
+            >
+              {(chatResponse) => <Chat chats={chatResponse.data} />}
+            </Await>
+          </Suspense>
+          </div>
+        </div>
             <div className="title">
-              <h1>Minha Lista</h1>
+              <div className="movel">
+              <FaHome color="#9ac5c8" size={30} />
+              <h1>Meus imóveis anunciados!</h1>
+              </div>
               <Link to="/add">
               <button >Criar Novo Post</button>
               </Link>
@@ -58,8 +77,12 @@ const ProfilePage = () => {
               {(postResponse) => <List posts={postResponse.data.userPosts} />}
             </Await>
           </Suspense>
+          
             <div className="title">
-              <h1>Listas Salvas</h1>
+              <div className="movel">
+              <BsBookmarkStarFill color="#9ac5c8" size={30}/>
+              <h1>Imóveis Salvos</h1>
+              </div>
             </div>
             <Suspense fallback={<p>Loading...</p>}>
              <Await
@@ -71,18 +94,7 @@ const ProfilePage = () => {
           </Suspense>
           </div>
         </div>
-        <div className="chatContainer">
-          <div className="wrapper">
-          <Suspense fallback={<p>Loading...</p>}>
-             <Await
-              resolve={data.chatResponse}
-              errorElement={<p>Chats não encontrado!</p>}
-            >
-              {(chatResponse) => <Chat chats={chatResponse.data} />}
-            </Await>
-          </Suspense>
-          </div>
-        </div>
+
       </div>
     )
 };

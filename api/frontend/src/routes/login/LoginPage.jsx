@@ -51,7 +51,6 @@ const LoginPage = () => {
 
   return (
     <div className="login">
-      <div className={`${pathname === "/login" && "before"}`} />
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Seja Bem-vindo</h1>
