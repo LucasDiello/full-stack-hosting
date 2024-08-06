@@ -3,6 +3,31 @@
 .login {
   height: 100%;
   display: flex;
+
+  &::before {
+    background-image: url("../../../public/homepage.jpg");
+    background-size: cover;
+    background-position: center;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(8, 6, 0, 0.7);
+    z-index: -1;
+  }
+
   .formContainer {
     flex: 3;
     height: 100%;
@@ -11,18 +36,18 @@
     form {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
       padding-block: 50px;
 
       h1 {
         font-weight: 300;
         font-size: 90px;
-        color: rgb(36, 36, 36);
+        color: white;
 
         &::after {
           content: "!";
           font-size: 7rem;
-          color: #ff6b6b;
+          color: #fece51;
 
           @include sm {
             font-size: 4rem;
@@ -31,7 +56,7 @@
         }
 
         @include sm {
-          font-size: 30px;
+          font-size: 2.8rem;
           line-height: 50px;
         }
 
@@ -87,18 +112,18 @@
       button {
         padding: 20px 24px;
         max-width: 40%;
-        background-color: #ff6b6b;
+        background-color: #fece51;
         cursor: pointer;
-        color: white;
+        color: black;
         border: none;
         font-size: 15px;
         font-weight: 300;
         transition: all 0.5s ease;
 
         &:hover {
-          background-color: #fece51;
+          background-color: rgb(163, 158, 158, 0.75);
           box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
-          color: black;
+          color: white;
       }
     }
     }
@@ -106,7 +131,7 @@
 
   .imgContainer {
     flex: 2;
-    background-color: #ff6b6b;
+    background-color: rgb(36, 36, 36,0.5); ;
     display: none;
     img {
       width: 100%;

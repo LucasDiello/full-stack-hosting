@@ -3,6 +3,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "./map.scss";
 import "leaflet/dist/leaflet.css";
 import Pin from "../pin/Pin";
+import useSavePost from "../../hooks/useSavePost";
 // // -29.9177800, -51.1836100
 
 const Map = ({ items }) => {

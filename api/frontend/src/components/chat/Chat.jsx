@@ -10,8 +10,6 @@ function Chat({ chats }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
-  console.log(chats)
-  console.log(chats[0].id)
   const decrease = useNotificationStore((state) => state.decrease);
 
   const handleOpenChat = async (id, receiver) => {
@@ -57,6 +55,7 @@ function Chat({ chats }) {
 
     if (chat && socket) {
       socket.on("getMessage", (data) => {
+        console.log(data)
         if (chat.id === data.chatId) {
           setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
           read();
@@ -67,7 +66,7 @@ function Chat({ chats }) {
       socket.off("getMessage");
     };
   }, [socket, chat]);
-
+  console.log(chats[1].lastMessage)
   return (
     <div className="chat">
       <div className="messages">
@@ -86,8 +85,8 @@ function Chat({ chats }) {
           >
             <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
             <div>
-            <span>{c.receiver.username}</span>
-            <p>{c.lastMessage}</p>
+              <span>{c.receiver.username}</span>
+              <p>{c.lastMessage}</p>
             </div>
           </div>
         ))}
@@ -104,21 +103,16 @@ function Chat({ chats }) {
             </span>
           </div>
           <div className="center">
-            {chat.messages.map((message) => (
+            {chat.messages.map((message, index) => (
               <div
-                className="chatMessage"
-                style={{
-                  alignSelf:
-                    message.userId === currentUser.id
-                      ? "flex-end"
-                      : "flex-start",
-                  textAlign:
-                    message.userId === currentUser.id ? "right" : "left",
-                }}
+                className={`chatMessage ${
+                  message.userId === currentUser.id
+                    ? "myMessage"
+                    : "otherMessage"
+                }`}
                 key={message.id}
               >
                 <p>{message.text}</p>
-                <span>{format(message.createdAt)}</span>
               </div>
             ))}
           </div>

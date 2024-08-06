@@ -33,7 +33,6 @@ const RegisterPage = () => {
   };
   return (
     <div className="register">
-      <div className={`${pathname === "/register" && "before"}`} />
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Criar uma Conta</h1>
