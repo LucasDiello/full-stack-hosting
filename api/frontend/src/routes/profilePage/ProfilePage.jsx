@@ -7,9 +7,9 @@ import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import { FaHome } from "react-icons/fa";
+import { RxExit } from "react-icons/rx";
 
 const ProfilePage = () => {
-  console.log("profilePage"); 
   const { updateUser, currentUser } = useContext(AuthContext);
   const data = useLoaderData();
   const navigate = useNavigate();
@@ -45,7 +45,8 @@ const ProfilePage = () => {
               <span>
                 E-mail: <b>{currentUser.email}</b>
               </span>
-              <button onClick={handleLogout}>Sair</button>
+              <button onClick={handleLogout}><RxExit size={20} />
+              </button>
             </div>
             <div className="chatContainer">
           <div className="wrapper">

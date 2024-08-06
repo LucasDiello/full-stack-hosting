@@ -8,11 +8,11 @@ const useSavePost = () => {
   const post = useLoaderData();
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(post.id);
-
+  const [saved, setSaved] = useState(post.isSaved);
+  console.log(saved);
+  console.log(saved);
   const handleSave = async (postId) => {
     setSaved((prev) => !prev);
-
     if (!currentUser) {
       navigate("/login");
       return;

@@ -20,6 +20,7 @@ const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
+  console.log(saved)
   const handleChat = async (receiverId) => {
     try {
       const response = await apiRequest.post("/chats", { receiverId });
