@@ -1,4 +1,4 @@
-# Projeto MERN Full Stack APP projeto para compra de imóveis!
+# Projeto MERN Full Stack APP projeto para venda de imóveis!
 #### (Em desenvolvimento)
 
  - Visão Geral :
