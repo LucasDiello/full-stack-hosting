@@ -5,7 +5,7 @@ O Projeto Full Stack APP é uma aplicação para compra de imóveis, desenvolvid
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/LucasDiello/Next-js-Ecommerce)
 
-## Arquitetura utilizada:
+## Arquitetura utilizada (até o momento):
 
 <div>
   <img src="/api/frontend/public/arquitetura.png" alt="Imagem 1"  />
@@ -13,14 +13,14 @@ O Projeto Full Stack APP é uma aplicação para compra de imóveis, desenvolvid
 
 ## Pré visualização:
 <div display=grid>
-  <img src="/api/frontend/public/host1.png" alt="Imagem 1" width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host2.png" alt="Imagem 2"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host3.png" alt="Imagem 3"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host4.png" alt="Imagem 4"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host6.png" alt="Imagem 6"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host7.png" alt="Imagem 7"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host8.png" alt="Imagem 8"  width=500 object-fit=cover/>
-  <img src="/api/frontend/public/host9.png" alt="Imagem 9"  width=500 object-fit=cover/>
+  <img src="/api/frontend/public/host1.png" alt="Imagem 1" width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host2.png" alt="Imagem 2"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host3.png" alt="Imagem 3"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host4.png" alt="Imagem 4"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host6.png" alt="Imagem 6"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host7.png" alt="Imagem 7"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host8.png" alt="Imagem 8"  width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host9.png" alt="Imagem 9"  width=400 object-fit=cover/>
 </div>
 
 ## Tecnologias Utilizadas
