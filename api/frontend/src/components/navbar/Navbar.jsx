@@ -20,6 +20,7 @@ const Navbar = () => {
         case "/login":
           case "/register":
             case "/sales":
+              case "/add":
           return "rgb(36, 36, 36,0.5)";
       default:
         return "";

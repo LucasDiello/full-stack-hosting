@@ -27,8 +27,6 @@ export const serviceGetUserById = async (userId) => {
 
 export const serviceUpdateUser = async (userId, inputs, password, avatar) => {
     let updatedPassword = null;
-    console.log(userId);
-    console.log(password, avatar, inputs);
     if (password) {
       updatedPassword = await bcrypt.hash(password, 10);
     }
@@ -92,7 +90,7 @@ export const serviceSavePost = async (postId, tokenUserId) => {
         return {
             status: "SUCCESSFUL",
             data: {
-                message: "Post saved"
+                message: "Post saved successfully"
             }
         }
 }
