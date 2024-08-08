@@ -15,6 +15,8 @@ O Projeto Full Stack APP é uma aplicação para compra de imóveis, desenvolvid
 ## Pré visualização:
 <div display=grid>
   <img src="/api/frontend/public/host1.png" alt="Imagem 1" width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host10.png" alt="Imagem 1" width=400 object-fit=cover/>
+  <img src="/api/frontend/public/host11.png" alt="Imagem 1" width=400 object-fit=cover/>
   <img src="/api/frontend/public/host2.png" alt="Imagem 2"  width=400 object-fit=cover/>
   <img src="/api/frontend/public/host3.png" alt="Imagem 3"  width=400 object-fit=cover/>
   <img src="/api/frontend/public/host4.png" alt="Imagem 4"  width=400 object-fit=cover/>
