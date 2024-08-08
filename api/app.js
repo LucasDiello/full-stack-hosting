@@ -30,5 +30,5 @@ app.use('/test', userRoute)
 // app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/frontend/dist/index.html')));
 
 app.listen(PORT, () => {
-    console.log(`S  erver is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 }) 
