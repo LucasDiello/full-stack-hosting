@@ -1,0 +1,59 @@
+@import "./responsive.scss";
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  background-color: #fff;
+  
+  @include sm {
+    overflow: auto;
+  }
+}
+
+.before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 100px;
+  background-color: #ff6b6b;
+  z-index: -1;
+
+  @include md {
+    width: 100%;
+    
+  }
+}
+
+.cloudinary-button {
+  margin: 20px;
+  width: 10em;
+  height: 3em;
+  border-radius: 8px;
+  border: none;
+  background-color: #9ac5c8 !important;
+  transition: all 0.5s ease;
+  color: black !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  cursor: pointer;
+}
