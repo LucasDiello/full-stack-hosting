@@ -1,0 +1,9 @@
+@import "../../responsive.scss";
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    @include sm {
+    }
+}
