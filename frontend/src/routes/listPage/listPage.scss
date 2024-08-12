@@ -1,0 +1,43 @@
+@import "../../responsive.scss";
+
+.listPage {
+  height: 100%;
+  
+  .listContainer {
+    flex: 3;
+
+    .wrapper{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-block-start:40px ;
+      gap: 50px;
+      overflow-y: scroll;
+      padding-bottom: 50px;
+      @include md{
+        height: auto;
+      }
+
+      .post-notfound {
+        font-size: 20px;
+        font-weight: 300;
+        color: #888;
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+    }
+  }
+  .mapContainer {
+    flex: 2;
+    background-color: #fcf5f3;
+
+    @include md{
+      display: none;
+    }
+  }
+}
+
