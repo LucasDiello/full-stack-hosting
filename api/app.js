@@ -16,6 +16,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
+
 app.use('/api/posts', postRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/users', userRoute)

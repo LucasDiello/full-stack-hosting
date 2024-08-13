@@ -167,7 +167,7 @@ const NewPostPage = () => {
           <div className="example-images">
               <div className="title">
             <p>Suas imagens </p>
-            <IoMdArrowDropdown size={40} color="#333"/>
+            <IoMdArrowDropdown size={40} color="#f1f1f1"/>
             </div>
           {
             images.map((image, index) => <img src={image} key={index} alt="" />)
@@ -176,7 +176,7 @@ const NewPostPage = () => {
           <div className="example-images">
             <div className="title">
             <p>Adicione imagens do seu imóvel. <br /> exemplo  <br /></p>
-            <IoMdArrowDropdown size={40} color="#333"/>
+            <IoMdArrowDropdown size={40} color="#f1f1f1"/>
             </div>
             <img src="./example1.jpg" alt="example_house1" />
             <img src="./example2.jpg" alt="example_house2" />

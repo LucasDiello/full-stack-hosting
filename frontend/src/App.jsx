@@ -9,7 +9,6 @@ import RegisterPage from "./routes/register/RegisterPage";
 import ProfileUpdatePage from "./routes/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./routes/newPostPage/NewPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
-import SalesPage from "./routes/sales/SalesPage";
 import NotFoundPage from "./routes/notFoundPage/NotFoundPage";
 import ErrorPage from "./routes/errorPage/ErrorPage";
 
@@ -43,10 +42,6 @@ function App() {
         {
           path: "/register",
           element: <RegisterPage />,
-        },
-        {
-          path: "/sales",
-          element: <SalesPage />,
         },
         {
           path: "*",
