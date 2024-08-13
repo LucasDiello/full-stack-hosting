@@ -16,15 +16,12 @@ const Map = ({ items }) => {
   const { currentUser } = useContext(AuthContext);
   const mapRef = useRef(null);
 
-  
   const hostIcon = new Icon({
     iconUrl: icon,
     iconSize: [32, 32],
   });
   const { avatar } = currentUser || {}; 
   const verifyUser = !currentUser ? "/noavatar.jpg" : (currentUser && avatar != null && avatar !== undefined && avatar) ? avatar : "/noavatar.jpg";
-
-  console.log(verifyUser);
 
   const iconUser = new Icon({
     iconUrl: verifyUser,
@@ -77,25 +74,24 @@ const Map = ({ items }) => {
       }
     }
   }, [userLocation, selectedItem]);
-
   const MapEvent = () => {
     const map = useMap();
     mapRef.current = map;
     return null;
   };
-
+  
   return (
     <MapContainer
-      center={
-        items.length === 1
-          ? [items[0].latitude, items[0].longitude]
-          : userLocation
-          ? [userLocation.lat, userLocation.lng]
-          : [-29.91778, -51.18361]
-      }
-      zoom={11}
-      scrollWheelZoom={false}
-      className="map"
+    center={
+      items.length === 1
+      ? [items[0].latitude, items[0].longitude]
+      : userLocation
+      ? [userLocation.lat, userLocation.lng]
+      : [-29.91778, -51.18361]
+    }
+    zoom={11}
+    scrollWheelZoom={false}
+    className="map"
     >
       <MapEvent />
       <TileLayer
@@ -120,7 +116,7 @@ const Map = ({ items }) => {
                 <Link to={`/${item.id}`}>{item.title}</Link>
                 <span>{item.bedroom} bedroom</span>
                 <b>$ {item.price}</b>
-            {distance && <div>Distância do trajeto: {distance.toFixed(2)} km</div>}
+                {distance && <div>Distância do trajeto: {distance.toFixed(2)} km</div>}
               </div>
             </div>
           </Popup>
@@ -130,7 +126,7 @@ const Map = ({ items }) => {
         <Marker
           position={[userLocation.lat, userLocation.lng]}
           icon={iconUser}
->
+        >
           <Popup>Você está aqui!</Popup>
         </Marker>
       )}
