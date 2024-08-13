@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js & npm run dev --prefix ./socket",
-    "build": "vite build",
-    "postinstall": "prisma generate"
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
