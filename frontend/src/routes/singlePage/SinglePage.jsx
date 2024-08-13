@@ -15,16 +15,24 @@ import {
 import { FaBed, FaBus, FaRegMoneyBillAlt, FaSchool, FaStar } from "react-icons/fa";
 import { IoIosResize, IoMdRestaurant } from "react-icons/io";
 import useSavePost from "../../hooks/useSavePost";
+import { AuthContext } from "../../context/AuthContext";
 
 const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
-  console.log(saved)
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
   const handleChat = async (receiverId) => {
     try {
+      console.log(currentUser);
+      if (!currentUser) {
+        console.log("no user");
+        navigate("/login");
+        return;
+      }
       const response = await apiRequest.post("/chats", { receiverId });
-      console.log(response);
       setChatMessage(response.data);
       setTimeout(() => setChatMessage(""), 3000);
     } catch (error) {

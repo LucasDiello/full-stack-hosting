@@ -24,6 +24,8 @@ const Map = ({ items }) => {
   const { avatar } = currentUser || {}; 
   const verifyUser = !currentUser ? "/noavatar.jpg" : (currentUser && avatar != null && avatar !== undefined && avatar) ? avatar : "/noavatar.jpg";
 
+  console.log(verifyUser);
+
   const iconUser = new Icon({
     iconUrl: verifyUser,
     iconSize: [32, 32],

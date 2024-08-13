@@ -9,8 +9,7 @@ const useSavePost = () => {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved);
-  console.log(saved);
-  console.log(saved);
+
   const handleSave = async (postId) => {
     setSaved((prev) => !prev);
     if (!currentUser) {
