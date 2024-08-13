@@ -17,11 +17,10 @@ const Navbar = () => {
     switch (pathname) {
       case "/":
         return "transparent"
-        case "/login":
-          case "/register":
-            case "/sales":
-              case "/add":
-          return "rgb(36, 36, 36,0.5)";
+      case "/login":
+        case "/register":
+          case "/add":
+        return "rgb(0, 17, 31,0.9)"
       default:
         return "";
     }
@@ -33,7 +32,6 @@ const Navbar = () => {
         return "white";
       case "/login":
         case "/register":
-          case "/sales":
         return "white";
       default:
         return "black"
@@ -52,7 +50,6 @@ const Navbar = () => {
 
   // Fetch notifications if currentUser exists
   if (currentUser) fetch();
-  console.log(currentUser);
   return (
     <nav >
       <div/>
@@ -64,7 +61,6 @@ const Navbar = () => {
         <a href="/">Início</a>
         <a href="/">Sobre</a>
         <a href="/list">Ver móveis</a>
-        <a href="/sales">Vendedores</a>
       </div>
       <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
@@ -117,7 +113,6 @@ const Navbar = () => {
           </div>
           <a href="/" className={pathname === "/" && "active-menu"}>Início</a>
           <a href="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</a>
-          <a href="/sales" className={pathname === "/sales" && "active-menu"}>Vendedores</a>
           {currentUser && (
             <>
             <a href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</a>

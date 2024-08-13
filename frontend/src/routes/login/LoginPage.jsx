@@ -81,7 +81,6 @@ const LoginPage = () => {
         </form>
       </div>
       <div className="imgContainer">
-        <img src="/bg.png" alt="" />
       </div>
     </div>
   );
