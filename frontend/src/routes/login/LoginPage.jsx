@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./loginPage.scss";
-import apiRequest from "../../lib/apiRequest";
+import apiRequest, { setAuthToken } from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 import { SlLogin } from "react-icons/sl";
 import { GoogleLogin } from "@react-oauth/google";
@@ -10,8 +10,9 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { updateUser } = useContext(AuthContext);
-  const { pathname } = useLocation();
+
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -23,7 +24,15 @@ const LoginPage = () => {
       const response = await apiRequest.post("/auth/login", {
         username,
         password,
-      });
+      },
+      {
+       credentials: 'include'
+      }
+    );
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      setAuthToken(token); // Atualiza o token nas configurações do Axios
+
       updateUser(response.data);
       navigate("/");
     } catch (error) {
@@ -39,7 +48,15 @@ const LoginPage = () => {
       const { credential } = response;
       const result = await apiRequest.post("/auth/google-login", {
         idToken: credential
-      });
+      }, 
+      {
+        credentials: 'include'
+      }  
+    );
+      const { token } = result.data;
+      localStorage.setItem("token", token);
+      
+      setAuthToken(token);
       updateUser(result.data);
       navigate("/");
     } catch (error) {

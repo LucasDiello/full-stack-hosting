@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import CryptoJS from "crypto-js";
+import { removeAuthUser } from "../lib/apiRequest";
 
 export const AuthContext = createContext();
-
 const SECRET_KEY = "secret_key";
 
 const encrypt = (data) => {
@@ -10,67 +10,59 @@ const encrypt = (data) => {
 };
 
 const decrypt = (ciphertext) => {
-    const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET_KEY);
-    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    try {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET_KEY);
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    } catch (error) {
+        console.error("Error decrypting data:", error);
+        return null;
+    }
 };
 
-export const AuthContextProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+const TOKEN_EXPIRY_TIME = 100 * 60 * 60 * 1000; // 100 hours in milliseconds
 
-    // Função para atualizar o usuário e o localStorage
+export const AuthContextProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState(localStorage.getItem("user") || null); ;
+
     const updateUser = (data) => {
-        const expirationTime = Date.now() + 100 * 60 * 60 * 1000; // 100 horas em milissegundos
-        const userWithExpiry = { ...data, expiryTimestamp: expirationTime };
-        const encryptedUser = encrypt(userWithExpiry);
         if (!data) {
-            localStorage.removeItem("user");
+            removeAuthUser();
             setCurrentUser(null);
+            console.log("User removed");
             return;
         }
+
+        const expirationTime = Date.now() + TOKEN_EXPIRY_TIME;
+        const userWithExpiry = { ...data, expiryTimestamp: expirationTime };
+        const encryptedUser = encrypt(userWithExpiry);
+
         localStorage.setItem("user", encryptedUser);
+        console.log("User updated");
         setCurrentUser(userWithExpiry);
     };
 
-    useEffect(() => {
+    const checkUserExpiry = () => {
         const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-            try {
-                const decryptedUser = decrypt(savedUser);
-                // Verifica se o usuário ainda é válido
-                if (decryptedUser && Date.now() <= decryptedUser.expiryTimestamp) {
-                    setCurrentUser(decryptedUser);
-                } else {
-                    localStorage.removeItem("user");
-                }
-            } catch (error) {
-                console.error("Error decrypting user data:", error);
-                localStorage.removeItem("user");
-            }
+        if (!savedUser) {
+            removeAuthUser();
+            setCurrentUser(null);
+            return;
         }
-    }, []);
+
+        const decryptedUser = decrypt(savedUser);
+        if (decryptedUser && Date.now() <= decryptedUser.expiryTimestamp) {
+            setCurrentUser(decryptedUser);
+        } else {
+            removeAuthUser();
+            setCurrentUser(null);
+        }
+    };
 
     useEffect(() => {
-        if (currentUser) {
-            const checkExpiry = () => {
-                const savedUser = localStorage.getItem("user");
-                if (savedUser) {
-                    try {
-                        const decryptedUser = decrypt(savedUser);
-                        if (Date.now() > decryptedUser.expiryTimestamp) {
-                            localStorage.removeItem("user");
-                            setCurrentUser(null);
-                        }
-                    } catch (error) {
-                        console.error("Error decrypting user data:", error);
-                        localStorage.removeItem("user");
-                        setCurrentUser(null);
-                    }
-                }
-            };
-            const intervalId = setInterval(checkExpiry, 60000); // Checa a cada 1 minuto
-            return () => clearInterval(intervalId);
-        }
-    }, [currentUser]);
+        checkUserExpiry(); // Check user on initial load
+        const intervalId = setInterval(checkUserExpiry, 60000); // Check every minute
+        return () => clearInterval(intervalId);
+    }, []);
 
     return (
         <AuthContext.Provider value={{ currentUser, updateUser }}>

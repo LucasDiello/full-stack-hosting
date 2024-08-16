@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 
-dotenv.config({path: "../.env"});
+dotenv.config();
 
-const url = process.env.MONGO_URL;
+const url = process.env.CLIENT_URL;
 
 const io = new Server({
   cors: {
@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.log("a user disconnected");
     removeUser(socket.id);
   });
 
