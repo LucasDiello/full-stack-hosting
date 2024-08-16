@@ -26,7 +26,7 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, useCookies } = req.body;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -47,23 +47,32 @@ export const login = async (req, res) => {
         .status(mapStatusHTTP("UNAUTHORIZED"))
         .json({ message: "Invalid credentials Password" });
     }
+    
     // Generate cookie token and send it to the client
     // res.setHeader("Set-Cookie", "test=" + "myValue").json("success")
     const age = 100 * 60 * 60 * 24 * 7;
-
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: age,
     });
 
     const { password: userPassword, ...dataUser } = user;
 
+
+    if(useCookies) {
     res
       .cookie("token", token, {
         httpOnly: true,
         maxAge: age,
+        sameSite: "none", // Necessário se estiver usando cookies com domínio diferente
+        secure: true, // Necessário se estiver usando HTTPS
       })
-      .status(mapStatusHTTP("SUCCESSFUL"))
-      .json(dataUser);
+    }
+
+      return res
+        .status(mapStatusHTTP("SUCCESSFUL"))
+        .json(
+          { ...dataUser, token }
+        );
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
@@ -79,12 +88,11 @@ export const logout = (req, res) => {
 };
 
 export const googleLogin = async (req, res) => {
-  const { idToken } = req.body;
+  const { idToken, useCookies } = req.body;
   try {
     const decoded = jwtDecode(idToken);
     const { email, email_verified, name, picture } = decoded;
-    console.log(decoded);
-    console.log(email);
+
     if (!email_verified) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
@@ -116,16 +124,21 @@ export const googleLogin = async (req, res) => {
 
     const { password: userPassword, ...dataUser } = user; // remove password from user data
 
+    if(useCookies) {
     res
       .cookie("token", token, {
         httpOnly: true,
         maxAge: age,
-      }) 
+        sameSite: "none", // Necessário se estiver usando cookies com domínio diferente
+        secure: true, // Necessário se estiver usando HTTPS
+      })
+    }
+
+    return res
       .status(mapStatusHTTP("SUCCESSFUL"))
-      .json({
-        ...dataUser,
-        avatar: picture,
-      });
+      .json(
+        { ...dataUser, token }
+      );
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
