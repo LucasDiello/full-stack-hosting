@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config({path: "../.env"});
 
+const url = process.env.MONGO_URL;
+
 const io = new Server({
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: url,
   },
 });
 
@@ -45,9 +47,6 @@ io.on("connection", (socket) => {
     removeUser(socket.id);
   });
 
-  socket.on("disconnect", () => {
-    removeUser(socket.id);
-  });
 });
 
 io.listen(4001);
