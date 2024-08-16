@@ -1,7 +1,6 @@
 import React, { Suspense, useContext } from "react";
 import "./profilePage.scss";
 import List from "../../components/List/List";
-import Chat from "../../components/chat/Chat";
 import apiRequest from "../../lib/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -48,18 +47,6 @@ const ProfilePage = () => {
               <button onClick={handleLogout}><RxExit size={20} />
               </button>
             </div>
-            <div className="chatContainer">
-          <div className="wrapper">
-          <Suspense fallback={<p>Loading...</p>}>
-             <Await
-              resolve={data.chatResponse}
-              errorElement={<p>Chats não encontrado!</p>}
-            >
-              {(chatResponse) => <Chat chats={chatResponse.data} />}
-            </Await>
-          </Suspense>
-          </div>
-        </div>
             <div className="title">
               <div className="movel">
               <FaHome color="#9ac5c8" size={30} />
