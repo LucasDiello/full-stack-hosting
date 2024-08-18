@@ -9,6 +9,10 @@
     bottom: 0;
     z-index: 999;
   
+    @include sm {
+      right: 0;
+    }
+
     .messages {
       background-color: #b3b3b3;
       .messages-list {
@@ -16,6 +20,7 @@
         height: 0 ;
         width: 0;
         opacity: 0;
+
         @keyframes expandWidth {
           0% {
             width: 0;
@@ -32,6 +37,25 @@
           animation: expandWidth 0.5s ease 0.3s forwards;
         }
 
+        .notFound- {
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+          padding-top: 100px;
+          p {
+            font-size: 10px;
+            font-weight: 400;
+            color: #333;
+          }
+
+          svg {
+            display: flex;
+            margin: 0 auto;
+          }
+
+
+        }
       }
 
       .box {
@@ -97,10 +121,19 @@
       bottom: 0;
       right: 400px;
       height: 0;
-      max-width: 300px;
+      max-width: 330px;
       transition: all 0.5s ease;
       opacity: 0;
       
+      @include sm {
+        max-width: 100%;
+        max-height: 100%;        
+      }
+
+      @include md {
+        right: 0;
+      }
+
       @keyframes expandHeight {
         0% {
           height: 0;
@@ -115,12 +148,9 @@
         opacity: 1  ;
       }
 
-      @include sm {
-        width: 100%;
-      }
 
       .top {
-        background-color: #b38c37;
+        background-color: #9ac5c8;
         padding: 20px;
         font-weight: bold;
         display: flex;
@@ -130,37 +160,52 @@
         .user {
           display: flex;
           align-items: center;
-          gap: 20px;
+          gap: 10px;
           
           img {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             object-fit: cover;
+            border: 1.5px solid white;
+          }
+
+          span {
+            font-size: 12px;
+            color: #333;
+          }
+
+          p {
+            font-size: 8px;
+            color: #333;
+            letter-spacing: 0.025em;
           }
         }
         .close {
           cursor: pointer;
+
         }
       }
+      
       .center {
         height: 350px;
         overflow: scroll;
         padding: 20px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 10px;
         box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
         background-color: #f7f7f7;
 
-        .myMessage {
+          .myMessage {
           align-self: flex-end;
-          text-align: right;
+          text-align: left;
           background-color: #333;
           border-radius: 1.125rem 1.125rem 0 1.125rem;
           box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
           max-width: 80%;
           word-break: break-all;
+
           p {
             padding: 8px;
             font-size: 12px;
@@ -168,6 +213,7 @@
             letter-spacing: 0.025em;
             color: white;
           }
+          
         }
 
         .otherMessage {
@@ -178,6 +224,7 @@
           box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
           max-width: 80%;
           word-break: break-all;
+          margin-left: 16px;
           p {
             padding: 8px;
             font-size: 12px;
@@ -185,26 +232,23 @@
             letter-spacing: 0.025em;
             color: #333;
           }
-        }
 
-        .chatMessage{
-          
-          &.own{
-            align-self: flex-end;
-            text-align: right;
-          }
-          
-          span{
-            font-size: 10px;
-            background-color: #f7c14b39;
-            padding: 2px;
-            border-radius: 5px;
-            margin-inline-end: 10px;
-          }
+        }
+        
+        .receiver-user {
+          img {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            bottom: 15px;
+            right: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+          } 
         }
       }
       .bottom {
-        border-top: 2px solid #b38c37;
+        border-top: 2px solid #9ac5c8;
         height: 60px;
         display: flex;
         align-items: center;
@@ -219,7 +263,7 @@
   
         button{
           flex:1;
-          background-color: #b38c37;
+          background-color: #9ac5c8;
           height: 100%;
           border: none;
           cursor: pointer;

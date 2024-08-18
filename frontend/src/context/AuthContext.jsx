@@ -23,7 +23,11 @@ const TOKEN_EXPIRY_TIME = 100 * 60 * 60 * 1000; // 100 hours in milliseconds
 
 export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(localStorage.getItem("user") || null); ;
-
+    const [chats, setChats] = useState(false);
+    const updateChats = (updated) => {
+        setChats(updated);
+    };  
+    
     const updateUser = (data) => {
         if (!data) {
             removeAuthUser();
@@ -31,18 +35,18 @@ export const AuthContextProvider = ({ children }) => {
             console.log("User removed");
             return;
         }
-
+        
         const expirationTime = Date.now() + TOKEN_EXPIRY_TIME;
         const userWithExpiry = { ...data, expiryTimestamp: expirationTime };
         const encryptedUser = encrypt(userWithExpiry);
-
+        
         localStorage.setItem("user", encryptedUser);
-        console.log("User updated");
         setCurrentUser(userWithExpiry);
     };
-
+    
     const checkUserExpiry = () => {
         const savedUser = localStorage.getItem("user");
+        console.log(decrypt(savedUser));
         if (!savedUser) {
             removeAuthUser();
             setCurrentUser(null);
@@ -51,6 +55,7 @@ export const AuthContextProvider = ({ children }) => {
 
         const decryptedUser = decrypt(savedUser);
         if (decryptedUser && Date.now() <= decryptedUser.expiryTimestamp) {
+            console.log("User still valid");
             setCurrentUser(decryptedUser);
         } else {
             removeAuthUser();
@@ -65,7 +70,7 @@ export const AuthContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser, updateUser }}>
+        <AuthContext.Provider value={{ currentUser, updateUser, chats, updateChats }}>
             {children}
         </AuthContext.Provider>
     );

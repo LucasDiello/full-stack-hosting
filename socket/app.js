@@ -11,13 +11,15 @@ const io = new Server({
   },
 });
 
+
 let onlineUser = [];
 
 const addUser = (userId, socketId) => {
-    const userExits = onlineUser.find((user) => user.userId === userId);
-    if (!userExits) {
-      onlineUser.push({ userId, socketId });
-    }
+  const userExits = onlineUser.find((user) => user.userId === userId);
+  if (!userExits) {
+    console.log("User added");
+    onlineUser.push({ userId, socketId, online: true, lastSeen: new Date() });
+  }
 };
 
 const removeUser = (socketId) => {
@@ -26,7 +28,6 @@ const removeUser = (socketId) => {
 
 const getUser = (userId) => {
   return onlineUser.find((user) => user.userId === userId);
- 
 };
 
 io.on("connection", (socket) => {
@@ -34,7 +35,7 @@ io.on("connection", (socket) => {
   socket.on("newUser", (userId) => {
     addUser(userId, socket.id);
   });
-
+  
   socket.on("sendMessage", ({ receiverId, data }) => {
     const receiver = getUser(receiverId);
     if (!receiver) {
@@ -42,12 +43,12 @@ io.on("connection", (socket) => {
     }
     io.to(receiver.socketId).emit("getMessage", data);
   });
+  
 
   socket.on("disconnect", () => {
     console.log("a user disconnected");
     removeUser(socket.id);
   });
-
-});
+}); 
 
 io.listen(4001);
