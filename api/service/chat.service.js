@@ -106,7 +106,7 @@ export const serviceCreateChat = async (tokenUserId, receiverId) => {
     });
 
     return {
-        status: "SUCCESSFUL",
+        status: "CREATED",
         data: `Chat adicionado!!`
     }
 };

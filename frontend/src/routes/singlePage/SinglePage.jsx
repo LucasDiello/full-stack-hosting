@@ -21,7 +21,8 @@ const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, updateChats } = useContext(AuthContext);
+
   const navigate = useNavigate();
   
   const handleChat = async (receiverId) => {
@@ -34,7 +35,11 @@ const SinglePage = () => {
       }
       const response = await apiRequest.post("/chats", { receiverId });
       setChatMessage(response.data);
+      console.log(response);
       setTimeout(() => setChatMessage(""), 3000);
+
+      response.status === 200 ? updateChats(false) : updateChats(true); // condition to economize the number of requests
+
     } catch (error) {
       setChatMessage(error.response.data || error.res);
       setTimeout(() => setChatMessage(""), 3000);
