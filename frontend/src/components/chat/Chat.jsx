@@ -2,23 +2,27 @@ import { useContext, useEffect, useRef, useState } from "react";
 import "./chat.scss";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
-import { format } from "timeago.js";
+import { format, register } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 import { HiChatBubbleOvalLeft } from "react-icons/hi2";
-import { useNavigate } from "react-router-dom";
+import { CiFaceFrown } from "react-icons/ci";
+import { IoIosClose } from "react-icons/io";
+import ptBR from 'timeago.js/lib/lang/pt_BR';
+
 function Chat() {
   const [chat, setChat] = useState(null);
   const [upd, setUpd] = useState([]);
   const [open, setOpen] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const [messageText, setMessageText] = useState("");
+  const { currentUser, chats } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
-
   const messageEndRef = useRef();
+  register('pt_BR', ptBR);
 
   const decrease = useNotificationStore((state) => state.decrease);
-  const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
+  const fetch = useNotificationStore((state) => state.fetch);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -33,6 +37,10 @@ function Chat() {
     }
   };
 
+  useEffect(() => {
+    fetchChats();
+  }, [chats]);
+
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await apiRequest("/chats/" + id);
@@ -45,60 +53,55 @@ function Chat() {
     }
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData(e.target);
     const text = formData.get("text");
-    
+
     if (!text) return;
     try {
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
-      
-      const updatedChats = await apiRequest("/chats");
-      setUpd(updatedChats.data);
-      
-      e.target.reset();
-      
+      console.log("message sent");
+      setMessageText("");
+      fetchChats();
+
       socket.emit("sendMessage", {
         receiverId: chat.receiver.id,
         data: res.data,
       });
+      
+      e.target.reset();
+
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   useEffect(() => {
-    fetchChats();
-    
     const read = async () => {
       try {
-        await apiRequest.put("/chats/read/" + chat.id);
+      await apiRequest.put("/chats/read/" + chat.id);
       } catch (err) {
         console.log(err);
       }
     };
-    
+
     if (chat && socket) {
       socket.on("getMessage", (data) => {
-        console.log(data);
         if (chat.id === data.chatId) {
-          console.log("entrei");
           setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
-          console.log("entrei2");
           read();
         }
       });
     }
+
     return () => {
-      if (socket) return socket.off("getMessage");
+       if (socket) return socket.off("getMessage");
     };
   }, [socket, chat]);
-  
-  if (currentUser) fetch();
+
 
   return (
     <div className="chat">
@@ -112,30 +115,45 @@ function Chat() {
           </p>
         </div>
         {
-          <div className={`messages-list ${open ? "active " : ""}`}>
-            {upd?.map((c) => (
-              <div
-                className="message"
-                key={c.id}
-                style={{
-                  backgroundColor:
-                    c.seenBy.includes(currentUser.id) || chat?.id === c.id
-                      ? "white"
-                      : "#fecd514e",
-                }}
-                onClick={() => handleOpenChat(c.id, c.receiver)}
-              >
-                <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
-                <div>
-                  <span>{c.receiver.username}</span>
-                  <p>
-                    {c.lastMessage.length > 10
-                      ? c.lastMessage.substring(0, 10) + "..."
-                      : c.lastMessage}
-                  </p>
-                </div>
+          <div className={`messages-list ${open ? "active" : ""}`}>
+            {upd && upd.length > 0 ? (
+              upd.map((c) => {
+                if (!c || !c.receiver) return null; // Verifica se a mensagem e o receptor existem
+                return (
+                  <div
+                    className="message"
+                    key={c.id}
+                    style={{
+                      backgroundColor:
+                        c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                          ? "white"
+                          : "#fecd514e",
+                    }}
+                    onClick={() => handleOpenChat(c.id, c.receiver)}
+                  >
+                    <img
+                      src={c.receiver.avatar || "/noavatar.jpg"}
+                      alt={`${c.receiver.username}'s avatar`}
+                    />
+                    <div>
+                      <span>{c.receiver.username}</span>
+                      <p>
+                        {c.lastMessage
+                          ? c.lastMessage.length > 10
+                            ? `${c.lastMessage.substring(0, 10)}...`
+                            : c.lastMessage
+                          : "Mande uma mensagem!"}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className={`notFound- ${open ? "active" : ""}`}>
+                <p>Procure por um anfitrião e inicie uma conversa!</p>
+                <CiFaceFrown size={30} color="#333" />
               </div>
-            ))}
+            )}
           </div>
         }
       </div>
@@ -144,29 +162,49 @@ function Chat() {
           <div className="top">
             <div className="user">
               <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
-              {chat.receiver.username}
+              <div>
+              <span>{chat.receiver.username}</span>
+             <p>
+                {chat.messages.length > 0 && `Última Mensagem ${format(chat.messages[chat.messages.length - 1].createdAt, "pt_BR")}`}
+             </p>
+              </div>
             </div>
             <span className="close" onClick={() => setChat(null)}>
-              X
+              <IoIosClose size={30} />
             </span>
           </div>
           <div className="center">
             {chat.messages.map((message, index) => (
-              <div
-                className={`chatMessage ${
-                  message.userId === currentUser.id
-                    ? "myMessage"
-                    : "otherMessage"
-                }`}
-                key={message.id}
-              >
-                <p>{message.text}</p>
-              </div>
+              <>
+                <div
+                  className={`chatMessage ${
+                    message.userId === currentUser.id
+                      ? "myMessage"
+                      : "otherMessage"
+                  }`}
+                  key={message.id}
+                >
+                  <p>{message.text}</p>
+                </div>
+                <div className="receiver-user">
+                  {message.userId !== currentUser.id && (
+                    <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
+                  )}
+                </div>
+              </>
             ))}
             <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
-            <textarea name="text"></textarea>
+            <textarea name="text" 
+            value={
+              chat.messages.length < 1 ? 
+                `Olá, ${chat.receiver.username}!
+                 Visualizei seu anúncio e gostaria de saber mais sobre ele.`
+               : messageText
+            }
+            onChange={(e) => setMessageText(e.target.value)}
+            ></textarea>
             <button>Enviar</button>
           </form>
         </div>
