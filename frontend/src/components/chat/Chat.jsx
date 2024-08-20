@@ -16,6 +16,8 @@ function Chat() {
   const [open, setOpen] = useState(false);
   const [messageText, setMessageText] = useState("");
   const { currentUser, chats } = useContext(AuthContext);
+  const [onlineUser, setOnlineUser] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const { socket } = useContext(SocketContext);
   const messageEndRef = useRef();
   register('pt_BR', ptBR);
@@ -40,13 +42,21 @@ function Chat() {
   useEffect(() => {
     fetchChats();
   }, [chats]);
-
+  
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await apiRequest("/chats/" + id);
-      if (!res.data.seenBy.includes(currentUser.id)) {
+
+      if (!res.data.seenBy.includes(currentUser.id) ) {
+        console.log("message not read");
         decrease();
       }
+
+      if(res.data.seenBy.includes(currentUser.id) && res.data.seenBy.includes(receiver.id)) {
+        console.log("message read");
+        if (number > 0) return decrease();
+      }
+
       setChat({ ...res.data, receiver });
     } catch (err) {
       console.log(err);
@@ -58,20 +68,20 @@ function Chat() {
 
     const formData = new FormData(e.target);
     const text = formData.get("text");
-
     if (!text) return;
+
     try {
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       console.log("message sent");
       setMessageText("");
-      fetchChats();
-
+      
       socket.emit("sendMessage", {
         receiverId: chat.receiver.id,
         data: res.data,
       });
-      
+
+      fetch()
       e.target.reset();
 
     } catch (err) {
@@ -82,6 +92,7 @@ function Chat() {
   useEffect(() => {
     const read = async () => {
       try {
+        console.log("read");
       await apiRequest.put("/chats/read/" + chat.id);
       } catch (err) {
         console.log(err);
@@ -90,12 +101,22 @@ function Chat() {
 
     if (chat && socket) {
       socket.on("getMessage", (data) => {
+        console.log(data);
         if (chat.id === data.chatId) {
           setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
           read();
+          fetchChats();
+          console.log("message received");
+          console.log(data);
         }
       });
+
     }
+              if(socket) { socket.on("getMessage", (data) => {
+            console.log(data);
+       fetch(), fetchChats() 
+
+    } ) }
 
     return () => {
        if (socket) return socket.off("getMessage");
@@ -103,7 +124,20 @@ function Chat() {
   }, [socket, chat]);
 
 
-  return (
+  useEffect(() => {
+      socket.on("userOnline", (data) => {
+        console.log("userOnline");
+        console.log(data);
+        const users = data.map((user) => user.userId);
+        setOnlineUsers(data)
+        setOnlineUser(users);
+      });
+      
+  }, [socket]);
+  
+  console.log(number);
+
+  return (  
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
@@ -116,44 +150,42 @@ function Chat() {
         </div>
         {
           <div className={`messages-list ${open ? "active" : ""}`}>
-            {upd && upd.length > 0 ? (
-              upd.map((c) => {
-                if (!c || !c.receiver) return null; // Verifica se a mensagem e o receptor existem
-                return (
-                  <div
-                    className="message"
-                    key={c.id}
-                    style={{
-                      backgroundColor:
-                        c.seenBy.includes(currentUser.id) || chat?.id === c.id
-                          ? "white"
-                          : "#fecd514e",
-                    }}
-                    onClick={() => handleOpenChat(c.id, c.receiver)}
-                  >
-                    <img
-                      src={c.receiver.avatar || "/noavatar.jpg"}
-                      alt={`${c.receiver.username}'s avatar`}
-                    />
-                    <div>
-                      <span>{c.receiver.username}</span>
-                      <p>
-                        {c.lastMessage
-                          ? c.lastMessage.length > 10
-                            ? `${c.lastMessage.substring(0, 10)}...`
-                            : c.lastMessage
-                          : "Mande uma mensagem!"}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
+{upd.map((c) => {
+  if (!c || !c.receiver) return null;
+  return (
+    <div
+      className="message"
+      key={c.id}
+      style={{
+        backgroundColor:
+          c.seenBy.includes(currentUser.id) || chat?.id === c.id
+            ? "white"
+            : "#fecd514e",
+      }}
+      onClick={() => handleOpenChat(c.id, c.receiver)}
+    >
+      <img
+        src={c.receiver.avatar || "/noavatar.jpg"}
+        alt={`${c.receiver.username}'s avatar`}
+      />
+      <div>
+        <span>{c.receiver.username}</span>
+        <p>
+          {c.lastMessage
+            ? c.lastMessage.length > 10
+            ? `${c.lastMessage.substring(0, 10)}...`
+            : c.lastMessage
+            : "Mande uma mensagem!"}
+        </p>
+      </div>
+            {onlineUser.includes(c.receiver.id) ? (
+              <span className="online-indicator">●</span>
             ) : (
-              <div className={`notFound- ${open ? "active" : ""}`}>
-                <p>Procure por um anfitrião e inicie uma conversa!</p>
-                <CiFaceFrown size={30} color="#333" />
-              </div>
+              <span className="offline-indicator">●</span>
             )}
+    </div>
+  );
+})}
           </div>
         }
       </div>
@@ -165,9 +197,22 @@ function Chat() {
               <div>
               <span>{chat.receiver.username}</span>
              <p>
-                {chat.messages.length > 0 && `Última Mensagem ${format(chat.messages[chat.messages.length - 1].createdAt, "pt_BR")}`}
+                {chat.messages.length > 0 && `Última Mensagem ${format(chat.messages[chat.messages.length - 1].createdAt, "pt_BR")}`} <br />
+                {
+                }
              </p>
               </div>
+                {onlineUser.includes(chat.receiver.id) ? (
+                  <span className="top-online-indicator">
+                    ●
+                    </span>
+                )
+                : (
+                  <span className="top-offline-indicator">
+                    ●
+                  </span>
+                )
+              }
             </div>
             <span className="close" onClick={() => setChat(null)}>
               <IoIosClose size={30} />
