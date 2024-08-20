@@ -8,7 +8,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const clientId = import.meta.env.VITE_APP_CLIENT_ID;
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <AuthContextProvider>
       <SocketContextProvider>
         <GoogleOAuthProvider clientId={clientId}>
@@ -16,5 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </GoogleOAuthProvider>
       </SocketContextProvider>
     </AuthContextProvider>
-  </React.StrictMode>,
 );
+
+// DISABLE REACT STRICT MODE FOR NOW
