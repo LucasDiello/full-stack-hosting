@@ -24,6 +24,7 @@ const TOKEN_EXPIRY_TIME = 100 * 60 * 60 * 1000; // 100 hours in milliseconds
 export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(localStorage.getItem("user") || null); ;
     const [chats, setChats] = useState(false);
+
     const updateChats = (updated) => {
         setChats(updated);
     };  
@@ -46,8 +47,8 @@ export const AuthContextProvider = ({ children }) => {
     
     const checkUserExpiry = () => {
         const savedUser = localStorage.getItem("user");
-        console.log(decrypt(savedUser));
         if (!savedUser) {
+            console.log("No user found");
             removeAuthUser();
             setCurrentUser(null);
             return;
@@ -58,6 +59,7 @@ export const AuthContextProvider = ({ children }) => {
             console.log("User still valid");
             setCurrentUser(decryptedUser);
         } else {
+            console.log("User expired");
             removeAuthUser();
             setCurrentUser(null);
         }
@@ -65,10 +67,10 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         checkUserExpiry(); // Check user on initial load
-        const intervalId = setInterval(checkUserExpiry, 60000); // Check every minute
+        const intervalId = setInterval(checkUserExpiry, 1000000); // Check every 10 minute
         return () => clearInterval(intervalId);
     }, []);
-
+    console.log(currentUser)
     return (
         <AuthContext.Provider value={{ currentUser, updateUser, chats, updateChats }}>
             {children}
