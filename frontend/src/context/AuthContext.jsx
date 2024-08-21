@@ -70,7 +70,7 @@ export const AuthContextProvider = ({ children }) => {
         const intervalId = setInterval(checkUserExpiry, 1000000); // Check every 10 minute
         return () => clearInterval(intervalId);
     }, []);
-    console.log(currentUser)
+
     return (
         <AuthContext.Provider value={{ currentUser, updateUser, chats, updateChats }}>
             {children}

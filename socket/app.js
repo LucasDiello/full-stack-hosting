@@ -17,6 +17,7 @@ const addUser = (userId, socketId) => {
   const userExists = onlineUser.find((user) => user.userId === userId);
   if (!userExists) {
     onlineUser.push({ userId, socketId, lastSeen: new Date() });
+    console.log("User added", onlineUser);
     io.emit("userOnline", onlineUser);
   } else {
     userExists.socketId = socketId;
@@ -36,7 +37,6 @@ const getUser = (userId) => {
 
 io.on("connection", (socket) => {
   console.log("a user connected");
-
   socket.on("newUser", (userId) => {
     addUser(userId, socket.id);
     socket.emit("userOnline", onlineUser); 
@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", ({ receiverId, data }) => {
     const receiver = getUser(receiverId);
+    
     if (receiver) {
       io.to(receiver.socketId).emit("getMessage", data);
     } else {
@@ -52,6 +53,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.log("a user disconnected");
     removeUser(socket.id);
   });
 });
