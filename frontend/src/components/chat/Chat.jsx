@@ -81,6 +81,7 @@ function Chat() {
         data: res.data,
       });
 
+      fetchChats();
       fetch()
       e.target.reset();
 
