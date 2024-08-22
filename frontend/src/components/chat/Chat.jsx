@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 import { HiChatBubbleOvalLeft } from "react-icons/hi2";
 import { CiFaceFrown } from "react-icons/ci";
-import { IoIosClose } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoIosClose } from "react-icons/io";
 import ptBR from 'timeago.js/lib/lang/pt_BR';
 
 function Chat() {
@@ -142,12 +142,18 @@ function Chat() {
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
+          <div>
           <img src={currentUser.avatar || "./noavatar.jpg"} alt="" />
           <h1>Mensagens</h1>
           <p>
-            <HiChatBubbleOvalLeft size={30} />
+            <HiChatBubbleOvalLeft size={21} />
             <span>{number}</span>
           </p>
+          </div>
+            {
+              open ? 
+              (<div><IoIosArrowDown size={20} /></div>) : (<div><IoIosArrowUp size={20}/> </div> )
+            }
         </div>
         {
           <div className={`messages-list ${open ? "active" : ""}`}>
