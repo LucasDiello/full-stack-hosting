@@ -141,6 +141,22 @@
           color: green;
           font-size: 20px;
           margin-left: 5px;
+          position: relative;
+          right: 255px;
+          top: 12px;
+          z-index: 1;
+        }
+
+        .online-indicator::before {
+          content: '';
+          position: absolute;
+          width: 11px;
+          height: 11px;
+          background-color: white;
+          border-radius: 50%;
+          top: 7.2px;
+          left: 0.5px;
+          z-index: -1;
         }
         
         
@@ -198,7 +214,7 @@
       bottom: 0;
       right: 400px;
       height: 0;
-      max-width: 330px;
+      width: 350px;
       transition: all 0.5s ease;
       opacity: 0;
       
@@ -227,18 +243,19 @@
 
 
       .top {
-        background-color: #9ac5c8;
+        background-color: white;
         padding: 20px;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: space-between;
-  
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
         .user {
           display: flex;
           align-items: center;
           gap: 10px;
-          
+
           .top-online-indicator {
             color: green;
             font-size: 20px;
@@ -293,6 +310,8 @@
             border-radius: 50%;
             object-fit: cover;
             border: 1.5px solid white;
+            position: relative;
+            z-index: 1;
           }
 
           span {
@@ -308,7 +327,8 @@
         }
         .close {
           cursor: pointer;
-
+          position: relative;
+          z-index: 1;
         }
       }
       

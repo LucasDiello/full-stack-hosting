@@ -17,8 +17,8 @@ const Layout = () => {
       </div>
       <div className="content">
         <Outlet />
-      {showChat && currentUser && <Chat />}
       </div>
+      {showChat && currentUser && <Chat />} 
     </div>
   );
 };

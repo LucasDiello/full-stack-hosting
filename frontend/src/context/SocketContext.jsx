@@ -9,7 +9,7 @@ export const SocketContextProvider = ({ children }) => {
 
   const { currentUser } = useContext(AuthContext);
   const [socket, setSocket] = useState(null);
-
+  const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(() => {
     setSocket(io(urlClient));
   }, []);
@@ -18,8 +18,18 @@ export const SocketContextProvider = ({ children }) => {
     currentUser && socket?.emit("newUser", currentUser.id);
   }, [currentUser, socket]);
 
+  useEffect(() => {
+    if(currentUser && socket) {
+      socket.on("userOnline", (user) => {
+        console.log(user);
+        setOnlineUsers(user);
+      });
+    }
+  }
+  , [socket]);
+
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}
     </SocketContext.Provider>
   );

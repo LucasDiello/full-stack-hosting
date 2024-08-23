@@ -8,7 +8,7 @@ import { useNotificationStore } from "../../lib/notificationStore";
 import { HiChatBubbleOvalLeft } from "react-icons/hi2";
 import { CiFaceFrown } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp, IoIosClose } from "react-icons/io";
-import ptBR from 'timeago.js/lib/lang/pt_BR';
+import ptBR from "timeago.js/lib/lang/pt_BR";
 
 function Chat() {
   const [chat, setChat] = useState(null);
@@ -17,10 +17,9 @@ function Chat() {
   const [messageText, setMessageText] = useState("");
   const { currentUser, chats } = useContext(AuthContext);
   const [onlineUser, setOnlineUser] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const { socket } = useContext(SocketContext);
+  const { socket, onlineUsers } = useContext(SocketContext);
   const messageEndRef = useRef();
-  register('pt_BR', ptBR);
+  register("pt_BR", ptBR);
 
   const decrease = useNotificationStore((state) => state.decrease);
   const number = useNotificationStore((state) => state.number);
@@ -42,17 +41,20 @@ function Chat() {
   useEffect(() => {
     fetchChats();
   }, [chats]);
-  
+
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await apiRequest("/chats/" + id);
 
-      if (!res.data.seenBy.includes(currentUser.id) ) {
+      if (!res.data.seenBy.includes(currentUser.id)) {
         console.log("message not read");
         decrease();
       }
 
-      if(res.data.seenBy.includes(currentUser.id) && res.data.seenBy.includes(receiver.id)) {
+      if (
+        res.data.seenBy.includes(currentUser.id) &&
+        res.data.seenBy.includes(receiver.id)
+      ) {
         console.log("message read");
         if (number > 0) return decrease();
       }
@@ -75,16 +77,15 @@ function Chat() {
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       console.log("message sent");
       setMessageText("");
-      
+
       socket.emit("sendMessage", {
         receiverId: chat.receiver.id,
         data: res.data,
       });
 
       fetchChats();
-      fetch()
+      fetch();
       e.target.reset();
-
     } catch (err) {
       console.log(err);
     }
@@ -94,7 +95,7 @@ function Chat() {
     const read = async () => {
       try {
         console.log("read");
-      await apiRequest.put("/chats/read/" + chat.id);
+        await apiRequest.put("/chats/read/" + chat.id);
       } catch (err) {
         console.log(err);
       }
@@ -111,88 +112,84 @@ function Chat() {
           console.log(data);
         }
       });
-
     }
-              if(socket) { socket.on("getMessage", (data) => {
-            console.log(data);
-       fetch(), fetchChats() 
-
-    } ) }
+    if (socket) {
+      socket.on("getMessage", (data) => {
+        fetch(), fetchChats();
+      });
+    }
 
     return () => {
-       if (socket) return socket.off("getMessage");
+      if (socket) return socket.off("getMessage");
     };
   }, [socket, chat]);
 
-
+  console.log(onlineUsers);
   useEffect(() => {
-      socket.on("userOnline", (data) => {
-        console.log("userOnline");
-        console.log(data);
-        const users = data.map((user) => user.userId);
-        setOnlineUsers(data)
-        setOnlineUser(users);
-      });
-      
-  }, [socket]);
-  
-  console.log(number);
-
-  return (  
+    const onlineId = onlineUsers.map((user) => user.userId);
+    setOnlineUser(onlineId);
+  }, [onlineUsers]);
+  console.log(onlineUser);
+  return (
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
           <div>
-          <img src={currentUser.avatar || "./noavatar.jpg"} alt="" />
-          <h1>Mensagens</h1>
-          <p>
-            <HiChatBubbleOvalLeft size={21} />
-            <span>{number}</span>
-          </p>
+            <img src={currentUser.avatar || "./noavatar.jpg"} alt="" />
+            <h1>Mensagens</h1>
+            <p>
+              <HiChatBubbleOvalLeft size={21} />
+              <span>{number}</span>
+            </p>
           </div>
-            {
-              open ? 
-              (<div><IoIosArrowDown size={20} /></div>) : (<div><IoIosArrowUp size={20}/> </div> )
-            }
+          {open ? (
+            <div>
+              <IoIosArrowDown size={20} />
+            </div>
+          ) : (
+            <div>
+              <IoIosArrowUp size={20} />{" "}
+            </div>
+          )}
         </div>
         {
           <div className={`messages-list ${open ? "active" : ""}`}>
-{upd.map((c) => {
-  if (!c || !c.receiver) return null;
-  return (
-    <div
-      className="message"
-      key={c.id}
-      style={{
-        backgroundColor:
-          c.seenBy.includes(currentUser.id) || chat?.id === c.id
-            ? "white"
-            : "#fecd514e",
-      }}
-      onClick={() => handleOpenChat(c.id, c.receiver)}
-    >
-      <img
-        src={c.receiver.avatar || "/noavatar.jpg"}
-        alt={`${c.receiver.username}'s avatar`}
-      />
-      <div>
-        <span>{c.receiver.username}</span>
-        <p>
-          {c.lastMessage
-            ? c.lastMessage.length > 10
-            ? `${c.lastMessage.substring(0, 10)}...`
-            : c.lastMessage
-            : "Mande uma mensagem!"}
-        </p>
-      </div>
-            {onlineUser.includes(c.receiver.id) ? (
-              <span className="online-indicator">●</span>
-            ) : (
-              <span className="offline-indicator">●</span>
-            )}
-    </div>
-  );
-})}
+            {upd.map((c) => {
+              if (!c || !c.receiver) return null;
+              return (
+                <div
+                  className="message"
+                  key={c.id}
+                  style={{
+                    backgroundColor:
+                      c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                        ? "white"
+                        : "#fecd514e",
+                  }}
+                  onClick={() => handleOpenChat(c.id, c.receiver)}
+                >
+                  <img
+                    src={c.receiver.avatar || "/noavatar.jpg"}
+                    alt={`${c.receiver.username}'s avatar`}
+                  />
+                  <div>
+                    <span>{c.receiver.username}</span>
+                    <p>
+                      {c.lastMessage
+                        ? c.lastMessage.length > 10
+                          ? `${c.lastMessage.substring(0, 10)}...`
+                          : c.lastMessage
+                        : "Mande uma mensagem!"}
+                    </p>
+                  </div>
+                  {onlineUser.includes(c.receiver.id) ? (
+                    <span className="online-indicator">●</span>
+                  ) : (
+                    <span className="offline-indicator">●</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         }
       </div>
@@ -202,24 +199,22 @@ function Chat() {
             <div className="user">
               <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
               <div>
-              <span>{chat.receiver.username}</span>
-             <p>
-                {chat.messages.length > 0 && `Última Mensagem ${format(chat.messages[chat.messages.length - 1].createdAt, "pt_BR")}`} <br />
-                {
-                }
-             </p>
+                <span>{chat.receiver.username}</span>
+                <p>
+                  {chat.messages.length > 0 &&
+                    `Última Mensagem ${format(
+                      chat.messages[chat.messages.length - 1].createdAt,
+                      "pt_BR"
+                    )}`}{" "}
+                  <br />
+                  {}
+                </p>
               </div>
-                {onlineUser.includes(chat.receiver.id) ? (
-                  <span className="top-online-indicator">
-                    ●
-                    </span>
-                )
-                : (
-                  <span className="top-offline-indicator">
-                    ●
-                  </span>
-                )
-              }
+              {onlineUser.includes(chat.receiver.id) ? (
+                <span className="top-online-indicator">●</span>
+              ) : (
+                <span className="top-offline-indicator">●</span>
+              )}
             </div>
             <span className="close" onClick={() => setChat(null)}>
               <IoIosClose size={30} />
@@ -248,14 +243,15 @@ function Chat() {
             <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
-            <textarea name="text" 
-            value={
-              chat.messages.length < 1 ? 
-                `Olá, ${chat.receiver.username}!
+            <textarea
+              name="text"
+              value={
+                chat.messages.length < 1
+                  ? `Olá, ${chat.receiver.username}!
                  Visualizei seu anúncio e gostaria de saber mais sobre ele.`
-               : messageText
-            }
-            onChange={(e) => setMessageText(e.target.value)}
+                  : messageText
+              }
+              onChange={(e) => setMessageText(e.target.value)}
             ></textarea>
             <button>Enviar</button>
           </form>

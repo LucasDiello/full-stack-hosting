@@ -54,13 +54,13 @@ const Navbar = () => {
     <nav >
       <div/>
       <div className="left" style={{display: pathname === "/" && "none", color: getColor()}}>
-        <a href="/" className="logo">
+        <Link href="/" className="logo">
           <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
-        </a>
-        <a href="/">Início</a>
-        <a href="/">Sobre</a>
-        <a href="/list">Ver móveis</a>
+        </Link>
+        <Link to="/">Início</Link>
+        <Link to="/">Sobre</Link>
+        <Link to="/list">Ver móveis</Link>
       </div>
       <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
         {currentUser ? (
@@ -111,12 +111,12 @@ const Navbar = () => {
             </div>
           )}
           </div>
-          <a href="/" className={pathname === "/" && "active-menu"}>Início</a>
-          <a href="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</a>
+          <Link href="/" className={pathname === "/" && "active-menu"}>Início</Link>
+          <Link to="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</Link>
           {currentUser && (
             <>
-            <a href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</a>
-            <a href="/" onClick={handleLogout}>Sair</a></>
+            <Link href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</Link>
+            <Link href="/" onClick={handleLogout}>Sair</Link></>
           )}
           {!currentUser && (
             <>
