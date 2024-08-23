@@ -37,6 +37,7 @@ const getUser = (userId) => {
 
 io.on("connection", (socket) => {
   console.log("a user connected");
+  
   socket.on("newUser", (userId) => {
     addUser(userId, socket.id);
     socket.emit("userOnline", onlineUser); 
