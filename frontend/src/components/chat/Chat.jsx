@@ -17,7 +17,7 @@ function Chat() {
   const [messageText, setMessageText] = useState("");
   const { currentUser, chats } = useContext(AuthContext);
   const [onlineUser, setOnlineUser] = useState([]);
-  const { socket, onlineUsers } = useContext(SocketContext);
+  const { socket, onlineUsers, offlineUsers } = useContext(SocketContext);
   const messageEndRef = useRef();
   register("pt_BR", ptBR);
 
@@ -124,13 +124,18 @@ function Chat() {
     };
   }, [socket, chat]);
 
-  console.log(onlineUsers);
   useEffect(() => {
+    console.log(onlineUsers);
     const onlineId = onlineUsers.map((user) => user.userId);
+    console.log(onlineId);
     setOnlineUser(onlineId);
+    console.log("online users");
+    fetchChats();
   }, [onlineUsers]);
+
   console.log(onlineUser);
-  return (
+
+  return (  
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
@@ -143,11 +148,11 @@ function Chat() {
             </p>
           </div>
           {open ? (
-            <div>
-              <IoIosArrowDown size={20} />
+            <div className="arrow-down">
+              <IoIosArrowDown  size={20} />
             </div>
           ) : (
-            <div>
+            <div  className="arrow-up">
               <IoIosArrowUp size={20} />{" "}
             </div>
           )}
@@ -183,9 +188,13 @@ function Chat() {
                     </p>
                   </div>
                   {onlineUser.includes(c.receiver.id) ? (
-                    <span className="online-indicator">●</span>
+                    <span className="online-indicator" style={
+                      !open ? {display: "none"} : {display: "block"}
+                    }>●</span>
                   ) : (
-                    <span className="offline-indicator">●</span>
+                    <span className="offline-indicator" style={
+                      !open ? {display: "none"} : {display: "block"}
+                    }>●</span>
                   )}
                 </div>
               );
@@ -201,13 +210,15 @@ function Chat() {
               <div>
                 <span>{chat.receiver.username}</span>
                 <p>
-                  {chat.messages.length > 0 &&
-                    `Última Mensagem ${format(
-                      chat.messages[chat.messages.length - 1].createdAt,
-                      "pt_BR"
-                    )}`}{" "}
+                 
+                  {onlineUser.includes(chat.receiver.id) && chat.messages.length > 0 ?
+                  (
+                    `Disponível para conversar`
+                  )
+                  :
+                  `Última visualização: ${format(offlineUsers.find((user) => user.userId === chat.receiver.id)?.lastSeen, "pt_BR")}`
+}
                   <br />
-                  {}
                 </p>
               </div>
               {onlineUser.includes(chat.receiver.id) ? (
