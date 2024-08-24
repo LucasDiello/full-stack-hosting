@@ -10,6 +10,7 @@ export const SocketContextProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [offlineUsers, setOfflineUsers] = useState([]);
   useEffect(() => {
     setSocket(io(urlClient));
   }, []);
@@ -24,12 +25,18 @@ export const SocketContextProvider = ({ children }) => {
         console.log(user);
         setOnlineUsers(user);
       });
+
+      socket.on("usersOffline", (user) => {
+        console.log(user);
+        setOfflineUsers(user);
+      });
     }
   }
-  , [socket]);
+  , [currentUser,socket]);
+
 
   return (
-    <SocketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers, offlineUsers }}>
       {children}
     </SocketContext.Provider>
   );
