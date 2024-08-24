@@ -12,23 +12,33 @@ const io = new Server({
 });
 
 let onlineUser = [];
+let offlineUser = [];
 
 const addUser = (userId, socketId) => {
   const userExists = onlineUser.find((user) => user.userId === userId);
   if (!userExists) {
     onlineUser.push({ userId, socketId, lastSeen: new Date() });
-    console.log("User added", onlineUser);
+    offlineUser = offlineUser.filter((user) => user.userId !== userId);
+    console.log("Users online", onlineUser);
+    console.log("Users offline", offlineUser);
     io.emit("userOnline", onlineUser);
-  } else {
-    userExists.socketId = socketId;
-    userExists.lastSeen = new Date();
-    io.emit("userOnline", onlineUser); 
-  }
+    io.emit("usersOffline", offlineUser);
+  } 
 };
 
 const removeUser = (socketId) => {
+  const user = onlineUser.find((user) => user.socketId === socketId);
+  if (user) {
+    offlineUser.push({
+      userId: user.userId,
+      lastSeen: new Date().toISOString(),
+    });
+  };
   onlineUser = onlineUser.filter((user) => user.socketId !== socketId);
+  console.log("Users online", onlineUser);
+  console.log("Users offline", offlineUser);
   io.emit("userOnline", onlineUser); 
+  io.emit("usersOffline", offlineUser);
 };
 
 const getUser = (userId) => {
