@@ -135,7 +135,7 @@ function Chat() {
 
   console.log(onlineUser);
 
-  return (  
+  return (
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
@@ -149,10 +149,10 @@ function Chat() {
           </div>
           {open ? (
             <div className="arrow-down">
-              <IoIosArrowDown  size={20} />
+              <IoIosArrowDown size={20} />
             </div>
           ) : (
-            <div  className="arrow-up">
+            <div className="arrow-up">
               <IoIosArrowUp size={20} />{" "}
             </div>
           )}
@@ -188,13 +188,19 @@ function Chat() {
                     </p>
                   </div>
                   {onlineUser.includes(c.receiver.id) ? (
-                    <span className="online-indicator" style={
-                      !open ? {display: "none"} : {display: "block"}
-                    }>●</span>
+                    <span
+                      className="online-indicator"
+                      style={!open ? { display: "none" } : { display: "block" }}
+                    >
+                      ●
+                    </span>
                   ) : (
-                    <span className="offline-indicator" style={
-                      !open ? {display: "none"} : {display: "block"}
-                    }>●</span>
+                    <span
+                      className="offline-indicator"
+                      style={!open ? { display: "none" } : { display: "block" }}
+                    >
+                      ●
+                    </span>
                   )}
                 </div>
               );
@@ -210,14 +216,15 @@ function Chat() {
               <div>
                 <span>{chat.receiver.username}</span>
                 <p>
-                 
-                  {onlineUser.includes(chat.receiver.id) && chat.messages.length > 0 ?
-                  (
-                    `Disponível para conversar`
-                  )
-                  :
-                  `Última visualização: ${format(offlineUsers.find((user) => user.userId === chat.receiver.id)?.lastSeen, "pt_BR")}`
-}
+                  {onlineUser.includes(chat.receiver.id) &&
+                  chat.messages.length > 0
+                    ? `Disponível para conversar`
+                    : `Última visualização: ${format(
+                        offlineUsers.find(
+                          (user) => user.userId === chat.receiver.id
+                        )?.lastSeen,
+                        "pt_BR"
+                      )}`}
                   <br />
                 </p>
               </div>
