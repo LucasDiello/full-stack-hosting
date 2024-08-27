@@ -10,7 +10,7 @@ const Navbar = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const navigate = useNavigate();
 
   const getBackgroundColor = () => {
@@ -91,13 +91,18 @@ const Navbar = () => {
             </a>
           </>
         )}
-        <div className="menuIcon">
-          <img
-            src="/menu.png"
-            alt="Menu Icon"
-            onClick={() => setOpen((prev) => !prev)}
-          />
-        </div>
+        <div className={`menuIcon ${pathname === "/profile/chat" && "mobileMenuIcon"}`}>
+        <button className="nav-open-btn" aria-label="abrir menu"
+        onClick={() => setOpen((prev) => !prev)}
+>
+          <span className="line line-1">
+            </span>
+            <span className="line line-2">
+              </span>
+              <span className="line line-3">
+                </span>
+                </button>
+  </div>
         <div className={open ? "menu active" : "menu"}>
           <div className="box-user">
           {currentUser && (
@@ -111,12 +116,13 @@ const Navbar = () => {
             </div>
           )}
           </div>
-          <Link href="/" className={pathname === "/" && "active-menu"}>Início</Link>
+          <Link to="/" className={pathname === "/" && "active-menu"}>Início</Link>
           <Link to="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</Link>
           {currentUser && (
             <>
-            <Link href="/profile" className={pathname === "/profile" && "active-menu"}>Profile</Link>
-            <Link href="/" onClick={handleLogout}>Sair</Link></>
+            <Link to="/profile" className={pathname === "/profile" && "active-menu"}>Profile</Link>
+            <Link to="/profile/chat" className={pathname === "/profile/chat" && "active-menu"}>Mensagens {number}</Link>
+            <Link to="/" onClick={handleLogout}>Sair</Link></>
           )}
           {!currentUser && (
             <>
