@@ -136,8 +136,6 @@ function Chat() {
     fetchChats();
   }, [onlineUsers]);
 
-  console.log(onlineUser);
-
   return (
     <div className="chat">
       <div className="messages">
@@ -197,7 +195,8 @@ function Chat() {
                   <div>
                       <span>{c.receiver.username}
                          <span className="date-lastMessage">
-                      {format(c.updatedAt, "pt_BR")}
+                          {console.log(c)}
+                      {format(c.createdAt, "pt_BR")}
                         </span>
                         </span>
                     <p>
