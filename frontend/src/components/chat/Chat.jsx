@@ -9,6 +9,7 @@ import { HiChatBubbleOvalLeft } from "react-icons/hi2";
 import { CiFaceFrown } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp, IoIosClose } from "react-icons/io";
 import ptBR from "timeago.js/lib/lang/pt_BR";
+import useWindowSize from "../../hooks/useWindowSize";
 
 function Chat() {
   const [chat, setChat] = useState(null);
@@ -16,8 +17,10 @@ function Chat() {
   const [open, setOpen] = useState(false);
   const [messageText, setMessageText] = useState("");
   const { currentUser, chats } = useContext(AuthContext);
-  const [onlineUser, setOnlineUser] = useState([]);
   const { socket, onlineUsers, offlineUsers } = useContext(SocketContext);
+  const { width } = useWindowSize();
+  
+  console.log(width);
   const messageEndRef = useRef();
   register("pt_BR", ptBR);
 
@@ -40,7 +43,7 @@ function Chat() {
 
   useEffect(() => {
     fetchChats();
-  }, [chats]);
+  }, [chats, onlineUsers]);
 
   const handleOpenChat = async (id, receiver) => {
     try {
@@ -124,42 +127,46 @@ function Chat() {
     };
   }, [socket, chat]);
 
-  useEffect(() => {
-    console.log(onlineUsers);
-    const onlineId = onlineUsers.map((user) => user.userId);
-    console.log(onlineId);
-    setOnlineUser(onlineId);
-    console.log("online users");
-    fetchChats();
-  }, [onlineUsers]);
-
-  console.log(onlineUser);
-
   return (
     <div className="chat">
       <div className="messages">
         <div className="box" onClick={() => setOpen(!open)}>
           <div>
             <img src={currentUser.avatar || "./noavatar.jpg"} alt="" />
+            <div>
             <h1>Mensagens</h1>
+            { width <= 768 &&
+              <p>Inicie uma conversa com um vendedor!
+              </p>
+            }
+            </div>
             <p>
-              <HiChatBubbleOvalLeft size={21} />
+              <HiChatBubbleOvalLeft size={width <= 768 ? 31 : 21} color={width <= 768 && "#FECE51"} />
               <span>{number}</span>
             </p>
           </div>
-          {open ? (
-            <div className="arrow-down">
-              <IoIosArrowDown size={20} />
-            </div>
-          ) : (
-            <div className="arrow-up">
-              <IoIosArrowUp size={20} />{" "}
-            </div>
-          )}
+          {width > 768 &&
+            (open ? (
+              <div className="arrow-down">
+                <IoIosArrowDown size={20} />
+              </div>
+            ) : (
+              <div className="arrow-up">
+                <IoIosArrowUp size={20} />{" "}
+              </div>
+            ))}
+        </div>
+        <div  >
+            {
+              // in the next feature we will add search bar to search for a specific user
+            }
         </div>
         {
-          <div className={`messages-list ${open ? "active" : ""}`}>
+          <div
+            className={`messages-list ${open || width <= 768 ? "active" : ""}`}
+          >
             {upd.map((c) => {
+              const isOnline = onlineUsers.some(on => on.userId === c.receiver.id);
               if (!c || !c.receiver) return null;
               return (
                 <div
@@ -178,7 +185,13 @@ function Chat() {
                     alt={`${c.receiver.username}'s avatar`}
                   />
                   <div>
-                    <span>{c.receiver.username}</span>
+                      <span>{c.receiver.username}
+                         <span className="date-lastMessage">
+                      {
+                       format(Date.now(), "pt_BR")
+}
+                        </span>
+                        </span>
                     <p>
                       {c.lastMessage
                         ? c.lastMessage.length > 10
@@ -187,17 +200,11 @@ function Chat() {
                         : "Mande uma mensagem!"}
                     </p>
                   </div>
-                  {onlineUser.includes(c.receiver.id) ? (
+                  {
+                   (
                     <span
-                      className="online-indicator"
-                      style={!open ? { display: "none" } : { display: "block" }}
-                    >
-                      ●
-                    </span>
-                  ) : (
-                    <span
-                      className="offline-indicator"
-                      style={!open ? { display: "none" } : { display: "block" }}
+                      className={`${isOnline ? "online-indicator" : "offline-indicator"}`}
+                      style={!open && width > 768 ? { display: "none" } : { display: "block" }}
                     >
                       ●
                     </span>
@@ -212,11 +219,11 @@ function Chat() {
         <div className={`chatBox ${chat ? "active2" : ""}`}>
           <div className="top">
             <div className="user">
-              <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
+              <img src={chat.receiver.avatar || "/noavatar.jpg"} alt="" />
               <div>
                 <span>{chat.receiver.username}</span>
                 <p>
-                  {onlineUser.includes(chat.receiver.id) &&
+                  {onlineUsers.some(user => user.userId === chat.receiver.id) &&
                   chat.messages.length > 0
                     ? `Disponível para conversar`
                     : `Última visualização: ${format(
@@ -228,7 +235,7 @@ function Chat() {
                   <br />
                 </p>
               </div>
-              {onlineUser.includes(chat.receiver.id) ? (
+              {onlineUsers.some(user => user.userId === chat.receiver.id) ? (
                 <span className="top-online-indicator">●</span>
               ) : (
                 <span className="top-offline-indicator">●</span>
@@ -253,7 +260,7 @@ function Chat() {
                 </div>
                 <div className="receiver-user">
                   {message.userId !== currentUser.id && (
-                    <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
+                    <img src={chat.receiver.avatar || "/noavatar.jpg"} alt="" />
                   )}
                 </div>
               </>
@@ -277,6 +284,6 @@ function Chat() {
       )}
     </div>
   );
-}
+} 
 
 export default Chat;
