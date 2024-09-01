@@ -3,7 +3,6 @@
 .singlePage {
   .details {
     display: flex;
-
     @include md {
       flex-wrap: wrap;
     }
@@ -268,7 +267,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 1rem;
-    padding-bottom: 2rem;
+    padding-bottom: 4rem;
     .need-movel {
       background-color: #9ac5c8;
       width: 350px;

@@ -11,6 +11,7 @@ import NewPostPage from "./routes/newPostPage/NewPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
 import NotFoundPage from "./routes/notFoundPage/NotFoundPage";
 import ErrorPage from "./routes/errorPage/ErrorPage";
+import Chat from "./components/chat/Chat";
 
 function App() {
   const router = createBrowserRouter([
@@ -67,6 +68,10 @@ function App() {
           path: "/add",
           element: <NewPostPage />,
         },
+        {
+          path: "/profile/chat",
+          element: <Chat />,
+        }
       ],
     },
     {

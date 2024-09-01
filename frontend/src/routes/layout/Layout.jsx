@@ -4,12 +4,13 @@ import Navbar from '../../components/navbar/Navbar';
 import Chat from '../../components/chat/Chat'; // Importe o componente Chat
 import "./layout.scss";
 import { AuthContext } from '../../context/AuthContext';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const Layout = () => {
   const location = useLocation();
-  const showChat = location.pathname !== '/';
+  const { width } = useWindowSize();
   const { currentUser } = useContext(AuthContext);
-
+  const showChat = location.pathname !== '/' && width > 768 && currentUser;
   return (
     <div className="layout">
       <div className="navbar">
@@ -18,7 +19,7 @@ const Layout = () => {
       <div className="content">
         <Outlet />
       </div>
-      {showChat && currentUser && <Chat />} 
+      {showChat && <Chat />}
     </div>
   );
 };

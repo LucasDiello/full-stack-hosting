@@ -2,8 +2,13 @@ import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 
 export const serviceGetAllPosts = async (query) => {
-  const { city, type, property, bedroom, minPrice, maxPrice } = query;
+  const { city, type, property, bedroom, minPrice, maxPrice, morePosts } = query;
+
+  let take = 6;
+
   const posts = await prisma.post.findMany({
+    take: morePosts ? take + parseInt(morePosts) : take,
+    skip: 0,
     where: {
       city: city || undefined,
       type: type || undefined,
@@ -15,6 +20,7 @@ export const serviceGetAllPosts = async (query) => {
       },
     },
   });
+  
   return {
     status: "SUCCESSFUL",
     data: posts,
