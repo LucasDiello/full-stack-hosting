@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export const serviceGetAllPosts = async (query) => {
   const { city, type, property, bedroom, minPrice, maxPrice, morePosts } = query;
 
-  let take = 3;
+  let take = 6;
 
   const posts = await prisma.post.findMany({
     take: morePosts ? take + parseInt(morePosts) : take,
