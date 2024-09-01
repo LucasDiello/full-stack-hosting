@@ -214,6 +214,10 @@
           right: 255px;
           top: 12px;
           z-index: 1;
+
+          @include sm {
+            right: 343px;
+          }
         }
 
         .online-indicator::before {

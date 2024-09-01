@@ -17,9 +17,9 @@ function Chat() {
   const [open, setOpen] = useState(false);
   const [messageText, setMessageText] = useState("");
   const { currentUser, chats } = useContext(AuthContext);
-  const [onlineUser, setOnlineUser] = useState([]);
   const { socket, onlineUsers, offlineUsers } = useContext(SocketContext);
   const { width } = useWindowSize();
+  
   console.log(width);
   const messageEndRef = useRef();
   register("pt_BR", ptBR);
@@ -43,7 +43,7 @@ function Chat() {
 
   useEffect(() => {
     fetchChats();
-  }, [chats]);
+  }, [chats, onlineUsers]);
 
   const handleOpenChat = async (id, receiver) => {
     try {
@@ -127,15 +127,6 @@ function Chat() {
     };
   }, [socket, chat]);
 
-  useEffect(() => {
-    console.log(onlineUsers);
-    const onlineId = onlineUsers.map((user) => user.userId);
-    console.log(onlineId);
-    setOnlineUser(onlineId);
-    console.log("online users");
-    fetchChats();
-  }, [onlineUsers]);
-
   return (
     <div className="chat">
       <div className="messages">
@@ -175,6 +166,7 @@ function Chat() {
             className={`messages-list ${open || width <= 768 ? "active" : ""}`}
           >
             {upd.map((c) => {
+              const isOnline = onlineUsers.some(on => on.userId === c.receiver.id);
               if (!c || !c.receiver) return null;
               return (
                 <div
@@ -195,8 +187,9 @@ function Chat() {
                   <div>
                       <span>{c.receiver.username}
                          <span className="date-lastMessage">
-                          {console.log(c)}
-                      {format(c.createdAt, "pt_BR")}
+                      {
+                       format(Date.now(), "pt_BR")
+}
                         </span>
                         </span>
                     <p>
@@ -207,16 +200,10 @@ function Chat() {
                         : "Mande uma mensagem!"}
                     </p>
                   </div>
-                  {onlineUser.includes(c.receiver.id) ? (
+                  {
+                   (
                     <span
-                      className="online-indicator"
-                      style={!open && width > 768 ? { display: "none" } : { display: "block" }}
-                    >
-                      ●
-                    </span>
-                  ) : (
-                    <span
-                      className="offline-indicator"
+                      className={`${isOnline ? "online-indicator" : "offline-indicator"}`}
                       style={!open && width > 768 ? { display: "none" } : { display: "block" }}
                     >
                       ●
@@ -236,7 +223,7 @@ function Chat() {
               <div>
                 <span>{chat.receiver.username}</span>
                 <p>
-                  {onlineUser.includes(chat.receiver.id) &&
+                  {onlineUsers.some(user => user.userId === chat.receiver.id) &&
                   chat.messages.length > 0
                     ? `Disponível para conversar`
                     : `Última visualização: ${format(
@@ -248,7 +235,7 @@ function Chat() {
                   <br />
                 </p>
               </div>
-              {onlineUser.includes(chat.receiver.id) ? (
+              {onlineUsers.some(user => user.userId === chat.receiver.id) ? (
                 <span className="top-online-indicator">●</span>
               ) : (
                 <span className="top-offline-indicator">●</span>
