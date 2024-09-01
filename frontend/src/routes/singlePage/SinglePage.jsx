@@ -16,7 +16,7 @@ import { FaBed, FaBus, FaRegMoneyBillAlt, FaSchool, FaStar } from "react-icons/f
 import { IoIosResize, IoMdRestaurant } from "react-icons/io";
 import useSavePost from "../../hooks/useSavePost";
 import { AuthContext } from "../../context/AuthContext";
-
+import Footer from "../../components/footer/Footer";
 const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
@@ -209,6 +209,7 @@ const SinglePage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
