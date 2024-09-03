@@ -12,6 +12,7 @@ import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loade
 import NotFoundPage from "./routes/notFoundPage/NotFoundPage";
 import ErrorPage from "./routes/errorPage/ErrorPage";
 import Chat from "./components/chat/Chat";
+import VerifyEmail from "./components/verifyEmail/VerifyEmail";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,9 +46,13 @@ function App() {
           element: <RegisterPage />,
         },
         {
+          path: "/verify-email",
+          element: <VerifyEmail />,
+        },
+        {
           path: "*",
           element: <NotFoundPage />,
-        },
+        }
       ],
     },
     {
