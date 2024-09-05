@@ -76,6 +76,8 @@ model User {
   email      String      @unique
   username   String      @unique
   password   String
+  isVerified   Boolean     @default(false)
+  verifiedToken String?
   avatar     String?
   createdAt  DateTime    @default(now())
   posts      Post[]
