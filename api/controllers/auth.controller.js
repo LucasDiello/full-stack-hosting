@@ -153,9 +153,8 @@ export const register = async (req, res) => {
     if (existingUser) {
       return res
         .status(mapStatusHTTP("CONFLICT"))
-        .json({ message: "User already exists" });
+        .json({ message: "Usuário já existe" });
     }
-    console.log("vrifytoken" , verifiedToken)
     const user = await prisma.user.create({
       data: {
         username,
@@ -205,12 +204,12 @@ export const register = async (req, res) => {
         console.log(err)
       }
       )
-    res.status(mapStatusHTTP("CREATED")).json({ message: "User created" });
+    res.status(mapStatusHTTP("CREATED")).json({ message: "Usuário criado!" });
   } catch (err) {
     console.log(err)
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
-      .json({ message: "Failed to create user" });
+      .json({ message: "Falha ao criar usuário" });
   }
 };
 
@@ -226,15 +225,15 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
-        .json({ message: "Invalid credentials User" });
-    }
+        .json({ message : "Credenciais de Usuário inválidas." });
+      }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
-        .json({ message: "Invalid credentials Password" });
+        .json({ message: "Credenciais de Senha inválidas." });
     }
 
     if (!user.isVerified) {
@@ -271,7 +270,7 @@ export const login = async (req, res) => {
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
-      .json({ message: "Failed to login" });
+      .json({ message: "Falha ao relizar login!" });
   }
 };
 
@@ -292,7 +291,7 @@ export const googleLogin = async (req, res) => {
     if (!email_verified) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
-        .json({ message: "Email not verified" });
+        .json({ message: "Email não verificado!" });
       }
 
     let user = await prisma.user.findUnique({
@@ -338,7 +337,7 @@ export const googleLogin = async (req, res) => {
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
-      .json({ message: "Failed to login with google" });
+      .json({ message: "Falha ao logar com usuário google!" });
   }
 };
 
