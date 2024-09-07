@@ -92,7 +92,19 @@
       }
 
       span{
-        color: rgba(255, 0, 0, 0.591);
+        color: rgba(255, 0, 0, 0.591);  
+      }
+
+      .button-resend {
+        border: none;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 11px;
+        &:active {
+
+        }
       }
 
       a{
@@ -109,7 +121,7 @@
 
       }
 
-      button {
+      .button-lgn {
         padding: 20px 24px;
         max-width: 40%;
         background-color: #fece51;
