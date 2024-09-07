@@ -12,29 +12,28 @@ const VerifyEmail = () => {
     const [message, setMessage] = useState('');
     const [countdown, setCountdown] = useState(10); 
     const navigate = useNavigate();
-    console.log(tokenParam)
-    console.log(emailParam)
+
     const messages = {
         "1": "Usuário não encontrado.",
         "2": "Email já verificado.",
-        "3": "Token inválido ou expirado.",
+        "3": "Verificação inválida ou expirada.",
         "4": "E-mail verificado com sucesso."
     };
 
     const timeForPush = (path) => {
         setTimeout(() => {
             navigate(path);
-        }, 1000000); 
+        }, 10000); 
     };
 
     const resendEmail = async () => {
         try {
             console.log("resendEmail")
             const res = await apiRequest(`/auth/resend-email?email=${emailParam}`);
-            console.log(res.data.message);
-            navigate('/login');
+            navigate('/');
         } catch (err) {
             console.error(err.response.data.message);
+            setMessage(err.response.data.message);
         }
     }
     const verifyEmail = async () => {
@@ -84,7 +83,6 @@ const VerifyEmail = () => {
                 <p className={`top-msg`}>
                    {message} {message === messages[4] ? <FaCheck color='green'/> : <FaExclamation color='orange' /> }
                 </p>
-                {console.log(messages[3])}
                 {
                     message === messages["3"] && (
                         <div className='resend-email'>
