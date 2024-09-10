@@ -60,6 +60,7 @@ export const serviceDeleteUser = async (userId) => {
 
 // refactor logic to get all posts 
 export const serviceSavePost = async (postId, tokenUserId) => {
+
    const savedPost = await prisma.savedPost.findUnique({
          where: {
               userId_postId: {
@@ -68,6 +69,7 @@ export const serviceSavePost = async (postId, tokenUserId) => {
               }
          }
     });
+
     if(savedPost) {
         await prisma.savedPost.delete({
             where: {
@@ -81,12 +83,13 @@ export const serviceSavePost = async (postId, tokenUserId) => {
             }
         }
     } 
-        await prisma.savedPost.create({
+        const postCreated = await prisma.savedPost.create({
             data: {
                 userId: tokenUserId,
                 postId
             }
         });
+
         return {
             status: "SUCCESSFUL",
             data: {

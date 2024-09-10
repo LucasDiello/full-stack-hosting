@@ -15,7 +15,7 @@ export const getAllPosts = async (req, res) => {
 
 export const getPostById = async (req, res) => {
     const id = req.params.id;
-    const token = req.cookies?.token;
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
 
     try {   
         const {status, data} = await serviceGetPostById(id, token);
@@ -48,8 +48,6 @@ export const deletePost = async (req, res) => {
     
     try {
         const {status, data} = await serviceDeletePost(id, tokenUserId);
-        console.log(data)
-        console.log(status)
         res.status(mapStatusHTTP(status)).json(data.message);
     } catch (error) {
         res.status(500).json({ message: "Error deleting post" });
