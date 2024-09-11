@@ -15,6 +15,7 @@ const ListPage = () => {
   const data = useLoaderData();
   const [take, setTake] = useState(3);
   const [posts, setPosts] = useState(data.postResponse);
+
   useEffect(() => {
     setPosts(data.postResponse);
   } , [searchParams]);
@@ -28,7 +29,8 @@ const ListPage = () => {
   
     setSearchParams(newParams);
   };
-  console.log(searchParams.toString());
+
+  console.log(posts);
   return (
     <div className="listPage">
       <div className="listContainer">
