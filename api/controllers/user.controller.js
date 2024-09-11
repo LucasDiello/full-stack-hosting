@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-import { serviceDeleteUser, serviceGetAllUsers, serviceGetNotificationNumber, serviceGetUserById, serviceProfilePosts, serviceSavePost, serviceUpdateUser } from "../service/user.service.js";
+import { serviceDeleteUser, serviceGetAllSavedPosts, serviceGetAllUsers, serviceGetNotificationNumber, serviceGetUserById, serviceProfilePosts, serviceSavePost, serviceUpdateUser } from "../service/user.service.js";
 import mapStatusHTTP from "../util/mapStatusHTTP.js";
 
 export const getAllUsers = async (req, res) => {
@@ -59,6 +59,17 @@ export const savePost = async (req, res) => {
         res.status(mapStatusHTTP(status)).json(data);
     } catch (error) {
         res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error saving post" });
+    }
+}
+
+export const getAllSavedPosts = async (req, res) => {
+    
+    const tokenUserId = req.userId;
+    try {
+        const {status, data} = await serviceGetAllSavedPosts(tokenUserId);
+        res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+        res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error retrieving saved posts" });
     }
 }
 

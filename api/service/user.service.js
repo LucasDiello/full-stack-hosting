@@ -98,6 +98,20 @@ export const serviceSavePost = async (postId, tokenUserId) => {
         }
 }
 
+export const serviceGetAllSavedPosts = async (tokenUserId) => {
+    const saved = await prisma.savedPost.findMany({
+        where: {
+            userId: tokenUserId
+        }
+    });
+
+    return {
+        status: "SUCCESSFUL",
+        data: saved
+    }
+}
+
+
 export const serviceProfilePosts = async (tokenUserId) => {
     const userPosts = await prisma.post.findMany({
         where: {
