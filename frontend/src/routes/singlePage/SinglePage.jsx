@@ -5,7 +5,7 @@ import Slider from "../../components/slider/Slider";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import apiRequest from "../../lib/apiRequest";
-import { BsFillSaveFill, BsSave } from "react-icons/bs";
+import { BsBookmarkHeart, BsBookmarkHeartFill} from "react-icons/bs";
 import {
   MdBathroom,
   MdOutlineChat,
@@ -17,14 +17,15 @@ import { IoIosResize, IoMdRestaurant } from "react-icons/io";
 import useSavePost from "../../hooks/useSavePost";
 import { AuthContext } from "../../context/AuthContext";
 import Footer from "../../components/footer/Footer";
+
 const SinglePage = () => {
   const post = useLoaderData();
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
   const { currentUser, updateChats } = useContext(AuthContext);
-
+  console.log(saved)
   const navigate = useNavigate();
-  
+
   const handleChat = async (receiverId) => {
     try {
       console.log(currentUser);
@@ -45,7 +46,8 @@ const SinglePage = () => {
       setTimeout(() => setChatMessage(""), 3000);
     }
   };
-
+  console.log(post);
+  console.log(saved)
   return (
     <div className="singlePage">
       <div className="details">
@@ -86,7 +88,7 @@ const SinglePage = () => {
                   className="chats"
                   style={{ backgroundColor: saved ? "#fece51" : "white" }}
                 >
-                  {saved ? <BsFillSaveFill /> : <BsSave />}
+                  {saved ? <BsBookmarkHeartFill /> : <BsBookmarkHeart />}
                   {saved ? <p>Local Salvo</p> : <p>Salvar o Local</p>}
                 </button>
                 <div className="chats" onClick={() => handleChat(post.userId)}>
