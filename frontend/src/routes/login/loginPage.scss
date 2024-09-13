@@ -1,11 +1,11 @@
 @import "../../responsive.scss";
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 .login {
   height: 100%;
   display: flex;
 
   &::before {
-    background-image: url("../../../public/homepage.jpg");
+    background-color: white;
     background-size: cover;
     background-position: center;
     content: "";
@@ -17,32 +17,69 @@
     z-index: -1;
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(8, 6, 0, 0.7);
-    z-index: -1;
-  }
 
   .formContainer {
     flex: 3;
     height: 100%;
     display: flex;
-    
+    justify-content: center;
+
+    .group {
+      position: relative;
+      width: 70%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      margin-block: 10px;
+     }
+     
+     .input {
+      font-size: 16px;
+      padding: 10px 10px 10px 5px;
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #333;
+      background: transparent;
+      color: #333;
+     }
+     
+     .input:focus {
+      outline: none;
+     }
+     
+     label {
+      color: #333;
+      font-size: 13px;
+      font-weight: normal;
+      position: absolute;
+      pointer-events: none;
+      left: 78px;
+      top: 10px;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+     }
+     
+     .input:focus ~ label, .input:valid ~ label {
+      top: -20px;
+      font-size: 14px;
+      color: #fece51;
+     }
+     
+     
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
       padding-block: 40px;
-
+      align-items: center;
+      text-align: center;
+      
       h1 {
-        font-weight: 300;
+        font-weight: 500;
         font-size: 70px;
-        color: white;
+        color: #333;
 
         &::after {
           content: "!";
@@ -67,13 +104,12 @@
       }
 
       p {
-        font-size: 13px;
+        font-size: 10px;
         max-width: 70%;
-        line-height: 30px;
+        line-height: 20px;
         letter-spacing: 1px;
-        color: gray;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
+        color: #c4baba;
+        font-family: sans-serif;
         @include sm {
           max-width: 100%;
           font-size: 11px;
@@ -82,9 +118,8 @@
 
       input{
         padding: 15px;
-        border: 1px solid gray;
+        border: 1px solid #c4baba;
         max-width: 70%;
-        border-radius: 5px;
 
         @include sm {
           max-width: 100%;
@@ -98,21 +133,19 @@
       .button-resend {
         border: none;
         background-color: transparent;
-        color: white;
+        color: black;
         cursor: pointer;
         text-decoration: underline;
         font-size: 11px;
-        &:active {
 
-        }
       }
 
       a{
         font-size: 11px;
-        color: gray;
+        color: #c4baba;
         letter-spacing: 1px;
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid #c4baba;
         width: max-content;
        
         @include sm {
@@ -122,8 +155,7 @@
       }
 
       .button-lgn {
-        padding: 20px 24px;
-        max-width: 40%;
+        padding: 20px 70px;
         background-color: #fece51;
         cursor: pointer;
         color: black;
@@ -135,10 +167,51 @@
         &:hover {
           background-color: rgb(163, 158, 158, 0.75);
           box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
-          color: white;
+          color: black;
       }
     }
     }
+
+    .auth {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px ;
+      
+      .auth-login {
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        
+        &:first-child {
+          background-color: #dd4b39;
+        }
+
+        &:nth-child(2) {
+          background-color: #1da1f2;
+        }
+        
+        &:last-child {
+          background-color: #3b5998;
+        
+        }
+
+        
+
+        &:hover {
+          background-color: #fece51;
+          transform: scale(1.1);
+        }
+      }
+    }
+    
+
   }
 
   .imgContainer {

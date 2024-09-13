@@ -50,17 +50,20 @@ const Navbar = () => {
 
   // Fetch notifications if currentUser exists
   if (currentUser) fetch();
+
   return (
     <nav >
       <div/>
-      <div className="left" style={{display: pathname === "/" && "none", color: getColor()}}>
-        <Link href="/" className="logo">
+      <div className="left" style={{display: pathname === "/" && "none"}}>
+        <Link href="/" className="logo" style={{marginLeft: pathname === "/login" || pathname === "/register" ? "30px" : "0"}}>
           <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
         </Link>
+        <div style={{display: pathname === "/login" || pathname === "/register" ? "none" : "flex", gap:"40px" }}>
         <Link to="/">Início</Link>
         <Link to="/">Sobre</Link>
         <Link to="/list">Ver móveis</Link>
+        </div>
       </div>
       <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
         {currentUser ? (

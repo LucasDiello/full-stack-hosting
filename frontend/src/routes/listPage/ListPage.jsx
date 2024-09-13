@@ -30,7 +30,6 @@ const ListPage = () => {
     setSearchParams(newParams);
   };
 
-  console.log(posts);
   return (
     <div className="listPage">
       <div className="listContainer">

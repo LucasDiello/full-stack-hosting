@@ -1,11 +1,10 @@
 @import "../../responsive.scss";
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 .register {
   height: 100%;
   display: flex;
-
   &::before {
-    background-image: url("../../../public/homepage.jpg");
+    background-color: white;
     background-size: cover;
     background-position: center;
     content: "";
@@ -17,32 +16,121 @@
     z-index: -1;
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(8, 6, 0, 0.7);
-    z-index: -1;
-  }
 
   .formContainer {
     flex: 3;
     height: 100%;
     display: flex;
-    
+    justify-content: center;
+
+    @keyframes visible {
+      0% {
+        opacity: 0;
+      }
+      25% {
+        opacity: 0.25;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      75% {
+        opacity: 0.75;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .cookies-banner {
+      position: absolute;
+      width: 60%;
+      height: 10vh;
+      left: 0;
+      bottom: 0;
+      background-color: rgba(36, 36, 36, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      color: white;
+      font-size: 14px;
+      animation: visible 1s ease-out;
+      
+      p {
+
+        margin-inline-start: 3rem;
+        button {
+          margin-left: 20px;
+          padding: 10px 20px;
+          background-color: #fece51;
+          border: none;
+          cursor: pointer;
+          color: #333;
+          transition: background-color 0.3s ease;
+          
+          &:hover {
+            background-color: #d4b048;
+          }
+        }
+      }
+    }
+
+    .group {
+      position: relative;
+      width: 70%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      margin-block: 10px;
+     }
+     
+     .input {
+      font-size: 16px;
+      padding: 10px 10px 10px 5px;
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #333;
+      background: transparent;
+      color: #333;
+     }
+     
+     .input:focus {
+      outline: none;
+     }
+     
+     label {
+      color: #333;
+      font-size: 13px;
+      font-weight: normal;
+      position: absolute;
+      pointer-events: none;
+      left: 78px;
+      top: 10px;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+     }
+     
+     .input:focus ~ label, .input:valid ~ label {
+      top: -20px;
+      font-size: 14px;
+      color: #fece51;
+     }
+     
+     
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
       padding-block: 40px;
-
+      align-items: center;
+      text-align: center;
+      
       h1 {
-        font-weight: 300;
+        font-weight: 500;
         font-size: 70px;
-        color: white;
+        color: #333;
 
         &::after {
           content: "!";
@@ -51,12 +139,12 @@
 
           @include sm {
             font-size: 4rem;
-            line-height: 100px; 
+            line-height: 100px;
           }
         }
 
         @include sm {
-          font-size: 2.5rem;
+          font-size: 2.8rem;
           line-height: 50px;
         }
 
@@ -67,13 +155,12 @@
       }
 
       p {
-        font-size: 13px;
+        font-size: 10px;
         max-width: 70%;
-        line-height: 30px;
+        line-height: 20px;
         letter-spacing: 1px;
-        color: gray;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
+        color: #c4baba;
+        font-family: sans-serif;
         @include sm {
           max-width: 100%;
           font-size: 11px;
@@ -82,9 +169,8 @@
 
       input{
         padding: 15px;
-        border: 1px solid gray;
+        border: 1px solid #c4baba;
         max-width: 70%;
-        border-radius: 5px;
 
         @include sm {
           max-width: 100%;
@@ -92,55 +178,51 @@
       }
 
       span{
-        color: rgba(255, 0, 0, 0.591);
+        color: rgba(255, 0, 0, 0.591);  
       }
 
-      a{
-        font-size: 11px;
-        color: gray;
-        letter-spacing: 1px;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        border-bottom: 1px solid gray;
-        width: max-content;
-       
-        @include sm {
-          font-size: 11px;
-        }
-
-      }
-
-      button {
-        padding: 20px 24px;
-        max-width: 40%;
-        background-color: #fece51;
-        cursor: pointer;
-        color: black;
-        border: none;
-        font-size: 15px;
-        font-weight: 300;
-        transition: all 0.5s ease;
-
-        .spinner {
-          animation: spin 1s linear infinite;
-          font-size: 1.2rem; /* Tamanho do ícone */
-        }
-        
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        &:hover {
-          background-color: rgb(163, 158, 158, 0.75);
-          box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
-          color: white;
-      }
     }
+
+    .button-register {
+      padding: 20px 70px;
+      background-color: #fece51;
+      cursor: pointer;
+      color: #333;
+      border: none;
+      font-size: 15px;
+      font-weight: 300;
+      transition: all 0.5s ease;
+      font-family: 'Roboto', sans-serif;
+      
+      .spinner {
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      &:hover {
+        background-color: rgb(163, 158, 158, 0.75);
+        box-shadow: 0px 0px 10px 0px rgb(163, 158, 158, 0.75);
+        color: #333;
     }
+  }
+  .have-account {
+    font-size: 10px;
+    color: #c4baba;
+    font-family: sans-serif;
+    @include sm {
+      max-width: 100%;
+      font-size: 11px;
+    }
+  }
   }
 
   .imgContainer {
@@ -156,6 +238,7 @@
     img {
       width: 95%;
     }
+    
     @media screen and (min-width: 768px) {
       display: flex;
       justify-content: center;
