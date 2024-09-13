@@ -10,9 +10,12 @@ const Layout = () => {
   const location = useLocation();
   const { width } = useWindowSize();
   const { currentUser } = useContext(AuthContext);
-  const showChat = location.pathname !== '/' && width > 768 && currentUser;
+
+  const { pathname } = location;
+  const showChat = pathname !== '/' && width > 768 && currentUser;
+
   return (
-    <div className="layout">
+    <div className={`${pathname !== "/login" && pathname !== "/register" ? "layout" : "layout-auth"}`}>
       <div className="navbar">
         <Navbar />
       </div>
@@ -29,7 +32,6 @@ const RequireAuth = () => {
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
-
   return <Layout />;
 };
 

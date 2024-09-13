@@ -42,6 +42,7 @@ const RegisterPage = () => {
         onRequestClose={() => setOpenModal(false)}
         title="E-mail de Verificação Enviado!"
         message="Um e-mail de verificação foi enviado. Por favor, verifique sua caixa de entrada e clique no link para ativar sua conta."
+        type={"verify-email"}
       />
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
@@ -50,25 +51,42 @@ const RegisterPage = () => {
             Crie uma conta para acessar a plataforma e encontrar o imóvel dos
             seus sonhos. Não perca tempo, crie sua conta agora mesmo!
           </p>
+          <div className="group">
           <input
             name="username"
             minLength={3}
             maxLength={20}
             type="text"
-            placeholder="Usuário"
-          />
-          <input name="email" type="text" placeholder="E-mail" />
-          <input name="password" type="password" placeholder="Senha" />
-          <button disabled={isLoading}>
+            className="input"
+            required
+            />
+          <label htmlFor="">Usuário</label>
+            </div>
+            <div className="group">
+
+          <input name="email" type="text"  className="input" required/>
+          <label htmlFor="">E-mail</label>
+            </div>
+          <div className="group">
+
+          <input name="password" type="password"  className="input" required/>
+          <label htmlFor="">Senha</label>
+          </div>
+          <button className="button-register" disabled={isLoading}>
           {isLoading ? (
-            <FaSpinner className="spinner" />
+            <div className="spinner" />
           ) : (
-            "Registrar"
+            "Enviar"
             )}
           </button>
           {error && <span>{error}</span>}
-          <Link to="/login">Já tem uma conta?</Link>
+          <Link to="/login" className="have-account">Já tem uma conta?</Link>
         </form>
+        <div class="cookies-banner">
+      <p>
+        Este site usa cookies para melhorar a experiência. <button>Aceitar</button>
+        </p>
+    </div>
       </div>
       <div className="imgContainer"></div>
     </div>

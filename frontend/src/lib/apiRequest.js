@@ -1,12 +1,14 @@
 import axios from "axios";
 
 const url = import.meta.env.VITE_API_URL_LOCAL;
+
 const apiRequest = axios.create({
   baseURL: url,
   withCredentials: true,
 });
-console.log(url);
+
 export const setAuthToken = (token) => {
+
   if (token) {
     apiRequest.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {

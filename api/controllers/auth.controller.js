@@ -5,6 +5,10 @@ import jwt from "jsonwebtoken";
 import { jwtDecode } from "jwt-decode";
 import transporter from "../config/nodemailer.js";
 
+const url = process.env.CLIENT_URL_LOCAL || process.env.CLIENT_URL_PROD;
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const GITHUB_REDIRECT_URI = process.env.GITHUB_REDIRECT_URI;
 
 const generateToken = (payload, expiresIn = "1m") => {
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn } );
@@ -208,7 +212,7 @@ export const resendEmail = async (req, res) => {
       }
     })
 
-    const verifyLink = `http://localhost:5173/verify-email?email=${user.email}&token=${newToken}`;
+    const verifyLink = `${url}/verify-email?email=${user.email}&token=${newToken}`;
     const htmlContent = generateVerificationEmailHTML(user.username, verifyLink);
 
     await sendEmail(user.email, htmlContent);
@@ -258,7 +262,7 @@ export const register = async (req, res) => {
       },
     });
 
-    const verifyLink = `http://localhost:5173/verify-email?email=${email}&token=${verifiedToken}`;
+    const verifyLink = `${url}/verify-email?email=${email}&token=${verifiedToken}`;
     const htmlContent = generateVerificationEmailHTML(username, verifyLink);
 
       await sendEmail(user.email, htmlContent);
@@ -279,13 +283,13 @@ export const login = async (req, res) => {
         username,
       },
     });
-
+    console.log(user)
     if (!user) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
         .json({ message : "Credenciais de Usuário inválidas." });
       }
-
+      
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
@@ -302,7 +306,9 @@ export const login = async (req, res) => {
     
     // Generate cookie token and send it to the client
     // res.setHeader("Set-Cookie", "test=" + "myValue").json("success")
+    
     const age = 100 * 60 * 60 * 24 * 7;
+
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: age,
     });
@@ -341,12 +347,12 @@ export const logout = (req, res) => {
 };
 
 export const googleLogin = async (req, res) => {
-  const { idToken, useCookies } = req.body;
+  const { data, useCookies } = req.body;
+  
   try {
-    const decoded = jwtDecode(idToken);
-    const { email, email_verified, name, picture } = decoded;
-
-    if (!email_verified) {
+    const { id, email, verified_email, name, picture } = data;
+    console.log(data)
+    if (!verified_email) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
         .json({ message: "Email não verificado!" });
@@ -358,23 +364,25 @@ export const googleLogin = async (req, res) => {
       },
     });
 
+    console.log(email,name,id,picture, verified_email)
+
     if (!user) {
       user = await prisma.user.create({
         data: {
           email,
           username: name,
-          password: idToken,
+          password: id.toString(),
           avatar: picture,
+          isVerified: true,
         },
       });
     }
+    console.log("to aqui")
 
     const age = 100 * 60 * 60 * 24 * 7;
-
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: age,
     });
-
     const { password: userPassword, ...dataUser } = user; // remove password from user data
 
     if(useCookies) {
@@ -393,9 +401,37 @@ export const googleLogin = async (req, res) => {
         { ...dataUser, token }
       );
   } catch (err) {
+    console.log(err)
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
       .json({ message: "Falha ao logar com usuário google!" });
   }
 };
 
+
+export const githubAuth = async (req, res) => {
+  const { code } = req.body;
+  console.log(code)
+  try {
+
+    const response = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: GITHUB_CLIENT_ID,
+        client_secret: GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: GITHUB_REDIRECT_URI
+      }),
+    });
+    
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send("Erro ao autenticar com o GitHub.");
+  }
+
+}

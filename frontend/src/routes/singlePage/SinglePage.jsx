@@ -19,7 +19,9 @@ import { AuthContext } from "../../context/AuthContext";
 import Footer from "../../components/footer/Footer";
 
 const SinglePage = () => {
+  
   const post = useLoaderData();
+
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
   const { currentUser, updateChats } = useContext(AuthContext);
@@ -46,8 +48,7 @@ const SinglePage = () => {
       setTimeout(() => setChatMessage(""), 3000);
     }
   };
-  console.log(post);
-  console.log(saved)
+
   return (
     <div className="singlePage">
       <div className="details">
