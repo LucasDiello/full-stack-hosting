@@ -114,7 +114,6 @@ const ListPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
