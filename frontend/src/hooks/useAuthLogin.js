@@ -79,7 +79,6 @@ export const useAuthFace =  () => {
 
 
 
-
 export const loginGithub = () => {
     const url = `https://github.com/login/oauth/authorize?client_id=${client_id_github}&redirect_uri=${redirect_uri}&scope=user`;
     window.location.assign(url);
