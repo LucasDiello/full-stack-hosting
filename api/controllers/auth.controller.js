@@ -6,9 +6,6 @@ import { jwtDecode } from "jwt-decode";
 import transporter from "../config/nodemailer.js";
 
 const url = process.env.CLIENT_URL_LOCAL || process.env.CLIENT_URL_PROD;
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-const GITHUB_REDIRECT_URI = process.env.GITHUB_REDIRECT_URI;
 
 const generateToken = (payload, expiresIn = "1m") => {
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn } );
@@ -410,8 +407,12 @@ export const googleLogin = async (req, res) => {
 
 
 export const githubAuth = async (req, res) => {
+  const GITHUB_CLIENT_ID = "Ov23liflWyn3oaQ6g2ZC";
+  const GITHUB_CLIENT_SECRET = "3b7ea20e14cb37b4a991bd22221902cb3b90fe57";
+  const GITHUB_REDIRECT_URI = "http://localhost:5173/login";
+  
   const { code } = req.body;
-  console.log(code)
+
   try {
 
     const response = await fetch('https://github.com/login/oauth/access_token', {
