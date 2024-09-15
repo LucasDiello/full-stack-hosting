@@ -212,7 +212,6 @@ const SinglePage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
