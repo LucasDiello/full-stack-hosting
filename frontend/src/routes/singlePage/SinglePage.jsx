@@ -24,7 +24,7 @@ const SinglePage = () => {
 
   const [chatMessage, setChatMessage] = useState("");
   const { saved, handleSave } = useSavePost();
-  const { currentUser, updateChats } = useContext(AuthContext);
+  const { currentUser, setChats } = useContext(AuthContext);
   console.log(saved)
   const navigate = useNavigate();
 
@@ -36,12 +36,13 @@ const SinglePage = () => {
         navigate("/login");
         return;
       }
+
       const response = await apiRequest.post("/chats", { receiverId });
       setChatMessage(response.data);
       console.log(response);
       setTimeout(() => setChatMessage(""), 3000);
 
-      response.status === 200 ? updateChats(false) : updateChats(true); // condition to economize the number of requests
+      response.status === 201 ? setChats(true) : setChats(false); // condition to economize the number of requests
 
     } catch (error) {
       setChatMessage(error.response.data || error.res);
@@ -49,7 +50,7 @@ const SinglePage = () => {
     }
   };
 
-  return (
+  return (  
     <div className="singlePage">
       <div className="details">
         <div className="info">

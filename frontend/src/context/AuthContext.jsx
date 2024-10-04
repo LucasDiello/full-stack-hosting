@@ -24,10 +24,6 @@ const TOKEN_EXPIRY_TIME = 100 * 60 * 60 * 1000; // 100 hours in milliseconds
 export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(localStorage.getItem("user") || null); ;
     const [chats, setChats] = useState(false);
-
-    const updateChats = (updated) => {
-        setChats(updated);
-    };  
     
     const updateUser = (data) => {
         if (!data) {
@@ -72,7 +68,7 @@ export const AuthContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser, updateUser, chats, updateChats }}>
+        <AuthContext.Provider value={{ currentUser, updateUser, chats, setChats }}>
             {children}
         </AuthContext.Provider>
     );

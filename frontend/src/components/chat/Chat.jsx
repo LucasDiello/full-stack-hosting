@@ -20,7 +20,6 @@ function Chat() {
   const { socket, onlineUsers, offlineUsers } = useContext(SocketContext);
   const { width } = useWindowSize();
   
-  console.log(width);
   const messageEndRef = useRef();
   register("pt_BR", ptBR);
 

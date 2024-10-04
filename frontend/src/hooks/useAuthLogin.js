@@ -6,8 +6,9 @@ import { useContext } from "react";
 
 const client_id_github = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const redirect_uri = import.meta.env.VITE_GITHUB_REDIRECT_URI;
-const client_id_facebook = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const secret_id_facebook = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
+
+const client_id_facebook = import.meta.env.VITE_FACEBOOK_CLIENT_ID;
+const secret_id_facebook = import.meta.env.VITE_FACEBOOK_CLIENT_SECRET;
 
 export const loginFacebook = () => {
   const url = `https://www.facebook.com/v13.0/dialog/oauth?client_id=${client_id_facebook}&redirect_uri=${redirect_uri}&scope=email`;
