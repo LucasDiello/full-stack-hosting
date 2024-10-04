@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./registerPage.scss";
 import apiRequest from "../../lib/apiRequest";
-import CustomModal from "../../components/modal/EmailModal";
+import CustomModal from "../../components/modal/CustomModal";
 import { FaSpinner } from "react-icons/fa";
 
 const RegisterPage = () => {
