@@ -32,8 +32,6 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
-app.use("/test", userRoute);
-
 
 
 app.listen(PORT, () => {

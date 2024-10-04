@@ -20,7 +20,9 @@ function useWindowSize() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return windowSize;
+  const { width, height } = windowSize
+  
+  return { width, height };
 }
 
 export default useWindowSize;
