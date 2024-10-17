@@ -16,6 +16,7 @@
       padding-bottom: 50px;
       @include md {
         height: auto;
+        overflow-y: hidden;
       }
 
       .post-notfound {

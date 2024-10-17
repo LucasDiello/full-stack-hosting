@@ -8,7 +8,6 @@ const apiRequest = axios.create({
 });
 
 export const setAuthToken = (token) => {
-
   if (token) {
     apiRequest.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
