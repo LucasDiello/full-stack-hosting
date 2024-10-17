@@ -8,11 +8,16 @@ import LoginPage from "./routes/login/LoginPage";
 import RegisterPage from "./routes/register/RegisterPage";
 import ProfileUpdatePage from "./routes/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./routes/newPostPage/NewPostPage";
-import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
+import {
+  listPageLoader,
+  profilePageLoader,
+  singlePageLoader,
+} from "./lib/loaders";
 import NotFoundPage from "./routes/notFoundPage/NotFoundPage";
 import ErrorPage from "./routes/errorPage/ErrorPage";
 import Chat from "./components/chat/Chat";
 import VerifyEmail from "./components/verifyEmail/VerifyEmail";
+import PrivacyPolicy from "./routes/privacypolicy/PrivacyPolicy";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,9 +30,9 @@ function App() {
           path: "/",
           element: <HomePage />,
         },
-        { 
-          path: "/list", 
-          element: <ListPage />, 
+        {
+          path: "/list",
+          element: <ListPage />,
           loader: listPageLoader,
           errorElement: <ErrorPage />,
         },
@@ -50,11 +55,15 @@ function App() {
           element: <VerifyEmail />,
         },
         {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy />,
+        },
+        {
           path: "*",
           element: <NotFoundPage />,
-        }
+        },
       ],
-    }, 
+    },
     {
       path: "/",
       element: <RequireAuth />,
@@ -76,7 +85,7 @@ function App() {
         {
           path: "/profile/chat",
           element: <Chat />,
-        }
+        },
       ],
     },
     {
