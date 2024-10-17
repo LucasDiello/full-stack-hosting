@@ -54,12 +54,16 @@
       font-weight: normal;
       position: absolute;
       pointer-events: none;
-      left: 78px;
+      left: 55px;
       top: 10px;
       transition: 0.2s ease all;
       -moz-transition: 0.2s ease all;
       -webkit-transition: 0.2s ease all;
-     }
+    
+      @include sm {
+        left: 0px;
+      }
+    }
      
      .input:focus ~ label, .input:valid ~ label {
       top: -20px;

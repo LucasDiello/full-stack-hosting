@@ -206,35 +206,11 @@ nav {
       }
     }
       
-    //   .menuIcon {
-    //   display: none;
-    //   z-index: 9999;
-    //   right: 50%;
-
-      
-    //   img {
-    //     width: 36px;
-    //     height: 36px;
-    //     cursor: pointer;
-    //   }
-      
-    //   @include sm {
-    //     display: inline;
-    //     width: 100%;
-    //     position: fixed;
-    //     right: 0;
-    //     bottom: 0;
-    //     background-color: inherit ;
-    //     padding: 10px;
-    //     text-align: center;
-    //   }
-    // }
-    
     .menu {
       position: fixed;
       justify-content: center;
-      top: 0;
-      right: -100%;
+      top: 0; 
+      visibility: hidden;
       background-color: #0e0d0b;
       color: white;
       height: 100vh;
@@ -247,9 +223,10 @@ nav {
       z-index: 999;
 
       @include sm {
+        right: 20px;
+        visibility: visible;
         bottom: -100%;
         top: initial;
-        right: initial;
       }
 
       .box-user {
@@ -283,12 +260,11 @@ nav {
       }
 
       &.active {
-        right: 0;
-
+        
         @include sm {
           bottom: 0;
-          right: initial;
-        }
+          left: 18px;
+          }
       }
 
       @include sm {

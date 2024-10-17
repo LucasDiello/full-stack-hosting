@@ -137,9 +137,6 @@ try {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const { email } = decoded;
   
-  if (!email) {
-    console.log("n entrei")
-  }
   // Busca o usuário correspondente
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
