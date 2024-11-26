@@ -8,11 +8,11 @@ import MaintenanceContentModal from "./MaintenanceContentModal";
 
 Modal.setAppElement("#root");
 
-const CustomModal = ({ isOpen, onRequestClose, type }) => {
+const CustomModal = ({ isOpen, onRequestClose, type, email }) => {
   const renderContent = () => {
     switch (type) {
       case "verify-email":
-        return <VerifyEmailContentModal />;
+        return <VerifyEmailContentModal email={email} />;
       case "recover-password":
         return <RecoverPasswordContentModal onRequestClose={onRequestClose} />;
       case "maintenance":
@@ -21,7 +21,7 @@ const CustomModal = ({ isOpen, onRequestClose, type }) => {
         return null;
     }
   };
-  console.log(isOpen)
+
   return (
     <Modal
       isOpen={isOpen}
@@ -30,7 +30,7 @@ const CustomModal = ({ isOpen, onRequestClose, type }) => {
       style={{
         overlay: {
           backgroundColor: "rgb(0,0,0,0.4)",
-          width: "100%"
+          width: "100%",
         },
         content: {
           position: "absolute",
@@ -39,15 +39,17 @@ const CustomModal = ({ isOpen, onRequestClose, type }) => {
           transform: "translate(-50%, -50%)",
         },
       }}
-      overlayClas sName="modal-overlay"
+      overlayClas
+      sName="modal-overlay"
       contentLabel="Custom Modal"
     >
       {renderContent()}
-      <button style={{
+      <button
+        style={{
           cursor: "pointer",
           display: "flex",
-          justifyContent:"center",
-          alignItems:"center",
+          justifyContent: "center",
+          alignItems: "center",
           position: "absolute",
           top: "10px",
           right: "10px",
@@ -57,8 +59,10 @@ const CustomModal = ({ isOpen, onRequestClose, type }) => {
           fontFamily: "'Roboto', cursive",
           fontSize: "0.8rem",
           zIndex: 10,
-        }} onClick={onRequestClose}>
-          <MdClose size={20} color="#333"/>
+        }}
+        onClick={onRequestClose}
+      >
+        <MdClose size={20} color="#333" />
       </button>
     </Modal>
   );
