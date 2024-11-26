@@ -8,23 +8,24 @@ import transporter from "../config/nodemailer.js";
 const url = process.env.CLIENT_URL_LOCAL || process.env.CLIENT_URL_PROD;
 
 const generateToken = (payload, expiresIn = "1m") => {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn } );
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn });
 };
 
 const sendEmail = async (email, html) => {
-  console.log(email)
- return transporter.sendMail({
-    from: ' "Alugue@já -" <lucasoliveiradiello@gmail.com>',
-    to: email,
-    subject: "Ativação de conta",
-    text: "Verifique seu e-mail!!",
-    html,
-  }).then((info) => {
-    console.log("Message sent: %s", info);
-  } ).catch((err) => {
-    console.log(err)
-  }
-  )
+  return transporter
+    .sendMail({
+      from: ' "Alugue@já -" <lucasoliveiradiello@gmail.com>',
+      to: email,
+      subject: "Ativação de conta",
+      text: "Verifique seu e-mail!!",
+      html,
+    })
+    .then((info) => {
+      console.log("Message sent: %s", info);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const generateVerificationEmailHTML = (username, verifyLink) => {
@@ -129,97 +130,113 @@ const generateVerificationEmailHTML = (username, verifyLink) => {
   `;
 };
 
-
-export const verifyEmail = async (req,res) => {
+export const verifyEmail = async (req, res) => {
   const { token } = req.query;
-try {
-  // Verifica o token
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const { email } = decoded;
-  
-  // Busca o usuário correspondente
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return res.status(mapStatusHTTP("NOT_FOUND")).json({ message: 'Usuário não encontrado.' });
+  try {
+    // Verifica o token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { email } = decoded;
+
+    // Busca o usuário correspondente
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res
+        .status(mapStatusHTTP("NOT_FOUND"))
+        .json({ message: "Usuário não encontrado." });
+    }
+
+    if (user.isVerified) {
+      return res
+        .status(mapStatusHTTP("NOT_FOUND"))
+        .json({ message: "E-mail já verificado." });
+    }
+
+    if (user.verifiedToken !== token) {
+      return res
+        .status(mapStatusHTTP("UNAUTHORIZED"))
+        .json({ message: "Verificação inválida ou expirada." });
+    }
+
+    // Atualiza o status de verificação
+    const userUpdate = await prisma.user.update({
+      where: { email },
+      data: {
+        isVerified: true,
+        verifiedToken: null,
+      },
+    });
+
+    console.log(userUpdate);
+
+    res
+      .status(mapStatusHTTP("SUCCESSFUL"))
+      .json({ message: "E-mail verificado com sucesso." });
+  } catch (error) {
+    console.error(error);
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(400)
+        .json({ message: "Verificação inválida ou expirada." });
+    }
+    res.status(500).json({ message: "Erro no servidor." });
   }
-
-  if (user.isVerified) {
-    return res.status(mapStatusHTTP("NOT_FOUND")).json({ message: 'E-mail já verificado.' });
-  }
-
-  if (user.verifiedToken !== token) {
-    return res.status(mapStatusHTTP("UNAUTHORIZED")).json({ message: 'Verificação inválida ou expirada.' });
-  }
-
-  // Atualiza o status de verificação
-  const userUpdate = await prisma.user.update({
-    where: { email },
-    data: {
-      isVerified: true,
-      verifiedToken: null,
-    },
-  });
-
-  console.log(userUpdate)
-
-  res.status(mapStatusHTTP("SUCCESSFUL")).json({ message: 'E-mail verificado com sucesso.' });
-} catch (error) {
-  console.error(error);
-  if (error.name === 'TokenExpiredError') {
-    return res.status(400).json({ message: 'Verificação inválida ou expirada.' });
-  }
-  res.status(500).json({ message: 'Erro no servidor.' });
-}
-}
+};
 
 export const resendEmail = async (req, res) => {
   const { email, username } = req.query;
   try {
-    const user = await prisma.user.findFirst({ where: {
-      OR: [
-        {
-          username,
-        },
-        {
-          email,
-        },
-      ],
-      
-    } });
-    console.log(user)
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            username,
+          },
+          {
+            email,
+          },
+        ],
+      },
+    });
     if (!user) {
-      return res.status(mapStatusHTTP("NOT_FOUND")).json({ message: 'Usuário não encontrado.' });
+      return res
+        .status(mapStatusHTTP("NOT_FOUND"))
+        .json({ message: "Usuário não encontrado." });
     }
 
     if (user.isVerified) {
-      return res.status(mapStatusHTTP("NOT_FOUND")).json({ message: 'E-mail já verificado.' });
+      return res
+        .status(mapStatusHTTP("NOT_FOUND"))
+        .json({ message: "E-mail já verificado." });
     }
-    const newToken = generateToken({ email : user.email });
+    const newToken = generateToken({ email: user.email });
 
     const userUpdated = await prisma.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
         isVerified: false,
-        verifiedToken: newToken 
-      }
-    })
+        verifiedToken: newToken,
+      },
+    });
 
     const verifyLink = `${url}/verify-email?email=${user.email}&token=${newToken}`;
-    const htmlContent = generateVerificationEmailHTML(user.username, verifyLink);
+    const htmlContent = generateVerificationEmailHTML(
+      user.username,
+      verifyLink
+    );
 
     await sendEmail(user.email, htmlContent);
-
-    res.status(mapStatusHTTP("SUCCESSFUL")).json({ message: 'E-mail de verificação reenviado com sucesso.' });
-
+    res.status(mapStatusHTTP("SUCCESSFUL")).json(user);
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(400).json({ message: 'Verificação inválida ou expirada.' });
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(400)
+        .json({ message: "Verificação inválida ou expirada." });
     }
-    res.status(500).json({ message: 'Erro no servidor.' });
+    res.status(500).json({ message: "Erro no servidor." });
   }
-}
+};
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -227,7 +244,6 @@ export const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
@@ -259,10 +275,10 @@ export const register = async (req, res) => {
     const verifyLink = `${url}/verify-email?email=${email}&token=${verifiedToken}`;
     const htmlContent = generateVerificationEmailHTML(username, verifyLink);
 
-      await sendEmail(user.email, htmlContent);
+    await sendEmail(user.email, htmlContent);
     res.status(mapStatusHTTP("CREATED")).json({ message: "Usuário criado!" });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
       .json({ message: "Falha ao criar usuário" });
@@ -277,13 +293,13 @@ export const login = async (req, res) => {
         username,
       },
     });
-    console.log(user)
+    console.log(user);
     if (!user) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
-        .json({ message : "Credenciais de Usuário inválidas." });
-      }
-      
+        .json({ message: "Credenciais de Usuário inválidas." });
+    }
+
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
@@ -294,13 +310,13 @@ export const login = async (req, res) => {
 
     if (!user.isVerified) {
       return res
-      .status(mapStatusHTTP("UNAUTHORIZED"))
-      .json({ message: "Verifique seu e-mail para ativar sua conta." })
+        .status(mapStatusHTTP("UNAUTHORIZED"))
+        .json({ message: "Verifique seu e-mail para ativar sua conta." });
     }
-    
+
     // Generate cookie token and send it to the client
     // res.setHeader("Set-Cookie", "test=" + "myValue").json("success")
-    
+
     const age = 100 * 60 * 60 * 24 * 7;
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -309,22 +325,16 @@ export const login = async (req, res) => {
 
     const { password: userPassword, ...dataUser } = user;
 
-
-    if(useCookies) {
-    res
-      .cookie("token", token, {
+    if (useCookies) {
+      res.cookie("token", token, {
         httpOnly: true,
         maxAge: age,
         sameSite: "none", // Necessário se estiver usando cookies com domínio diferente
         secure: true, // Necessário se estiver usando HTTPS
-      })
+      });
     }
 
-      return res
-        .status(mapStatusHTTP("SUCCESSFUL"))
-        .json(
-          { ...dataUser, token }
-        );
+    return res.status(mapStatusHTTP("SUCCESSFUL")).json({ ...dataUser, token });
   } catch (err) {
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
@@ -337,20 +347,19 @@ export const logout = (req, res) => {
     .clearCookie("token")
     .status(mapStatusHTTP("SUCCESSFUL"))
     .json({ message: "Logout Successful" });
-
 };
 
 export const googleLogin = async (req, res) => {
   const { data, useCookies } = req.body;
-  
+
   try {
     const { id, email, verified_email, name, picture } = data;
-    console.log(data)
+    console.log(data);
     if (!verified_email) {
       return res
         .status(mapStatusHTTP("UNAUTHORIZED"))
         .json({ message: "Email não verificado!" });
-      }
+    }
 
     let user = await prisma.user.findUnique({
       where: {
@@ -358,7 +367,7 @@ export const googleLogin = async (req, res) => {
       },
     });
 
-    console.log(email,name,id,picture, verified_email)
+    console.log(email, name, id, picture, verified_email);
 
     if (!user) {
       user = await prisma.user.create({
@@ -371,7 +380,7 @@ export const googleLogin = async (req, res) => {
         },
       });
     }
-    console.log("to aqui")
+    console.log("to aqui");
 
     const age = 100 * 60 * 60 * 24 * 7;
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -379,57 +388,52 @@ export const googleLogin = async (req, res) => {
     });
     const { password: userPassword, ...dataUser } = user; // remove password from user data
 
-    if(useCookies) {
-    res
-      .cookie("token", token, {
+    if (useCookies) {
+      res.cookie("token", token, {
         httpOnly: true,
         maxAge: age,
         sameSite: "none", // Necessário se estiver usando cookies com domínio diferente
         secure: true, // Necessário se estiver usando HTTPS
-      })
+      });
     }
 
-    return res
-      .status(mapStatusHTTP("SUCCESSFUL"))
-      .json(
-        { ...dataUser, token }
-      );
+    return res.status(mapStatusHTTP("SUCCESSFUL")).json({ ...dataUser, token });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res
       .status(mapStatusHTTP("INTERNAL_SERVER_ERROR"))
       .json({ message: "Falha ao logar com usuário google!" });
   }
 };
 
-
 export const githubAuth = async (req, res) => {
   const GITHUB_CLIENT_ID = "Ov23liflWyn3oaQ6g2ZC";
   const GITHUB_CLIENT_SECRET = "3b7ea20e14cb37b4a991bd22221902cb3b90fe57";
   const GITHUB_REDIRECT_URI = "http://localhost:5173/login";
-  
+
   const { code } = req.body;
 
   try {
+    const response = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          client_id: GITHUB_CLIENT_ID,
+          client_secret: GITHUB_CLIENT_SECRET,
+          code,
+          redirect_uri: GITHUB_REDIRECT_URI,
+        }),
+      }
+    );
 
-    const response = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_CLIENT_ID,
-        client_secret: GITHUB_CLIENT_SECRET,
-        code,
-        redirect_uri: GITHUB_REDIRECT_URI
-      }),
-    });
-    
     const data = await response.json();
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send("Erro ao autenticar com o GitHub.");
   }
-
-}
+};

@@ -2,7 +2,8 @@ import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 
 export const serviceGetAllPosts = async (query) => {
-  const { city, type, property, bedroom, minPrice, maxPrice, morePosts } = query;
+  const { city, type, property, bedroom, minPrice, maxPrice, morePosts } =
+    query;
 
   let take = 6;
 
@@ -20,7 +21,7 @@ export const serviceGetAllPosts = async (query) => {
       },
     },
   });
-  
+
   return {
     status: "SUCCESSFUL",
     data: posts,
@@ -35,7 +36,7 @@ export const serviceGetPostById = async (id, token) => {
       user: {
         select: {
           username: true,
-          avatar: true ,
+          avatar: true,
         },
       },
     },
