@@ -62,7 +62,7 @@ nav {
       margin-right: 20px;
       text-align: center;
       padding: 10px ;
-      border: none !important;
+      border: none ;
     }
 
     .btn-login {
@@ -91,8 +91,10 @@ nav {
         color: #0e0d0b;
       }
 
-      &:last-of-type {
-        border-block-end: 1px solid #ffffff;
+      @include sm {
+        &:last-of-type {
+          border-block-end: 1px solid #ffffff;
+        }
       }
     }
 

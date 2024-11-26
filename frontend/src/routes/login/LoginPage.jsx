@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./loginPage.scss";
 import apiRequest, { setAuthToken } from "../../lib/apiRequest";
@@ -10,14 +10,15 @@ import { useAuthGoogle } from "../../hooks/useAuthGoogle";
 import { useAuthFace, useAuthGithub } from "../../hooks/useAuthLogin";
 
 const LoginPage = () => {
+  console.log("render LoginPage");
   const [error, setError] = useState("");
+  const [modalType, setModalType] = useState(null);
+  const [userResendEmail, setUserResendEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { updateUser } = useContext(AuthContext);
-  const [modalType, setModalType] = useState(null);
   const { loginGoogle } = useAuthGoogle(setError);
-  const { authLoginFacebook } = useAuthFace();
   const { authLoginGithub } = useAuthGithub();
-  
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,7 +29,10 @@ const LoginPage = () => {
     const { username, password } = Object.fromEntries(formData);
 
     try {
-      const response = await apiRequest.post("/auth/login", { username, password });
+      const response = await apiRequest.post("/auth/login", {
+        username,
+        password,
+      });
       const { token } = response.data;
       localStorage.setItem("token", token);
       setAuthToken(token);
@@ -42,9 +46,12 @@ const LoginPage = () => {
   };
 
   const handleResendEmail = async () => {
-    setModalType("verify-email")
+    setModalType("verify-email");
+    const formData = new FormData(document.querySelector("form"));
+    const username = formData.get("username");
     try {
-      await apiRequest(`/auth/resend-email?username=${username}`);
+      const res = await apiRequest(`/auth/resend-email?username=${username}`);
+      setUserResendEmail(res.data);
       setModalType("verify-email");
     } catch (error) {
       setError(error.response.data.message);
@@ -61,14 +68,26 @@ const LoginPage = () => {
 
   return (
     <div className="login">
-      <CustomModal type={modalType} isOpen={!!modalType} onRequestClose={closeModal} />
+      <CustomModal
+        type={modalType}
+        isOpen={!!modalType}
+        onRequestClose={closeModal}
+        email={userResendEmail.email}
+      />
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Seja Bem-vindo</h1>
           <p>Entre com seu usuário e senha para acessar a plataforma.</p>
           <div className="group">
-            <input required minLength={3} maxLength={20} type="text" className="input" name="username" />
-            <label>Username</label>
+            <input
+              required
+              minLength={3}
+              maxLength={20}
+              type="text"
+              className="input"
+              name="username"
+            />
+            <label>Nome de Usuário</label>
           </div>
           <div className="group">
             <input name="password" required type="password" className="input" />
@@ -79,7 +98,11 @@ const LoginPage = () => {
               {error === "Verifique seu e-mail para ativar sua conta." ? (
                 <div>
                   <span>{error}</span>
-                  <button className="button-resend" type="button" onClick={handleResendEmail}>
+                  <button
+                    className="button-resend"
+                    type="button"
+                    onClick={handleResendEmail}
+                  >
                     Enviar e-mail de verificação
                   </button>
                 </div>
@@ -97,11 +120,18 @@ const LoginPage = () => {
             <button className="auth-login" onClick={() => loginGoogle()}>
               <FaGoogle size={20} color="white" />
             </button>
-            <button className="auth-login" onClick={() => setModalType("maintenance")}>
+            <button
+              className="auth-login"
+              onClick={() => setModalType("maintenance")}
+            >
               <FaFacebookF size={20} color="white" />
             </button>
             <button className="auth-login" onClick={() => authLoginGithub()}>
-              <FaGithub size={20} color="white" onClick={() => setModalType("maintenance")} />
+              <FaGithub
+                size={20}
+                color="white"
+                onClick={() => setModalType("maintenance")}
+              />
             </button>
           </div>
         </form>
