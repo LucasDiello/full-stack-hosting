@@ -2,14 +2,11 @@ import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 
 export const serviceGetAllPosts = async (query) => {
-  const { city, type, property, bedroom, minPrice, maxPrice, morePosts } =
+  const { city, type, property, bedroom, minPrice, maxPrice, cursor } =
     query;
-
   let take = 6;
-
-  const posts = await prisma.post.findMany({
-    take: morePosts ? take + parseInt(morePosts) : take,
-    skip: 0,
+  
+  const filterOptions = {
     where: {
       city: city || undefined,
       type: type || undefined,
@@ -20,15 +17,32 @@ export const serviceGetAllPosts = async (query) => {
         lte: parseInt(maxPrice) || undefined,
       },
     },
+    orderBy: { id: "asc" }
+  }
+
+  const totalPosts = await prisma.post.count(filterOptions)
+  const validCursor = cursor && cursor.length === 24 ? cursor : null;
+
+  const posts = await prisma.post.findMany({
+    take,
+    skip: validCursor ? 1 : 0,
+    cursor: validCursor ? { id: cursor } : undefined, 
+    ...filterOptions,
   });
+  console.log(posts)
+  console.log(posts[posts.length - 1].id)
+  const nextCursor = posts.length === take ? posts[take - 1].id : null;
 
   return {
     status: "SUCCESSFUL",
     data: posts,
+    totalPosts,
+    nextCursor,
   };
 };
 
 export const serviceGetPostById = async (id, token) => {
+
   const post = await prisma.post.findUnique({
     where: { id },
     include: {
@@ -41,6 +55,7 @@ export const serviceGetPostById = async (id, token) => {
       },
     },
   });
+
   if (!post) {
     return {
       status: "NOT_FOUND",
@@ -60,6 +75,7 @@ export const serviceGetPostById = async (id, token) => {
         },
       },
     });
+
     return {
       status: "SUCCESSFUL",
       data: {
@@ -76,6 +92,7 @@ export const serviceGetPostById = async (id, token) => {
       isSaved: false,
     },
   };
+
 };
 
 export const serviceCreatePost = async (body, tokenUserId) => {
@@ -113,7 +130,6 @@ export const serviceDeletePost = async (id, tokenUserId) => {
   const postDetail = await prisma.postDetail.findUnique({
     where: { postId: id },
   });
-  console.log(postDetail);
 
   if (postDetail) {
     await prisma.postDetail.delete({

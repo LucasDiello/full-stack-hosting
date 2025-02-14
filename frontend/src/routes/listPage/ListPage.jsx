@@ -14,25 +14,43 @@ import apiRequest from "../../lib/apiRequest";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
-import Footer from "../../components/footer/Footer";
 const ListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData();
   const [take, setTake] = useState(3);
   const [posts, setPosts] = useState(data.postResponse);
+  const [hasmorePosts, setHasmorePosts] = useState(true);
+  const [cursor, setCursor] = useState(null);
+
+  const fetchPosts = async () => {
+    if (!hasmorePosts) return;
+  
+    console.log("Buscando mais posts...");
+  
+    
+    try {
+      console.log("Buscando posts com parâmetros:", newParams.toString());
+      const newParams = new URLSearchParams(searchParams.toString());
+      if (cursor) newParams.set("cursor", cursor);
+      const res = await apiRequest.get(`/list?${newParams.toString()}`);
+      const newPosts = res.data.data;
+  
+      if (newPosts.length > 0) {
+        setPosts((prev) => [...prev, ...newPosts]); // Agora adiciona os novos posts
+        setCursor(res.data.nextCursor); // Atualiza o cursor
+        setHasmorePosts(!!res.data.nextCursor); // Se não houver nextCursor, desativa o botão
+      } else {
+        setHasmorePosts(false);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar mais posts:", error);
+    }
+  };
+  
 
   useEffect(() => {
-    setPosts(data.postResponse);
-  }, [searchParams]);
-
-  const handleMorePosts = async () => {
-    setTake((prev) => prev + 3);
-    // Atualize o parâmetro morePosts na URL com o novo valor
-    const newParams = new URLSearchParams(searchParams.toString());
-    newParams.set("morePosts", take);
-
-    setSearchParams(newParams);
-  };
+    fetchPosts();
+  }, []);
 
   return (
     <div className="listPage">
@@ -60,7 +78,7 @@ const ListPage = () => {
           )}
         </div>
         <div className="btn">
-          <button onClick={handleMorePosts} className="btn">
+          <button onClick={fetchPosts} className="btn">
             <IoIosArrowDown size={20} />
           </button>
         </div>

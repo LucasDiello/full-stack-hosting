@@ -9,6 +9,7 @@ export const getAllPosts = async (req, res) => {
         const {status, data} = await serviceGetAllPosts(query);
         res.status(mapStatusHTTP(status)).json(data);
     } catch (error) {
+        console.log(error);
         res.status(mapStatusHTTP("INTERNAL_SERVER_ERROR")).json({ message: "Error retrieving posts" });
     }
 }

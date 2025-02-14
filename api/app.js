@@ -12,11 +12,12 @@ import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+console.log(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
+app.use(    
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,

@@ -59,7 +59,7 @@ function SearchBar() {
         <Link
           to={`/list?type=${query.type === "comprar" ? "buy" : "rent"}&city=${
           query.city
-          }&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`}
+          }&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&cursor=${undefined}`}
         >
           <button>
             <img src="/search.png" alt="" />
