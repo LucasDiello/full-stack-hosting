@@ -24,9 +24,6 @@ const ListPage = () => {
 
   const fetchPosts = async () => {
     if (!hasmorePosts) return;
-  
-    console.log("Buscando mais posts...");
-  
     
     try {
       console.log("Buscando posts com parâmetros:", newParams.toString());
