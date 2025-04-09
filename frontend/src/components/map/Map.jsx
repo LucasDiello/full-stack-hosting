@@ -20,8 +20,14 @@ const Map = ({ items }) => {
     iconUrl: icon,
     iconSize: [32, 32],
   });
-  const { avatar } = currentUser || {}; 
-  const verifyUser = !currentUser ? "/noavatar.jpg" : (currentUser && avatar != null && avatar !== undefined && avatar) ? avatar : "/noavatar.jpg";
+
+  const { avatar } = currentUser || {};
+
+  const verifyUser = !currentUser
+    ? "/noavatar.jpg"
+    : currentUser && avatar != null && avatar !== undefined && avatar
+    ? avatar
+    : "/noavatar.jpg";
 
   const iconUser = new Icon({
     iconUrl: verifyUser,
@@ -59,14 +65,14 @@ const Map = ({ items }) => {
           showAlternatives: true,
           altLineOptions: {
             styles: [
-              { color: 'blue', opacity: 1, weight: 2, dashArray: '5,10' },
+              { color: "blue", opacity: 1, weight: 2, dashArray: "5,10" },
             ],
           },
         }).addTo(mapRef.current);
 
-        newRoute.on('routesfound', (e) => {
+        newRoute.on("routesfound", (e) => {
           const route = e.routes[0];
-          const totalDistance = route.summary.totalDistance / 1000; 
+          const totalDistance = route.summary.totalDistance / 1000;
           setDistance(totalDistance);
         });
 
@@ -79,19 +85,19 @@ const Map = ({ items }) => {
     mapRef.current = map;
     return null;
   };
-  
+
   return (
     <MapContainer
-    center={
-      items.length === 1
-      ? [items[0].latitude, items[0].longitude]
-      : userLocation
-      ? [userLocation.lat, userLocation.lng]
-      : [-29.91778, -51.18361]
-    }
-    zoom={11}
-    scrollWheelZoom={false}
-    className="map"
+      center={
+        items.length === 1
+          ? [items[0].latitude, items[0].longitude]
+          : userLocation
+          ? [userLocation.lat, userLocation.lng]
+          : [-29.91778, -51.18361]
+      }
+      zoom={11}
+      scrollWheelZoom={false}
+      className="map"
     >
       <MapEvent />
       <TileLayer
@@ -116,17 +122,16 @@ const Map = ({ items }) => {
                 <Link to={`/${item.id}`}>{item.title}</Link>
                 <span>{item.bedroom} bedroom</span>
                 <b>$ {item.price}</b>
-                {distance && <div>Distância do trajeto: {distance.toFixed(2)} km</div>}
+                {distance && (
+                  <div>Distância do trajeto: {distance.toFixed(2)} km</div>
+                )}
               </div>
             </div>
           </Popup>
         </Marker>
       ))}
       {userLocation && (
-        <Marker
-          position={[userLocation.lat, userLocation.lng]}
-          icon={iconUser}
-        >
+        <Marker position={[userLocation.lat, userLocation.lng]} icon={iconUser}>
           <Popup>Você está aqui!</Popup>
         </Marker>
       )}

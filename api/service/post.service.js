@@ -2,29 +2,38 @@ import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 
 export const serviceGetAllPosts = async (query) => {
-  const { city, type, property, bedroom, minPrice, maxPrice, morePosts } =
-    query;
+  const { city, type, property, bedroom, minPrice, maxPrice, page } = query;
 
-  let take = 6;
+  const ITEMS_PER_PAGE = 6;
 
-  const posts = await prisma.post.findMany({
-    take: morePosts ? take + parseInt(morePosts) : take,
-    skip: 0,
-    where: {
-      city: city || undefined,
-      type: type || undefined,
-      property: property || undefined,
-      bedroom: parseInt(bedroom) || undefined,
-      price: {
-        gte: parseInt(minPrice) || undefined,
-        lte: parseInt(maxPrice) || undefined,
-      },
+  const where = {
+    city: city || undefined,
+    type: type || undefined,
+    property: property || undefined,
+    bedroom: parseInt(bedroom) || undefined,
+    price: {
+      gte: parseInt(minPrice) || undefined,
+      lte: parseInt(maxPrice) || undefined,
     },
-  });
+  };
 
+  const [count, posts] = await Promise.all([
+    prisma.post.count({ where }),
+    prisma.post.findMany({
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
+      where,
+    }),
+  ]);
+
+  const pageCount = Math.ceil(count / ITEMS_PER_PAGE);
   return {
     status: "SUCCESSFUL",
-    data: posts,
+    pagination: {
+      pageCount,
+      count,
+    },
+    posts,
   };
 };
 
@@ -113,7 +122,6 @@ export const serviceDeletePost = async (id, tokenUserId) => {
   const postDetail = await prisma.postDetail.findUnique({
     where: { postId: id },
   });
-  console.log(postDetail);
 
   if (postDetail) {
     await prisma.postDetail.delete({

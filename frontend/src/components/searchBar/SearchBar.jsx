@@ -15,7 +15,7 @@ function SearchBar() {
   const switchType = (val) => {
     setQuery((prev) => ({ ...prev, type: val }));
   };
-  
+
   const handleChange = (e) => {
     setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -58,8 +58,8 @@ function SearchBar() {
         />
         <Link
           to={`/list?type=${query.type === "comprar" ? "buy" : "rent"}&city=${
-          query.city
-          }&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`}
+            query.city
+          }&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&page=1`}
         >
           <button>
             <img src="/search.png" alt="" />

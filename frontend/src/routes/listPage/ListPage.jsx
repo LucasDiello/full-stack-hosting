@@ -1,74 +1,66 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import "./listPage.scss";
 import Filter from "../../components/filter/Filter";
 import Card from "../../components/card/Card";
 import Map from "../../components/map/Map";
-import {
-  Await,
-  useLoaderData,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { CiFaceFrown } from "react-icons/ci";
-import apiRequest from "../../lib/apiRequest";
-import { IoIosArrowDown } from "react-icons/io";
+import { Await, useLoaderData, useSearchParams } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
-import Footer from "../../components/footer/Footer";
 const ListPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData();
-  const [take, setTake] = useState(3);
-  const [posts, setPosts] = useState(data.postResponse);
-
-  useEffect(() => {
-    setPosts(data.postResponse);
-  }, [searchParams]);
-
-  const handleMorePosts = async () => {
-    setTake((prev) => prev + 3);
-    // Atualize o parâmetro morePosts na URL com o novo valor
-    const newParams = new URLSearchParams(searchParams.toString());
-    newParams.set("morePosts", take);
-
-    setSearchParams(newParams);
-  };
+  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <div className="listPage">
       <div className="listContainer">
         <Filter />
-        <div className="wrapper">
-          {posts.data.length === 0 ? (
-            <div className="post-notfound">
-              <p>
-                Infelizmente não encontramos nenhum imóvel com essas
-                características.
-              </p>
-              <CiFaceFrown size={50} />
-            </div>
-          ) : (
-            <Suspense fallback={<p>Loading...</p>}>
-              <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
-                {(postResponse) =>
-                  postResponse.data.map((post) => (
+        <Suspense fallback={<p>Loading...</p>}>
+          <Await
+            resolve={data.postResponse}
+            errorElement={<p>Error loading posts!</p>}
+          >
+            {(postResponse) => (
+              <>
+                <div className="wrapper">
+                  {postResponse.data.posts.map((post) => (
                     <Card key={post.id} item={post} />
-                  ))
-                }
-              </Await>
-            </Suspense>
-          )}
-        </div>
-        <div className="btn">
-          <button onClick={handleMorePosts} className="btn">
-            <IoIosArrowDown size={20} />
-          </button>
-        </div>
+                  ))}
+                </div>
+                <div className="btn">
+                  {[
+                    ...Array.from({
+                      length: postResponse.data.pagination.pageCount,
+                    }),
+                  ].map((_, index) => (
+                    <button
+                      onClick={() => {
+                        setPage(index + 1);
+                        setSearchParams({
+                          ...Object.fromEntries(searchParams),
+                          page: index + 1,
+                        });
+                      }}
+                      disabled={index + 1 === page}
+                      className={`${index + 1 === page ? "active" : ""}`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </Await>
+        </Suspense>
       </div>
       <div className="mapContainer">
         <Suspense fallback={<p>Loading...</p>}>
-          <Await resolve={posts} errorElement={<p>Error loading posts!</p>}>
-            {(postResponse) => <Map items={postResponse.data} />}
+          <Await
+            resolve={data.postResponse}
+            errorElement={<p>Error loading posts!</p>}
+          >
+            {(postResponse) => <Map items={postResponse.data.posts} />}
           </Await>
         </Suspense>
       </div>
