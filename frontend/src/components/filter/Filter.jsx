@@ -13,7 +13,7 @@ function Filter() {
     maxPrice: maxPrice || 100000,
     bedroom: bedroom || 3,
   });
-  
+
   const handleChange = (e) => {
     setQuery({
       ...query,
@@ -25,6 +25,7 @@ function Filter() {
     setSearchParams({
       ...query,
       city: query.city.toLowerCase(),
+      page: "1",  
     });
   };
 

@@ -8,11 +8,20 @@ const useSavePost = () => {
   const post = useLoaderData();
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(post.isSaved || false);
+  const [saveds, setSaveds] = useState();
+
+  const fetchSavedPosts = async () => {
+    if (!currentUser) return;
+
+    try {
+      const response = await apiRequest.get("/users/saves");
+      setSaveds(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar posts salvos:", error);
+    }
+  };
 
   const handleSave = async (postId) => {
-    setSaved((prev) => !prev);
-    
     if (!currentUser) {
       navigate("/login");
       return;
@@ -23,14 +32,16 @@ const useSavePost = () => {
         postId,
         tokenUserId: currentUser.id,
       });
-      console.log(res);
+
+      await fetchSavedPosts();
+
+      return res;
     } catch (err) {
-      setSaved((prev) => !prev);
-      console.log(err);
+      console.error("Erro ao salvar o item:", err);
     }
   };
 
-  return { saved, handleSave };
+  return { handleSave, fetchSavedPosts, saveds, currentUser };
 };
 
 export default useSavePost;

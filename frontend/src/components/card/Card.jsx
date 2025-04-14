@@ -7,11 +7,17 @@ import { AuthContext } from "../../context/AuthContext";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import useSavePost from "../../hooks/useSavePost";
 
-const Card = ({ item }) => {
+const Card = ({ item, saveds }) => {
   const [chatMessage, setChatMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
-  const [saveds, setSaveds] = useState();
-  const { handleSave } = useSavePost();
+  const { handleSave, saved } = useSavePost();
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    if (saveds) {
+      setIsSaved(saveds.some((saved) => saved.postId === item.id));
+    }
+  }, [saveds, item.id]);
 
   const handleChat = async (receiverId) => {
     try {
@@ -24,18 +30,14 @@ const Card = ({ item }) => {
     }
   };
 
-  const verifySaveds = async () => {
-    const response = await apiRequest.get("/users/saves");
-    setSaveds(response.data);
-  };
-
-  useEffect(() => {
-    verifySaveds();
-  }, []);
-
   const handleSaveAndUpdate = async (postId) => {
-    await handleSave(postId);
-    verifySaveds();
+    try {
+      await handleSave(postId);
+      setIsSaved(!isSaved);
+    } catch (error) {
+      console.error("Erro ao salvar o item:", error);
+      setIsSaved(isSaved);
+    }
   };
 
   return (
@@ -74,7 +76,7 @@ const Card = ({ item }) => {
                 className="icon"
                 onClick={() => handleSaveAndUpdate(item.id)}
               >
-                {saveds && saveds.some((saved) => saved.postId === item.id) ? (
+                {isSaved ? (
                   <BsBookmarkHeartFill size={20} />
                 ) : (
                   <BsBookmarkHeart size={20} />

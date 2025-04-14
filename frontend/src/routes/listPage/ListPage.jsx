@@ -1,16 +1,26 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState, useContext } from "react";
 import "./listPage.scss";
 import Filter from "../../components/filter/Filter";
 import Card from "../../components/card/Card";
 import Map from "../../components/map/Map";
 import { Await, useLoaderData, useSearchParams } from "react-router-dom";
-
+import { AuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import apiRequest from "../../lib/apiRequest";
+import useSavePost from "../../hooks/useSavePost";
+
 const ListPage = () => {
   const data = useLoaderData();
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { fetchSavedPosts, currentUser, saveds } = useSavePost();
+
+  useEffect(() => {
+    (async () => {
+      await fetchSavedPosts();
+    })();
+  }, [currentUser]);
 
   return (
     <div className="listPage">
@@ -25,7 +35,7 @@ const ListPage = () => {
               <>
                 <div className="wrapper">
                   {postResponse.data.posts.map((post) => (
-                    <Card key={post.id} item={post} />
+                    <Card key={post.id} item={post} saveds={saveds} />
                   ))}
                 </div>
                 <div className="btn">
