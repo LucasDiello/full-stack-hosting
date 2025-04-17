@@ -5,14 +5,17 @@ import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 
 const useSavePost = () => {
-  const post = useLoaderData();
   const { currentUser } = useContext(AuthContext);
+  const data = useLoaderData();
+  const post = data.postResponse.data;
   const navigate = useNavigate();
   const [saveds, setSaveds] = useState();
+  const [isSaved, setIsSaved] = useState(false);
+  if (saveds) {
+  }
 
   const fetchSavedPosts = async () => {
     if (!currentUser) return;
-
     try {
       const response = await apiRequest.get("/users/saves");
       setSaveds(response.data);
@@ -27,21 +30,29 @@ const useSavePost = () => {
       return;
     }
 
+    setIsSaved((prev) => !prev);
+
     try {
       const res = await apiRequest.post("/users/save", {
         postId,
         tokenUserId: currentUser.id,
       });
 
-      await fetchSavedPosts();
-
       return res;
     } catch (err) {
-      console.error("Erro ao salvar o item:", err);
+      console.log(err);
     }
   };
-
-  return { handleSave, fetchSavedPosts, saveds, currentUser };
+  console.log(saveds);
+  return {
+    handleSave,
+    fetchSavedPosts,
+    saveds,
+    currentUser,
+    setSaveds,
+    isSaved,
+    setIsSaved,
+  };
 };
 
 export default useSavePost;

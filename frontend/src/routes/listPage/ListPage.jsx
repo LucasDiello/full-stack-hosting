@@ -35,7 +35,7 @@ const ListPage = () => {
               <>
                 <div className="wrapper">
                   {postResponse.data.posts.map((post) => (
-                    <Card key={post.id} item={post} saveds={saveds} />
+                    <Card key={post.id} post={post} saveds={saveds} />
                   ))}
                 </div>
                 <div className="btn">

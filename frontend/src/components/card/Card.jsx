@@ -7,17 +7,16 @@ import { AuthContext } from "../../context/AuthContext";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import useSavePost from "../../hooks/useSavePost";
 
-const Card = ({ item, saveds }) => {
+const Card = ({ post, saveds }) => {
   const [chatMessage, setChatMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
-  const { handleSave, saved } = useSavePost();
-  const [isSaved, setIsSaved] = useState(false);
-
+  const { handleSave, isSaved, setIsSaved } = useSavePost();
+  // Verifica se o post está salvo quando o componente é montado ou quando saveds muda
   useEffect(() => {
     if (saveds) {
-      setIsSaved(saveds.some((saved) => saved.postId === item.id));
+      setIsSaved(saveds.some((saved) => saved.postId === post.id));
     }
-  }, [saveds, item.id]);
+  }, [saveds, post.id]);
 
   const handleChat = async (receiverId) => {
     try {
@@ -30,51 +29,41 @@ const Card = ({ item, saveds }) => {
     }
   };
 
-  const handleSaveAndUpdate = async (postId) => {
-    try {
-      await handleSave(postId);
-      setIsSaved(!isSaved);
-    } catch (error) {
-      console.error("Erro ao salvar o item:", error);
-      setIsSaved(isSaved);
-    }
-  };
-
   return (
     <div className="card">
       <div className="imageContainer">
-        <Link to={`/${item.id}`}>
-          <img src={item.images[0]} alt="" />
+        <Link to={`/${post.id}`}>
+          <img src={post.images[0]} alt="" />
         </Link>
       </div>
       <div className="textContainer">
         <h2 className="title">
-          <Link to={`/${item.id}`}>{item.title}</Link>
+          <Link to={`/${post.id}`}>{post.title}</Link>
         </h2>
         <p className="address">
           <img src="/pin.png" alt="" />
-          <span>{item.address}</span>
+          <span>{post.address}</span>
         </p>
         <div className="price-btn">
-          <p className="price">$ {item.price}</p>
+          <p className="price">$ {post.price}</p>
           {chatMessage && <div class="speech down">{chatMessage}</div>}
         </div>
         <div className="bottom">
           <div className="features">
             <div className="feature">
               <img src="/bed.png" alt="" />
-              <span>{item.bedroom} bedroom</span>
+              <span>{post.bedroom} bedroom</span>
             </div>
             <div className="feature">
               <img src="/bath.png" alt="" />
-              <span>{item.bathroom} bathroom</span>
+              <span>{post.bathroom} bathroom</span>
             </div>
           </div>
           {currentUser && (
             <div className="icons">
               <button
                 className="icon"
-                onClick={() => handleSaveAndUpdate(item.id)}
+                onClick={async () => await handleSave(post.id)}
               >
                 {isSaved ? (
                   <BsBookmarkHeartFill size={20} />
@@ -82,7 +71,7 @@ const Card = ({ item, saveds }) => {
                   <BsBookmarkHeart size={20} />
                 )}
               </button>
-              <button className="icon" onClick={() => handleChat(item.userId)}>
+              <button className="icon" onClick={() => handleChat(post.userId)}>
                 <MdOutlineChat size={20} />
               </button>
             </div>
