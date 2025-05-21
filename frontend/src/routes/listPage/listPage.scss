@@ -36,7 +36,82 @@
       justify-content: center;
       align-items: center;
       margin-block-end: 20px;
-
+      .data-pagination {
+        color: white;
+        text-align: center;
+        margin: 1em auto;
+        transition: font-size .2s ease-in-out;
+        font-family: Geneva, Arial, sans-serif;
+      }
+      
+      .data-pagination ul {
+        list-style-type: none;
+        display: inline;
+        font-size: 100%;
+        margin: 0;
+        padding: .5em;
+      }
+      
+      .data-pagination ul li {
+        display: inline-block;
+        font-size: 100%;
+        width: auto;
+        border-radius: 3px;
+      }
+      
+      .data-pagination > a {
+        font-size: 140%;
+        display: flex;
+      }
+      
+      .data-pagination a {
+        color: #777;
+        font-size: 100%;
+        padding: .5em;
+        text-decoration: none;
+      }
+      
+      .data-pagination a:focus,
+      .data-pagination a:hover {
+        color: black;
+      }
+      
+      .data-pagination li.current {
+        background: rgba(0, 0, 0, .1);
+      }
+      
+      /* Disabled & Hidden Styles */
+      .data-pagination .disabled,
+      .data-pagination [hidden],
+      .data-pagination [disabled] {
+        opacity: .5;
+        pointer-events: none;
+      }
+      
+      @media (min-width: 350px) {
+        .data-pagination {
+          font-size: 10pt;
+        }
+      }
+      
+      @media (min-width: 500px) {
+        .data-pagination {
+          font-size: 12pt;
+        }
+      }
+      
+      @media (min-width: 700px) {
+        .data-pagination {
+          font-size: 14pt;
+        }
+      }
+      
+      @media (min-width: 900px) {
+        .data-pagination {
+          font-size: 16pt;
+        }
+      }
+      
       .active {
         background-color: #333;
         color: #fff;

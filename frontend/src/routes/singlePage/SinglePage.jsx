@@ -1,36 +1,52 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./singlePage.scss";
 import Map from "../../components/map/Map";
 import Slider from "../../components/slider/Slider";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import apiRequest from "../../lib/apiRequest";
-import { BsBookmarkHeart, BsBookmarkHeartFill} from "react-icons/bs";
+import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import {
   MdBathroom,
   MdOutlineChat,
   MdOutlineHardware,
   MdOutlinePets,
 } from "react-icons/md";
-import { FaBed, FaBus, FaRegMoneyBillAlt, FaSchool, FaStar } from "react-icons/fa";
+import {
+  FaBed,
+  FaBus,
+  FaRegMoneyBillAlt,
+  FaSchool,
+  FaStar,
+} from "react-icons/fa";
 import { IoIosResize, IoMdRestaurant } from "react-icons/io";
 import useSavePost from "../../hooks/useSavePost";
 import { AuthContext } from "../../context/AuthContext";
-import Footer from "../../components/footer/Footer";
 
 const SinglePage = () => {
-  
   const post = useLoaderData();
 
   const [chatMessage, setChatMessage] = useState("");
-  const { saved, handleSave } = useSavePost();
   const { currentUser, setChats } = useContext(AuthContext);
-  console.log(saved)
   const navigate = useNavigate();
+
+  const { handleSave, isSaved, setIsSaved, checkIfSaved } = useSavePost();
+
+  useEffect(() => {
+    setIsSaved(checkIfSaved(post.id));
+  }, [post.id, checkIfSaved]);
+
+  const handleSaveClick = async (postId) => {
+    try {
+      await handleSave(postId);
+      setIsSaved(checkIfSaved(postId));
+    } catch (error) {
+      console.error("Erro ao salvar post:", error);
+    }
+  };
 
   const handleChat = async (receiverId) => {
     try {
-      console.log(currentUser);
       if (!currentUser) {
         console.log("no user");
         navigate("/login");
@@ -43,14 +59,13 @@ const SinglePage = () => {
       setTimeout(() => setChatMessage(""), 3000);
 
       response.status === 201 ? setChats(true) : setChats(false); // condition to economize the number of requests
-
     } catch (error) {
       setChatMessage(error.response.data || error.res);
       setTimeout(() => setChatMessage(""), 3000);
     }
   };
 
-  return (  
+  return (
     <div className="singlePage">
       <div className="details">
         <div className="info">
@@ -84,20 +99,20 @@ const SinglePage = () => {
                 __html: DOMPurify.sanitize(post.postDetail.desc),
               }}
             ></p>
-              <div className="buttons">
-                <button
-                  onClick={() => handleSave(post.id)}
-                  className="chats"
-                  style={{ backgroundColor: saved ? "#fece51" : "white" }}
-                >
-                  {saved ? <BsBookmarkHeartFill /> : <BsBookmarkHeart />}
-                  {saved ? <p>Local Salvo</p> : <p>Salvar o Local</p>}
-                </button>
-                <div className="chats" onClick={() => handleChat(post.userId)}>
-                  <MdOutlineChat />
-                  <p>Chat</p>
-                </div>
+            <div className="buttons">
+              <button
+                onClick={() => handleSaveClick(post.id)}
+                className="chats"
+                style={{ backgroundColor: isSaved ? "#fece51" : "white" }}
+              >
+                {isSaved ? <BsBookmarkHeartFill /> : <BsBookmarkHeart />}
+                {isSaved ? <p>Local Salvo</p> : <p>Salvar o Local</p>}
+              </button>
+              <div className="chats" onClick={() => handleChat(post.userId)}>
+                <MdOutlineChat />
+                <p>Chat</p>
               </div>
+            </div>
             <div className="chat-message">
               {chatMessage && <div class="speech up">{chatMessage}</div>}
             </div>
@@ -187,29 +202,23 @@ const SinglePage = () => {
         <div className="need-movel">
           <div className="highlights">
             <FaStar color="" size={30} />
-            <h2>
-            - Destaques -
-            </h2>
+            <h2>- Destaques -</h2>
             <div className="why">
-              <h3>Por que você vai amar este lugar</h3> 
+              <h3>Por que você vai amar este lugar</h3>
               <p>
                 Este é um lugar incrível para se viver, com uma localização
                 privilegiada e uma vista maravilhosa.
               </p>
             </div>
             <div className="why">
-              <h3>
-                O que você precisa saber
-              </h3>
+              <h3>O que você precisa saber</h3>
               <p>
-                Este lugar é perfeito para você, com uma localização privilegiada
-                e uma vista maravilhosa.
+                Este lugar é perfeito para você, com uma localização
+                privilegiada e uma vista maravilhosa.
               </p>
             </div>
 
-            <button className="contact-we">
-              Contate-nos
-            </button>
+            <button className="contact-we">Contate-nos</button>
           </div>
         </div>
       </div>

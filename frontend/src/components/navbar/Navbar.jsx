@@ -16,11 +16,11 @@ const Navbar = () => {
   const getBackgroundColor = () => {
     switch (pathname) {
       case "/":
-        return "transparent"
+        return "transparent";
       case "/login":
-        case "/register":
-          case "/add":
-        return "rgb(0, 17, 31,0.9)"
+      case "/register":
+      case "/add":
+        return "rgb(0, 17, 31,0.9)";
       default:
         return "";
     }
@@ -31,11 +31,11 @@ const Navbar = () => {
       case "/":
         return "white";
       case "/login":
-        case "/register":
+      case "/register":
         return "white";
       default:
-        return "black"
-  }
+        return "black";
+    }
   };
   const handleLogout = async () => {
     try {
@@ -52,22 +52,42 @@ const Navbar = () => {
   if (currentUser) fetch();
 
   return (
-    <nav >
-      <div/>
-      <div className="left" style={{display: pathname === "/" && "none"}}>
-        <Link href="/" className="logo" style={{marginLeft: pathname === "/login" || pathname === "/register" ? "30px" : "0"}}>
+    <nav>
+      <div />
+      <div className="left" style={{ display: pathname === "/" && "none" }}>
+        <Link
+          href="/"
+          className="logo"
+          style={{
+            marginLeft:
+              pathname === "/login" || pathname === "/register" ? "30px" : "0",
+          }}
+        >
           <img src="/logo.png" alt="LDHomes Logo" />
           <span>LDHomes</span>
         </Link>
-        <div style={{display: pathname === "/login" || pathname === "/register" ? "none" : "flex", gap:"40px" }}>
-        <Link to="/">Início</Link>
-        <Link to="/">Sobre</Link>
-        <Link to="/list">Ver móveis</Link>
+        <div
+          style={{
+            display:
+              pathname === "/login" || pathname === "/register"
+                ? "none"
+                : "flex",
+            gap: "40px",
+          }}
+        >
+          <Link to="/">Início</Link>
+          <Link to="/">Sobre</Link>
+          <Link to="/list?type=&city=&minPrice=&maxPrice=&page=1">
+            Ver móveis
+          </Link>
         </div>
       </div>
-      <div className="right" style={{color: getColor(), backgroundColor: getBackgroundColor() }}>
+      <div
+        className="right"
+        style={{ color: getColor(), backgroundColor: getBackgroundColor() }}
+      >
         {currentUser ? (
-          <div className="user" >
+          <div className="user">
             <div className="user-name">
               <img
                 onClick={() => navigate("/profile")}
@@ -88,57 +108,86 @@ const Navbar = () => {
             </a>
             <a
               href="/register"
-              className={`${isActive("/register")} ${isActive("/")} btn-register`}
+              className={`${isActive("/register")} ${isActive(
+                "/"
+              )} btn-register`}
             >
               Registrar-se
             </a>
           </>
         )}
-        <div className={`menuIcon ${pathname === "/profile/chat" && "mobileMenuIcon"}`}>
-        <button className="nav-open-btn" aria-label="abrir menu"
-        onClick={() => setOpen((prev) => !prev)}
->
-          <span className="line line-1">
-            </span>
-            <span className="line line-2">
-              </span>
-              <span className="line line-3">
-                </span>
-                </button>
-  </div>
+        <div
+          className={`menuIcon ${
+            pathname === "/profile/chat" && "mobileMenuIcon"
+          }`}
+        >
+          <button
+            className="nav-open-btn"
+            aria-label="abrir menu"
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            <span className="line line-1"></span>
+            <span className="line line-2"></span>
+            <span className="line line-3"></span>
+          </button>
+        </div>
         <div className={open ? "menu active" : "menu"}>
           <div className="box-user">
-          {currentUser && (
-            <div className="user">
-              <img
-                onClick={() => navigate("/profile")}
-                src={currentUser.avatar || "/noavatar.jpg"}
-                alt="User Avatar"
+            {currentUser && (
+              <div className="user">
+                <img
+                  onClick={() => navigate("/profile")}
+                  src={currentUser.avatar || "/noavatar.jpg"}
+                  alt="User Avatar"
                 />
-              <p>{currentUser.username}</p>
-            </div>
-          )}
+                <p>{currentUser.username}</p>
+              </div>
+            )}
           </div>
-          <Link to="/" className={pathname === "/" && "active-menu"}>Início</Link>
-          <Link to="/list" className={pathname === "/list" && "active-menu"}>Ver móveis</Link>
+          <Link to="/" className={pathname === "/" && "active-menu"}>
+            Início
+          </Link>
+          <Link to="/list" className={pathname === "/list" && "active-menu"}>
+            Ver móveis
+          </Link>
           {currentUser && (
             <>
-            <Link to="/profile" className={pathname === "/profile" && "active-menu"}>Profile</Link>
-            <Link to="/profile/chat" className={pathname === "/profile/chat" && "active-menu"}>Mensagens {number}</Link>
-            <Link to="/" onClick={handleLogout}>Sair</Link></>
+              <Link
+                to="/profile"
+                className={pathname === "/profile" && "active-menu"}
+              >
+                Profile
+              </Link>
+              <Link
+                to="/profile/chat"
+                className={pathname === "/profile/chat" && "active-menu"}
+              >
+                Mensagens {number}
+              </Link>
+              <Link to="/" onClick={handleLogout}>
+                Sair
+              </Link>
+            </>
           )}
           {!currentUser && (
             <>
-              <a href="/login" className={pathname === "/login" && "active-menu"}>Entrar</a>
-              <a href="/" className={pathname === "/register" && "active-menu"}>Registrar-se</a>
+              <a
+                href="/login"
+                className={pathname === "/login" && "active-menu"}
+              >
+                Entrar
+              </a>
+              <a href="/" className={pathname === "/register" && "active-menu"}>
+                Registrar-se
+              </a>
             </>
           )}
           <div className="about">
             <h3>- Sobre nós -</h3>
             <p>
-             Somos uma empresa que vende móveis de alta qualidade e com preços acessíveis.
+              Somos uma empresa que vende móveis de alta qualidade e com preços
+              acessíveis.
             </p>
-            
           </div>
           <div className="copywrite">
             <p>&copy; 2021 LDHomes</p>

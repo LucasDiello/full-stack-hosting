@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import apiRequest from "../../lib/apiRequest";
 import useSavePost from "../../hooks/useSavePost";
+import { GrFormPrevious } from "react-icons/gr";
+import { GrFormNext } from "react-icons/gr";
 
 const ListPage = () => {
   const data = useLoaderData();
@@ -39,25 +41,66 @@ const ListPage = () => {
                   ))}
                 </div>
                 <div className="btn">
-                  {[
-                    ...Array.from({
-                      length: postResponse.data.pagination.pageCount,
-                    }),
-                  ].map((_, index) => (
-                    <button
-                      onClick={() => {
-                        setPage(index + 1);
-                        setSearchParams({
-                          ...Object.fromEntries(searchParams),
-                          page: index + 1,
-                        });
+                  <nav className="data-pagination">
+                    <a
+                      href="#"
+                      disabled={page === 1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page > 1) {
+                          setPage(page - 1);
+                          setSearchParams({
+                            ...Object.fromEntries(searchParams),
+                            page: page - 1,
+                          });
+                        }
                       }}
-                      disabled={index + 1 === page}
-                      className={`${index + 1 === page ? "active" : ""}`}
                     >
-                      {index + 1}
-                    </button>
-                  ))}
+                      <GrFormPrevious size={30} />
+                    </a>
+                    <ul>
+                      {[
+                        ...Array.from({
+                          length: postResponse.data.pagination.pageCount,
+                        }),
+                      ].map((_, index) => (
+                        <li
+                          key={index}
+                          className={index + 1 === page ? "current" : ""}
+                        >
+                          <a
+                            href={`#${index + 1}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(index + 1);
+                              setSearchParams({
+                                ...Object.fromEntries(searchParams),
+                                page: index + 1,
+                              });
+                            }}
+                          >
+                            {index + 1}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="#"
+                      disabled={page === postResponse.data.pagination.pageCount}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page < postResponse.data.pagination.pageCount) {
+                          setPage(page + 1);
+                          setSearchParams({
+                            ...Object.fromEntries(searchParams),
+                            page: page + 1,
+                          });
+                        }
+                      }}
+                    >
+                      <GrFormNext size={30} />
+                    </a>
+                  </nav>
                 </div>
               </>
             )}
