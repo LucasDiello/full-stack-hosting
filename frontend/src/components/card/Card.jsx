@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import useSavePost from "../../hooks/useSavePost";
 
-const Card = ({ post, saveds }) => {
+const Card = ({ post }) => {
   const [chatMessage, setChatMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
   const { handleSave, isSaved, setIsSaved, checkIfSaved } = useSavePost();
