@@ -111,7 +111,7 @@ const ListPage = () => {
           </Await>
         </Suspense>
       </div>
-      <div className="mapContainer">
+      {/* <div className="mapContainer">
         <Suspense fallback={<p>Loading...</p>}>
           <Await
             resolve={data.postResponse}
@@ -120,7 +120,7 @@ const ListPage = () => {
             {(postResponse) => <Map items={postResponse.data.posts} />}
           </Await>
         </Suspense>
-      </div>
+      </div> */}
       <div
         className="
       aboutContainer
