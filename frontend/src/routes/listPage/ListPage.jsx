@@ -31,15 +31,20 @@ const ListPage = () => {
         <Suspense fallback={<p>Loading...</p>}>
           <Await resolve={data.postResponse}>
             {(postResponse) => {
-              const posts = postResponse.data.posts;
-              const pageCount = postResponse.data.pagination.pageCount;
+              console.log("Post Response:", postResponse);
+              const posts = postResponse?.data?.posts || [];
+              const pageCount = postResponse?.data?.pagination?.pageCount || 1;
 
               return (
                 <>
                   <div className="wrapper">
-                    {posts.map((post) => (
-                      <Card key={post.id} post={post} />
-                    ))}
+                    {posts.length > 0 ? (
+                      posts.map((post) => (
+                        <Card key={post.id} post={post} saveds={saveds} />
+                      ))
+                    ) : (
+                      <p>Nenhum imóvel encontrado.</p>
+                    )}
                   </div>
 
                   <div className="btn">
