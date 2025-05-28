@@ -1,16 +1,13 @@
-import React, { Suspense, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import "./listPage.scss";
 import Filter from "../../components/filter/Filter";
 import Card from "../../components/card/Card";
 import Map from "../../components/map/Map";
-import { Await, useLoaderData, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
-import apiRequest from "../../lib/apiRequest";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import useSavePost from "../../hooks/useSavePost";
-import { GrFormPrevious } from "react-icons/gr";
-import { GrFormNext } from "react-icons/gr";
+import { Link } from "react-router-dom";
 
 const ListPage = () => {
   const data = useLoaderData();
@@ -18,108 +15,90 @@ const ListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
 
+  useEffect(() => {
+    (async () => {
+      await fetchSavedPosts();
+    })();
+  }, [currentUser]);
+
+  const postResponse = data.postResponse;
+  const posts = postResponse?.data?.posts || [];
+  const pageCount = postResponse?.data?.pagination?.pageCount || 1;
+
   return (
     <div className="listPage">
       <div className="listContainer">
         <Filter />
-        <Suspense fallback={<p>Loading...</p>}>
-          <Await resolve={data.postResponse}>
-            {(postResponse) => {
-              console.log("Post Response:", postResponse);
-              const posts = postResponse?.data?.posts || [];
-              const pageCount = postResponse?.data?.pagination?.pageCount || 1;
+        <div className="wrapper">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <Card key={post.id} post={post} saveds={saveds} />
+            ))
+          ) : (
+            <p>Nenhum imóvel encontrado.</p>
+          )}
+        </div>
 
-              return (
-                <>
-                  <div className="wrapper">
-                    {posts.length > 0 ? (
-                      posts.map((post) => (
-                        <Card key={post.id} post={post} saveds={saveds} />
-                      ))
-                    ) : (
-                      <p>Nenhum imóvel encontrado.</p>
-                    )}
-                  </div>
-
-                  <div className="btn">
-                    <nav className="data-pagination">
-                      <a
-                        href="#"
-                        disabled={page === 1}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page > 1) {
-                            setPage(page - 1);
-                            setSearchParams({
-                              ...Object.fromEntries(searchParams),
-                              page: page - 1,
-                            });
-                          }
-                        }}
-                      >
-                        <GrFormPrevious size={30} />
-                      </a>
-                      <ul>
-                        {[...Array(pageCount)].map((_, index) => (
-                          <li
-                            key={index}
-                            className={index + 1 === page ? "current" : ""}
-                          >
-                            <a
-                              href={`#${index + 1}`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setPage(index + 1);
-                                setSearchParams({
-                                  ...Object.fromEntries(searchParams),
-                                  page: index + 1,
-                                });
-                              }}
-                            >
-                              {index + 1}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                      <a
-                        href="#"
-                        disabled={page === pageCount}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page < pageCount) {
-                            setPage(page + 1);
-                            setSearchParams({
-                              ...Object.fromEntries(searchParams),
-                              page: page + 1,
-                            });
-                          }
-                        }}
-                      >
-                        <GrFormNext size={30} />
-                      </a>
-                    </nav>
-                  </div>
-                </>
-              );
-            }}
-          </Await>
-        </Suspense>
+        <div className="btn">
+          <nav className="data-pagination">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (page > 1) {
+                  setPage(page - 1);
+                  setSearchParams({
+                    ...Object.fromEntries(searchParams),
+                    page: page - 1,
+                  });
+                }
+              }}
+            >
+              <GrFormPrevious size={30} />
+            </a>
+            <ul>
+              {[...Array(pageCount)].map((_, index) => (
+                <li key={index} className={index + 1 === page ? "current" : ""}>
+                  <a
+                    href={`#${index + 1}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPage(index + 1);
+                      setSearchParams({
+                        ...Object.fromEntries(searchParams),
+                        page: index + 1,
+                      });
+                    }}
+                  >
+                    {index + 1}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (page < pageCount) {
+                  setPage(page + 1);
+                  setSearchParams({
+                    ...Object.fromEntries(searchParams),
+                    page: page + 1,
+                  });
+                }
+              }}
+            >
+              <GrFormNext size={30} />
+            </a>
+          </nav>
+        </div>
       </div>
-      {/* <div className="mapContainer">
-        <Suspense fallback={<p>Loading...</p>}>
-          <Await
-            resolve={data.postResponse}
-            errorElement={<p>Error loading posts!</p>}
-          >
-            {(postResponse) => <Map items={postResponse.data.posts} />}
-          </Await>
-        </Suspense>
-      </div> */}
-      <div
-        className="
-      aboutContainer
-      "
-      >
+
+      <div className="mapContainer">
+        <Map items={posts} />
+      </div>
+
+      <div className="aboutContainer">
         <div>
           <h1>
             Descubra Mais <span> Sobre nós </span>
@@ -137,7 +116,7 @@ const ListPage = () => {
         </div>
         <div className="need-movel">
           <div className="highlights">
-            <FaStar color="" size={30} />
+            <FaStar size={30} />
             <h2>- Destaques -</h2>
             <div className="why">
               <h3>Por que você vai amar este lugar</h3>

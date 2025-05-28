@@ -6,9 +6,9 @@ export const singlePageLoader = async ({ _request, params }) => {
   return res.data;
 };
 
-export const listPageLoader = ({ request, _params }) => {
+export const listPageLoader = async ({ request, _params }) => {
   const query = request.url.split("?")[1];
-  const dataPromise = apiRequest("/posts?" + query);
+  const dataPromise = await apiRequest("/posts?" + query);
   return defer({
     postResponse: dataPromise,
   });
