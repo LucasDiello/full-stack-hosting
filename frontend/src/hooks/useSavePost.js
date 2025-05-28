@@ -1,5 +1,5 @@
 // hooks/useSavePost.js
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
@@ -15,7 +15,7 @@ const useSavePost = () => {
     if (!currentUser) return;
 
     try {
-      const response = await apiRequest.get("/users/savedPosts");
+      const response = await apiRequest.get("/users/saves");
       setSaveds(response.data);
     } catch (error) {
       console.error("Erro ao buscar posts salvos:", error);
@@ -38,7 +38,7 @@ const useSavePost = () => {
 
     try {
       const response = await apiRequest.post("/users/save", { postId });
-      await fetchSavedPosts(); // Atualiza a lista após salvar
+      await fetchSavedPosts();
       return response.data;
     } catch (error) {
       console.error("Erro ao salvar post:", error);
@@ -46,9 +46,12 @@ const useSavePost = () => {
     }
   };
 
-  const checkIfSaved = (postId) => {
-    return saveds.some((saved) => saved.postId === postId);
-  };
+  const checkIfSaved = useCallback(
+    (postId) => {
+      return saveds.some((saved) => saved.postId === postId);
+    },
+    [saveds]
+  );
 
   return {
     isSaved,

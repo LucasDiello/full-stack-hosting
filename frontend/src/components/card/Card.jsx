@@ -10,13 +10,15 @@ import useSavePost from "../../hooks/useSavePost";
 const Card = ({ post, saveds }) => {
   const [chatMessage, setChatMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
-  const { handleSave, isSaved, setIsSaved } = useSavePost();
+  const { handleSave, isSaved, setIsSaved, checkIfSaved } = useSavePost();
+
   // Verifica se o post está salvo quando o componente é montado ou quando saveds muda
+
   useEffect(() => {
-    if (saveds) {
-      setIsSaved(saveds.some((saved) => saved.postId === post.id));
+    if (currentUser) {
+      setIsSaved(checkIfSaved(post.id));
     }
-  }, [saveds, post.id]);
+  }, [post.id, checkIfSaved, currentUser]);
 
   const handleChat = async (receiverId) => {
     try {

@@ -29,81 +29,84 @@ const ListPage = () => {
       <div className="listContainer">
         <Filter />
         <Suspense fallback={<p>Loading...</p>}>
-          <Await
-            resolve={data.postResponse}
-            errorElement={<p>Error loading posts!</p>}
-          >
-            {(postResponse) => (
-              <>
-                <div className="wrapper">
-                  {postResponse.data.posts.map((post) => (
-                    <Card key={post.id} post={post} saveds={saveds} />
-                  ))}
-                </div>
-                <div className="btn">
-                  <nav className="data-pagination">
-                    <a
-                      href="#"
-                      disabled={page === 1}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (page > 1) {
-                          setPage(page - 1);
-                          setSearchParams({
-                            ...Object.fromEntries(searchParams),
-                            page: page - 1,
-                          });
-                        }
-                      }}
-                    >
-                      <GrFormPrevious size={30} />
-                    </a>
-                    <ul>
-                      {[
-                        ...Array.from({
-                          length: postResponse.data.pagination.pageCount,
-                        }),
-                      ].map((_, index) => (
-                        <li
-                          key={index}
-                          className={index + 1 === page ? "current" : ""}
-                        >
-                          <a
-                            href={`#${index + 1}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setPage(index + 1);
-                              setSearchParams({
-                                ...Object.fromEntries(searchParams),
-                                page: index + 1,
-                              });
-                            }}
+          <Await resolve={data.postResponse}>
+            {(postResponse) => {
+              const posts = postResponse?.data?.posts || [];
+              const pageCount = postResponse?.data?.pagination?.pageCount || 1;
+
+              return (
+                <>
+                  <div className="wrapper">
+                    {posts.length > 0 ? (
+                      posts.map((post) => (
+                        <Card key={post.id} post={post} saveds={saveds} />
+                      ))
+                    ) : (
+                      <p>Nenhum imóvel encontrado.</p>
+                    )}
+                  </div>
+
+                  <div className="btn">
+                    <nav className="data-pagination">
+                      <a
+                        href="#"
+                        disabled={page === 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page > 1) {
+                            setPage(page - 1);
+                            setSearchParams({
+                              ...Object.fromEntries(searchParams),
+                              page: page - 1,
+                            });
+                          }
+                        }}
+                      >
+                        <GrFormPrevious size={30} />
+                      </a>
+                      <ul>
+                        {[...Array(pageCount)].map((_, index) => (
+                          <li
+                            key={index}
+                            className={index + 1 === page ? "current" : ""}
                           >
-                            {index + 1}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                    <a
-                      href="#"
-                      disabled={page === postResponse.data.pagination.pageCount}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (page < postResponse.data.pagination.pageCount) {
-                          setPage(page + 1);
-                          setSearchParams({
-                            ...Object.fromEntries(searchParams),
-                            page: page + 1,
-                          });
-                        }
-                      }}
-                    >
-                      <GrFormNext size={30} />
-                    </a>
-                  </nav>
-                </div>
-              </>
-            )}
+                            <a
+                              href={`#${index + 1}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setPage(index + 1);
+                                setSearchParams({
+                                  ...Object.fromEntries(searchParams),
+                                  page: index + 1,
+                                });
+                              }}
+                            >
+                              {index + 1}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                      <a
+                        href="#"
+                        disabled={page === pageCount}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page < pageCount) {
+                            setPage(page + 1);
+                            setSearchParams({
+                              ...Object.fromEntries(searchParams),
+                              page: page + 1,
+                            });
+                          }
+                        }}
+                      >
+                        <GrFormNext size={30} />
+                      </a>
+                    </nav>
+                  </div>
+                </>
+              );
+            }}
           </Await>
         </Suspense>
       </div>
