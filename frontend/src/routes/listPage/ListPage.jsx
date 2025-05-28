@@ -18,12 +18,6 @@ const ListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
 
-  useEffect(() => {
-    (async () => {
-      await fetchSavedPosts();
-    })();
-  }, [currentUser]);
-
   return (
     <div className="listPage">
       <div className="listContainer">
