@@ -23,7 +23,6 @@ const ListPage = () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
-
   return (
     <div className="listPage">
       <div className="listContainer">
@@ -44,65 +43,6 @@ const ListPage = () => {
                     ) : (
                       <p>Nenhum imóvel encontrado.</p>
                     )}
-                  </div>
-
-                  <div className="btn">
-                    <nav className="data-pagination">
-                      <a
-                        href="#"
-                        disabled={page === 1}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page > 1) {
-                            setPage(page - 1);
-                            setSearchParams({
-                              ...Object.fromEntries(searchParams),
-                              page: page - 1,
-                            });
-                          }
-                        }}
-                      >
-                        <GrFormPrevious size={30} />
-                      </a>
-                      <ul>
-                        {[...Array(pageCount)].map((_, index) => (
-                          <li
-                            key={index}
-                            className={index + 1 === page ? "current" : ""}
-                          >
-                            <a
-                              href={`#${index + 1}`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setPage(index + 1);
-                                setSearchParams({
-                                  ...Object.fromEntries(searchParams),
-                                  page: index + 1,
-                                });
-                              }}
-                            >
-                              {index + 1}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                      <a
-                        href="#"
-                        disabled={page === pageCount}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page < pageCount) {
-                            setPage(page + 1);
-                            setSearchParams({
-                              ...Object.fromEntries(searchParams),
-                              page: page + 1,
-                            });
-                          }
-                        }}
-                      >
-                        <GrFormNext size={30} />
-                      </a>
-                    </nav>
                   </div>
                 </>
               );

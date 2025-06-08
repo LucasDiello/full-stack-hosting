@@ -13,7 +13,6 @@ const Card = ({ post, saveds }) => {
   const { handleSave, isSaved, setIsSaved, checkIfSaved } = useSavePost();
 
   // Verifica se o post está salvo quando o componente é montado ou quando saveds muda
-
   useEffect(() => {
     if (currentUser) {
       setIsSaved(checkIfSaved(post.id));
