@@ -113,9 +113,7 @@ const ListPage = () => {
           <Await
             resolve={data.postResponse}
             errorElement={<p>Error loading posts!</p>}
-          >
-            {(postResponse) => <Map items={postResponse.posts} />}
-          </Await>
+          ></Await>
         </Suspense>
       </div>
       <div
