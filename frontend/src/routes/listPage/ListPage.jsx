@@ -23,7 +23,6 @@ const ListPage = () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
-  console.log(data.postResponse.data.posts);
   return (
     <div className="listPage">
       <div className="listContainer">
@@ -33,7 +32,6 @@ const ListPage = () => {
             {(postResponse) => {
               const posts = postResponse?.data?.posts || [];
               const pageCount = postResponse?.data?.pagination?.pageCount || 1;
-              console.log("posts", posts);
 
               return (
                 <>
