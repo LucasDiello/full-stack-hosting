@@ -30,11 +30,22 @@ const ListPage = () => {
       <div className="listContainer">
         <Filter />
         <Suspense fallback={<p>Loading...</p>}>
+          {data.postResponse.posts.map((post) => {
+            return (
+              <Card
+                key={post.id}
+                post={post}
+                saveds={saveds}
+                currentUser={currentUser}
+              />
+            );
+          })}
           <Await
             resolve={data.postResponse}
             errorElement={<p>Error loading posts!</p>}
           >
             {(postResponse) => {
+              console.log(postResponse);
               const posts = postResponse?.posts || [];
               const pageCount = postResponse?.pagination?.pageCount || 1;
               return (
