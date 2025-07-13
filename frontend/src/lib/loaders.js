@@ -6,13 +6,20 @@ export const singlePageLoader = async ({ _request, params }) => {
   return res.data;
 };
 
-export const listPageLoader = async ({ request, _params }) => {
-  const query = request.url.split("?")[1];
-  const dataPromise = await apiRequest("/posts?" + query);
-  return defer({
-    postResponse: dataPromise,
-  });
+export const listPageLoader = async ({ request }) => {
+  const query = request.url.split("?")[1] || "";
+  try {
+    const response = await apiRequest("/posts?" + query);
+
+    return defer({
+      postResponse: response.data,
+    });
+  } catch (err) {
+    console.error("Erro ao carregar posts:", err);
+    throw new Response("Erro ao carregar os posts", { status: 500 });
+  }
 };
+
 export const profilePageLoader = async () => {
   const postPromise = apiRequest("/users/profilePosts");
   return defer({

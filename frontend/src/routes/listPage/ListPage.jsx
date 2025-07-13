@@ -23,26 +23,26 @@ const ListPage = () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
+  console.log(data.postResponse);
+
   return (
     <div className="listPage">
       <div className="listContainer">
         <Filter />
         <Suspense fallback={<p>Loading...</p>}>
-          <Await resolve={data.postResponse}>
+          <Await
+            resolve={data.postResponse}
+            errorElement={<p>Error loading posts!</p>}
+          >
             {(postResponse) => {
-              const posts = postResponse?.data?.posts || [];
-              const pageCount = postResponse?.data?.pagination?.pageCount || 1;
-
+              const posts = postResponse?.posts || [];
+              const pageCount = postResponse?.pagination?.pageCount || 1;
               return (
                 <>
                   <div className="wrapper">
-                    {posts.length > 0 ? (
-                      posts.map((post) => (
-                        <Card key={post.id} post={post} saveds={saveds} />
-                      ))
-                    ) : (
-                      <p>Nenhum imóvel encontrado.</p>
-                    )}
+                    {posts.map((post) => (
+                      <Card key={post.id} post={post} saveds={saveds} />
+                    ))}
                   </div>
                   <div className="btn">
                     <nav className="data-pagination">
@@ -114,7 +114,7 @@ const ListPage = () => {
             resolve={data.postResponse}
             errorElement={<p>Error loading posts!</p>}
           >
-            {(postResponse) => <Map items={postResponse.data.posts} />}
+            {(postResponse) => <Map items={postResponse.posts} />}
           </Await>
         </Suspense>
       </div>
