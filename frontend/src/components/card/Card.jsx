@@ -12,7 +12,6 @@ const Card = ({ post, saveds }) => {
   const { currentUser } = useContext(AuthContext);
   const { handleSave, isSaved, setIsSaved, checkIfSaved } = useSavePost();
 
-  console.log("card post", post);
   useEffect(() => {
     if (currentUser) {
       setIsSaved(checkIfSaved(post.id));
