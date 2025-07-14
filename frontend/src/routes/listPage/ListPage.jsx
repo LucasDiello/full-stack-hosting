@@ -17,31 +17,38 @@ const ListPage = () => {
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
-
   useEffect(() => {
     (async () => {
       await fetchSavedPosts();
     })();
-  }, [currentUser, data.postResponse.posts]);
-  console.log(data.postResponse.posts);
+  }, [currentUser]);
   return (
     <div className="listPage">
       <div className="listContainer">
         <Filter />
-        <Suspense fallback={<p>Loading...</p>}>
-          <Await
-            resolve={data.postResponse}
-            errorElement={<p>Error loading posts!</p>}
-          >
+        {data.postResponse.posts &&
+          data.postResponse.posts.map((posts) => {
+            console.log("posts", posts);
+            return <Card key={posts.id} post={posts} saveds={saveds} />;
+          })}
+        {/* <Suspense fallback={<p>Loading...</p>}>
+          <Await resolve={data.postResponse}>
             {(postResponse) => {
               const posts = postResponse?.posts || [];
               const pageCount = postResponse?.pagination?.pageCount || 1;
               return (
                 <>
                   <div className="wrapper">
-                    {posts.map((post) => (
-                      <Card key={post.id} post={post} saveds={saveds} />
-                    ))}
+                    {posts.length > 0 ? (
+                      posts.map(
+                        (post) => (
+                          console.log("posts", post),
+                          (<Card key={post.id} post={post} saveds={saveds} />)
+                        )
+                      )
+                    ) : (
+                      <p>Nenhum imóvel encontrado.</p>
+                    )}
                   </div>
                   <div className="btn">
                     <nav className="data-pagination">
@@ -105,7 +112,7 @@ const ListPage = () => {
               );
             }}
           </Await>
-        </Suspense>
+        </Suspense> */}
       </div>
       <div className="mapContainer">
         <Suspense fallback={<p>Loading...</p>}>
@@ -113,7 +120,7 @@ const ListPage = () => {
             resolve={data.postResponse}
             errorElement={<p>Error loading posts!</p>}
           >
-            {/* {(postResponse) => <Map items={postResponse.posts} />} */}
+            {(postResponse) => <Map items={postResponse.posts} />}
           </Await>
         </Suspense>
       </div>
