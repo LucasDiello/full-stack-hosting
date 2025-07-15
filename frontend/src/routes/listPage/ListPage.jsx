@@ -22,6 +22,7 @@ const ListPage = () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
+  console.log("data", data);
   return (
     <div className="listPage">
       <div className="listContainer">
