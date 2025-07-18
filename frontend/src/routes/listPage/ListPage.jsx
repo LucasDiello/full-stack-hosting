@@ -17,36 +17,58 @@ const ListPage = () => {
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
+
   useEffect(() => {
     (async () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
-  console.log("data", data);
   return (
     <div className="listPage">
+      <Filter />
       <div className="listContainer">
+        {data.postResponse &&
+          data.postResponse.posts.map((post) => (
+            <div>
+              <Link to={`/${post.id}`}>
+                <img src={post.images[0]} width={200} alt="" />
+                <h2 className="title">
+                  <Link to={`/${post.id}`}>{post.title}</Link>
+                </h2>
+                <p className="address">
+                  <img src="/pin.png" alt="" />
+                  <span>{post.address}</span>
+                </p>
+              </Link>
+              <div>
+                <div className="feature">
+                  <img src="/bed.png" alt="" />
+                  <span>{post.bedroom} bedroom</span>
+                </div>
+                <div className="feature">
+                  <img src="/bath.png" alt="" />
+                  <span>{post.bathroom} bathroom</span>
+                </div>
+              </div>
+              <div></div>
+            </div>
+          ))}
+      </div>
+      {/* <div className="listContainer">
         <Filter />
-        {data.postResponse.posts &&
-          data.postResponse.posts.map((posts) => {
-            console.log("posts", posts);
-            return <Card key={posts.id} post={posts} saveds={saveds} />;
-          })}
-        {/* <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<p>Loading...</p>}>
           <Await resolve={data.postResponse}>
             {(postResponse) => {
               const posts = postResponse?.posts || [];
               const pageCount = postResponse?.pagination?.pageCount || 1;
+
               return (
                 <>
                   <div className="wrapper">
                     {posts.length > 0 ? (
-                      posts.map(
-                        (post) => (
-                          console.log("posts", post),
-                          (<Card key={post.id} post={post} saveds={saveds} />)
-                        )
-                      )
+                      posts.map((post) => (
+                        <Card key={post.id} post={post} saveds={saveds} />
+                      ))
                     ) : (
                       <p>Nenhum imóvel encontrado.</p>
                     )}
@@ -113,8 +135,8 @@ const ListPage = () => {
               );
             }}
           </Await>
-        </Suspense> */}
-      </div>
+        </Suspense>
+      </div> */}
       {/* <div className="mapContainer">
         <Suspense fallback={<p>Loading...</p>}>
           <Await
