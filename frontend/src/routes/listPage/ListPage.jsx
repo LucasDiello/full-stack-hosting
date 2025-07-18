@@ -13,63 +13,48 @@ import { GrFormPrevious } from "react-icons/gr";
 import { GrFormNext } from "react-icons/gr";
 
 const ListPage = () => {
-  const data = useLoaderData();
+  const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
 
-  // Estado para controlar o timeout
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true); // começa carregando
+        const response = await apiRequest.get("/posts", {
+          params: { page, ...Object.fromEntries(searchParams) },
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setIsLoading(false); // terminou
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   useEffect(() => {
     (async () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div style={{ textAlign: "center", marginTop: 40 }}>
-        Carregando imóveis...
-      </div>
-    );
-  }
-
   return (
     <div className="listPage">
       <Filter />
       <div className="listContainer">
-        {data.postResponse &&
-          data.postResponse.posts.map((post) => (
-            <div>
-              <Link to={`/${post.id}`}>
-                <img src={post.images[0]} width={200} alt="" />
-                <h2 className="title">
-                  <Link to={`/${post.id}`}>{post.title}</Link>
-                </h2>
-                <p className="address">
-                  <img src="/pin.png" alt="" />
-                  <span>{post.address}</span>
-                </p>
-              </Link>
-              <div>
-                <div className="feature">
-                  <img src="/bed.png" alt="" />
-                  <span>{post.bedroom} bedroom</span>
-                </div>
-                <div className="feature">
-                  <img src="/bath.png" alt="" />
-                  <span>{post.bathroom} bathroom</span>
-                </div>
-              </div>
-              <div></div>
+        {isLoading ? (
+          <p className="loading">Carregando imóveis...</p>
+        ) : (
+          data.posts?.map((post) => (
+            <div key={post.id}>
+              <Card post={post} saveds={saveds} />
             </div>
-          ))}
+          ))
+        )}
       </div>
       {/* <div className="listContainer">
         <Filter />
