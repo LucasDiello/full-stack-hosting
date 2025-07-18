@@ -18,11 +18,28 @@ const ListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
 
+  // Estado para controlar o timeout
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       await fetchSavedPosts();
     })();
   }, [currentUser]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: 40 }}>
+        Carregando imóveis...
+      </div>
+    );
+  }
+
   return (
     <div className="listPage">
       <Filter />
