@@ -56,7 +56,7 @@ const ListPage = () => {
       <div className="listContainer">
         {console.log(data, "data on div")}
         <Filter />
-        {data.posts.map((post) => (
+        {data.map((post) => (
           <div>
             <img src={post.images[0]} alt="" />
           </div>
