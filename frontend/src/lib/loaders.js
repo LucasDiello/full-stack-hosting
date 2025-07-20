@@ -9,15 +9,14 @@ export const singlePageLoader = async ({ _request, params }) => {
 export const listPageLoader = async ({ request }) => {
   const query = request.url.split("?")[1] || "";
   try {
-    const response = await apiRequest("/posts?" + query);
-
+    const {
+      data: { posts, pagination },
+    } = await apiRequest("/posts?" + query);
+    console.log(posts, pagination);
     return defer({
       postResponse: {
-        ...response.data,
-        pagination: {
-          pageCount: response.data.pagination.pageCount || 1,
-          count: response.data.pagination.count || 0,
-        },
+        posts: posts || [],
+        pagination: pagination || {},
       },
     });
   } catch (err) {
