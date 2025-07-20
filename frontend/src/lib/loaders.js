@@ -12,7 +12,13 @@ export const listPageLoader = async ({ request }) => {
     const response = await apiRequest("/posts?" + query);
 
     return defer({
-      postResponse: response.data,
+      postResponse: {
+        ...response.data,
+        pagination: {
+          pageCount: response.data.pagination.pageCount || 1,
+          count: response.data.pagination.count || 0,
+        },
+      },
     });
   } catch (err) {
     console.error("Erro ao carregar posts:", err);
