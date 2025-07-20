@@ -13,29 +13,10 @@ import { GrFormPrevious } from "react-icons/gr";
 import { GrFormNext } from "react-icons/gr";
 
 const ListPage = () => {
-  const [data, setData] = useState([]);
+  const data = useLoaderData();
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(true);
   const { fetchSavedPosts, currentUser, saveds } = useSavePost();
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setIsLoading(true); // começa carregando
-        const response = await apiRequest.get("/posts", {
-          params: { page, ...Object.fromEntries(searchParams) },
-        });
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setIsLoading(false); // terminou
-      }
-    };
-
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -44,19 +25,7 @@ const ListPage = () => {
   }, [currentUser]);
   return (
     <div className="listPage">
-      <Filter />
       <div className="listContainer">
-        {isLoading ? (
-          <p className="loading">Carregando imóveis...</p>
-        ) : (
-          data.posts?.map((post) => (
-            <div key={post.id}>
-              <Card post={post} saveds={saveds} />
-            </div>
-          ))
-        )}
-      </div>
-      {/* <div className="listContainer">
         <Filter />
         <Suspense fallback={<p>Loading...</p>}>
           <Await resolve={data.postResponse}>
@@ -138,8 +107,8 @@ const ListPage = () => {
             }}
           </Await>
         </Suspense>
-      </div> */}
-      {/* <div className="mapContainer">
+      </div>
+      <div className="mapContainer">
         <Suspense fallback={<p>Loading...</p>}>
           <Await
             resolve={data.postResponse}
@@ -148,7 +117,7 @@ const ListPage = () => {
             {(postResponse) => <Map items={postResponse.posts} />}
           </Await>
         </Suspense>
-      </div> */}
+      </div>
       <div
         className="
       aboutContainer

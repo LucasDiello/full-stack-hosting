@@ -12,7 +12,6 @@ import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -32,7 +31,6 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
