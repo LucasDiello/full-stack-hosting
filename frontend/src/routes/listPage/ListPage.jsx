@@ -46,7 +46,7 @@ const ListPage = () => {
         <Suspense fallback={<p>Loading...</p>}>
           <Await resolve={data.postResponse}>
             {(postResponse) => {
-              const posts = postResponse?.posts || [];
+              const posts = postResponse || [];
               const pageCount = postResponse?.pagination?.pageCount || 1;
 
               return (
