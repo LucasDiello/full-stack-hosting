@@ -57,7 +57,9 @@ const ListPage = () => {
         {console.log(data, "data on div")}
         <Filter />
         {data.posts.map((post) => (
-          <Card key={post.id} post={post} saveds={saveds} />
+          <div>
+            <img src={post.images[0]} alt="" />
+          </div>
         ))}
       </div>
     </div>
