@@ -17,22 +17,12 @@ export const serviceGetAllPosts = async (query) => {
     },
   };
 
-  const [count, posts] = await Promise.all([
-    prisma.post.count({ where }),
-    prisma.post.findMany({
-      take: ITEMS_PER_PAGE,
-      skip: (page - 1) * ITEMS_PER_PAGE,
-      where,
-    }),
-  ]);
+  const posts = await prisma.post.findMany({
+    where,
+  });
 
-  const pageCount = Math.ceil(count / ITEMS_PER_PAGE);
   return {
     status: "SUCCESSFUL",
-    pagination: {
-      pageCount,
-      count,
-    },
     posts,
   };
 };
